@@ -63,7 +63,6 @@ const RecipeDetail: React.FC<{
       <div className="px-8 -mt-16 relative z-10 pb-20">
         <div className="bg-white rounded-[40px] p-8 shadow-2xl border border-gray-100">
           <div className="mb-6">
-            {/* Changed from rounded-full to rounded-lg for a squarer look */}
             <span className={`inline-flex px-4 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-widest border mb-3 shadow-sm ${classification.color}`}>
               {classification.label}
             </span>
@@ -185,7 +184,7 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     <div className="min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans">
       <div className="flex flex-col items-center text-center">
         <div className="mb-8 drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
-          <img src="public/chef_2.svg" className="w-24 h-24 object-contain" alt="Kitchen Vault Chef Icon" />
+          <img src="chef_2.svg" className="w-24 h-24 object-contain" alt="Kitchen Vault Chef Icon" />
         </div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
         <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em]">The Black Book</p>
@@ -284,7 +283,6 @@ export default function App() {
                         <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={recipe.name} />
                       </div>
                       <div className="flex flex-col flex-1 px-1">
-                        {/* Square tags for a more architectural/archival feel */}
                         <div className={`inline-flex self-start px-3 py-1 rounded-md text-[10px] sm:text-[11px] font-black uppercase tracking-widest border mb-1.5 shadow-sm ${classification.color}`}>
                           {classification.label}
                         </div>

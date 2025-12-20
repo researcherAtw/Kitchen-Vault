@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen Vault - The Black Book</title>
+    <!-- 使用相對路徑確保在 GitHub Pages 子路徑下正常 -->
     <link rel="icon" type="image/svg+xml" href="book.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,5 +67,7 @@
 </head>
 <body>
     <div id="root"></div>
+    <!-- 必須引入 index.tsx 才會執行 React 渲染 -->
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
