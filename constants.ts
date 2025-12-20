@@ -84,5 +84,35 @@ export const RECIPES: Recipe[] = [
       '翻面續煎 2 分鐘，同時放入蘆筍一起加熱。'
     ],
     tips: '魚皮一定要擦乾，那是脆皮的關鍵。'
+  },
+  {
+    id: 'recipe-4',
+    name: '菜脯蛋',
+    category: 'Home-style',
+    description: '經典的台式家常滋味，爽脆的菜脯與軟嫩的煎蛋完美結合。加入少許低筋麵粉能讓蛋皮更加挺拔，是每一口都充滿驚喜的秘密配方。',
+    duration: '10 Min',
+    calories: '320 Cal',
+    nutrition: {
+      carbs: '8g',
+      protein: '24g',
+      calories: '320',
+      fat: '22g'
+    },
+    image: 'https://images.unsplash.com/photo-1626700051175-6818013e184f?auto=format&fit=crop&q=80&w=1000',
+    ingredients: [
+      { id: 'i4-1', name: '雞蛋', amount: '4顆' },
+      { id: 'i4-2', name: '菜脯', amount: '適量' },
+      { id: 'i4-3', name: '低筋麵粉', amount: '2匙' },
+      { id: 'i4-4', name: '烹大師', amount: '1匙' },
+      { id: 'i4-5', name: '白胡椒', amount: '少量' }
+    ],
+    steps: [
+      '將4顆蛋打入碗中。',
+      '加入低筋麵粉、烹大師及白胡椒。',
+      '徹底打勻，確保低筋麵粉完全消融、沒有任何結塊。',
+      '加入菜脯攪拌均勻。',
+      '熱油鍋，將蛋液倒入，煎至兩面金黃即可熄火。'
+    ],
+    tips: '徹底打勻麵粉是關鍵，這會讓成品更有厚實的口感且不散開。'
   }
 ];
