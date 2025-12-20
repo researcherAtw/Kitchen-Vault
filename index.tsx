@@ -14,3 +14,13 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // 考慮到 GitHub Pages 的子路徑，路徑會由 Vite 自動處理
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.log('SW registration failed: ', err);
+    });
+  });
+}

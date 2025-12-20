@@ -184,6 +184,7 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     <div className="min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans">
       <div className="flex flex-col items-center text-center">
         <div className="mb-8 drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
+          {/* 在 Vite build 後，public 目錄內的檔案會被移動到根目錄 */}
           <img src="chef_2.svg" className="w-24 h-24 object-contain" alt="Kitchen Vault Chef Icon" />
         </div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
