@@ -3,7 +3,7 @@
   "name": "Kitchen Vault",
   "short_name": "KitchenVault",
   "description": "The Black Book of Secret Recipes",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#F9F7EF",
   "theme_color": "#5C5C78",

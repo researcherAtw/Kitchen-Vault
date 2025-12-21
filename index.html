@@ -8,6 +8,9 @@
     
     <!-- PWA Settings -->
     <meta name="theme-color" content="#5C5C78">
+    <!-- Modern standard -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Legacy iOS support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="book.svg">
@@ -15,11 +18,18 @@
 
     <!-- Assets -->
     <link rel="icon" type="image/svg+xml" href="book.svg">
+    
+    <!-- Permissions Policy Fix (Silencing some browser noise) -->
+    <meta http-equiv="Permissions-Policy" content="browsing-topics=(), join-ad-interest-group=(), run-ad-auction=()">
+
+    <!-- Tailwind Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
     <script>
+      // 修正：直接設定 tailwind.config 而非 window.tailwind.config
       tailwind.config = {
         theme: {
           extend: {
@@ -69,7 +79,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite 模式下，直接引入相對路徑的 TSX 即可 -->
+    <!-- 修正：移除前綴斜線，確保 Vite 處理相對路徑 -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
