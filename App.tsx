@@ -31,14 +31,19 @@ const MenuIcon = ({ active }: { active: boolean }) => (
 
 // --- Utilities ---
 const getRecipeClassification = (name: string) => {
-  if (name.includes('甜') || name.includes('糕') || name.includes('餅') || name.includes('塔') || name.includes('糖')) return { label: '烘焙甜點', color: 'bg-[#C2A3A3] text-white border-[#B18F8F]' };
+  // 優先級判斷
+  if (name.includes('醬') || name.includes('餡') || name.includes('抹醬')) return { label: '自製醬餡', color: 'bg-[#8FA8A3] text-white border-[#7E9893]' };
+  if (name.includes('湯圓') || name.includes('紅豆') || name.includes('中式') || name.includes('粥')) return { label: '中式甜點', color: 'bg-[#C2A3A3] text-white border-[#B18F8F]' };
+  if (name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('派') || name.includes('西式') || name.includes('慕斯')) return { label: '西式甜點', color: 'bg-[#D4B2C2] text-white border-[#C3A1B1]' };
+  if (name.includes('豆腐') || name.includes('豆皮') || name.includes('豆乾')) return { label: '豆腐料理', color: 'bg-[#E6D5C3] text-[#7A6B5A] border-[#D5C4B2]' };
   if (name.includes('湯') || name.includes('鍋') || name.includes('煲')) return { label: '湯品鍋物', color: 'bg-[#A3B8C2] text-white border-[#92A7B1]' };
   if (name.includes('麵') || name.includes('通心粉') || name.includes('義大利') || name.includes('拉麵')) return { label: '麵類料理', color: 'bg-[#D9C5B2] text-white border-[#C4B2A1]' };
-  if (name.includes('飯') || name.includes('燉飯') || name.includes('粥')) return { label: '飯類料理', color: 'bg-[#BFB8AD] text-white border-[#A8A196]' };
-  if (name.includes('雞') || name.includes('肉')) return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
-  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮')) return { label: '海鮮料理', color: 'bg-[#8FB0C2] text-white border-[#7E9EB0]' };
+  if (name.includes('飯') || name.includes('燉飯')) return { label: '飯類料理', color: 'bg-[#BFB8AD] text-white border-[#A8A196]' };
+  if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛')) return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
+  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝')) return { label: '海鮮料理', color: 'bg-[#8FB0C2] text-white border-[#7E9EB0]' };
   if (name.includes('蛋')) return { label: '蛋類料理', color: 'bg-[#F2D06B] text-[#7A6124] border-[#E5C35D]' };
   if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜') || name.includes('蔬') || name.includes('菜')) return { label: '蔬食料理', color: 'bg-[#A3C2A3] text-[#3D523D] border-[#8FB18F]' };
+  
   return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
 };
 
@@ -49,9 +54,12 @@ const CATEGORIES = [
   '蔬食料理',
   '湯品鍋物',
   '蛋類料理',
+  '豆腐料理',
   '麵類料理',
   '飯類料理',
-  '烘焙甜點'
+  '中式甜點',
+  '西式甜點',
+  '自製醬餡'
 ];
 
 // --- Sub-Components ---
@@ -280,7 +288,7 @@ export default function App() {
         });
       }
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, activeTab]);
 
   const handleToggle = (id: string) => {
     const newState = { ...checkedIngredients, [id]: !checkedIngredients[id] };
@@ -322,7 +330,7 @@ export default function App() {
       {/* Main Container - The White Sheet */}
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
         
-        {/* --- FIXED TOP BLOCK (Frozen Section) --- */}
+        {/* --- FIXED TOP BLOCK --- */}
         <div className="flex-shrink-0 z-[100] bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
           <header className="px-8 pt-10 pb-4">
             <div className="flex justify-between items-end mb-8">
@@ -350,7 +358,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Category Navigation Pills - Only visible in Recipes Tab */}
+            {/* Category Navigation - Conditionally Rendered */}
             {activeTab === 'recipes' && (
               <div 
                 ref={navRef}
@@ -426,7 +434,7 @@ export default function App() {
               </div>
             </main>
           ) : (
-            <div className="px-8 pt-8 flex flex-col items-center justify-center text-center">
+            <div className="px-8 pt-8 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
               <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
               <p className="text-sm text-gray-400 mb-12">Curate your next culinary masterpiece.</p>
               <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
