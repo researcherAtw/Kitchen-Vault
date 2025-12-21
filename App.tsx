@@ -67,62 +67,45 @@ const RiceIllus = () => (
   </svg>
 );
 
-const DessertChineseIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="32" cy="32" r="20" fill="#FDE2E4" fillOpacity="0.6" stroke="#FF85A2" strokeWidth="1.5"/>
-    <path d="M24 28C24 28 28 24 32 28C36 32 40 28 40 28" stroke="#FF85A2" strokeWidth="1.5" strokeLinecap="round"/>
-    <circle cx="32" cy="32" r="4" fill="#EF4444" fillOpacity="0.2"/>
-  </svg>
-);
-
-const DessertWestIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 48H48V56H16V48Z" fill="#F9A8D4" stroke="#DB2777" strokeWidth="1.5"/>
-    <path d="M20 28C20 20 24 16 32 16C40 16 44 20 44 28V48H20V28Z" fill="#FDF2F8" stroke="#DB2777" strokeWidth="1.5"/>
-    <circle cx="32" cy="12" r="4" fill="#EF4444" stroke="#B91C1C" strokeWidth="1.5"/>
-    <path d="M28 48V32M36 48V36" stroke="#FBCFE8" strokeWidth="1.5"/>
-  </svg>
-);
-
-const SauceIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 24V12H42V24" stroke="#57534E" strokeWidth="2" strokeLinecap="round"/>
-    <rect x="18" y="24" width="28" height="32" rx="4" fill="#E9D5FF" fillOpacity="0.5" stroke="#9333EA" strokeWidth="1.5"/>
-    <path d="M24 12H40" stroke="#57534E" strokeWidth="3" strokeLinecap="round"/>
-    <rect x="22" y="34" width="20" height="12" fill="white" fillOpacity="0.8" stroke="#D8B4FE" strokeWidth="1"/>
-  </svg>
-);
-
 // --- Helper Functions ---
 const getRecipeIcon = (name: string, category: string) => {
-  // 指定外部資源：肉類料理
+  // 1. 中式甜點 (指定 SVG)
+  if (category === '中式甜點' || name.includes('湯圓') || name.includes('紅豆') || name.includes('中式甜點')) {
+    return <img src="Chinese_desserts.svg" className="w-20 h-20 object-contain" alt="Chinese Dessert" />;
+  }
+  // 2. 西式甜點 (指定 SVG)
+  if (category === '西式甜點' || name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('派') || name.includes('慕斯')) {
+    return <img src="cake.svg" className="w-20 h-20 object-contain" alt="Western Dessert" />;
+  }
+  // 3. 自製醬餡 / 自製餡料 (指定 SVG)
+  if (category === '自製醬餡' || name.includes('醬') || name.includes('餡') || name.includes('抹醬')) {
+    return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
+  }
+  // 4. 肉類料理
   if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛') || category === '肉類料理') {
     return <img src="meat.svg" className="w-20 h-20 object-contain" alt="Meat" />;
   }
-  // 指定外部資源：海鮮料理
+  // 5. 海鮮料理
   if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝') || category === '海鮮料理') {
     return <img src="seafood.svg" className="w-20 h-20 object-contain" alt="Seafood" />;
   }
-  // 指定外部資源：蛋類料理
+  // 6. 蛋類料理
   if (name.includes('蛋') || category === '蛋類料理') {
     return <img src="egg.svg" className="w-20 h-20 object-contain" alt="Egg" />;
   }
-  // 指定外部資源：蔬食料理
+  // 7. 蔬食料理
   if (name.includes('花椰菜') || name.includes('蔬') || name.includes('菜') || category === '蔬食料理') {
     return <img src="vegetable.svg" className="w-20 h-20 object-contain" alt="Vegetable" />;
   }
-  // 指定外部資源：湯品鍋物 (NEW)
-  if (name.includes('湯') || name.includes('鍋') || name.includes('煲') || name.includes('湯圓') || category === '湯品鍋物') {
+  // 8. 湯品鍋物 (含鹹湯圓)
+  if (name.includes('湯') || name.includes('鍋') || name.includes('煲') || name.includes('鹹湯圓') || category === '湯品鍋物') {
     return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />;
   }
   
-  // 其餘類別使用內建插畫組件
+  // 剩餘類別使用內建插畫
   if (name.includes('豆腐') || name.includes('豆皮') || name.includes('豆乾') || category === '豆腐料理') return <TofuIllus />;
   if (name.includes('麵') || name.includes('通心粉') || name.includes('拉麵') || category === '麵類料理') return <NoodleIllus />;
   if (name.includes('飯') || name.includes('燉飯') || category === '飯類料理') return <RiceIllus />;
-  if (name.includes('蛋糕') || name.includes('派') || category === '西式甜點') return <DessertWestIllus />;
-  if (name.includes('紅豆') || category === '中式甜點') return <DessertChineseIllus />;
-  if (name.includes('醬') || name.includes('餡') || category === '自製醬餡') return <SauceIllus />;
   
   return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />; // Default fallback
 };
@@ -312,7 +295,9 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   return (
     <div className="h-[100dvh] bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans max-w-md mx-auto relative overflow-hidden">
       <div className="flex flex-col items-center text-center">
-        <div className="mb-8 drop-shadow-2xl"><img src="chef_2.svg" className="w-24 h-24 object-contain" alt="Logo" /></div>
+        <div className="mb-8 drop-shadow-2xl">
+          <img src="chef_blue.svg" className="w-24 h-24 object-contain" alt="Logo" />
+        </div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
         <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em]">The Black Book</p>
       </div>
@@ -396,7 +381,9 @@ export default function App() {
           <header className="px-8 pt-10 pb-4">
             <div className="flex justify-between items-end mb-8">
               <h1 className="text-[36px] font-serif font-bold text-gray-900 leading-none">Kitchen Vault</h1>
-              <div className="w-12 h-12 rounded-[14px] bg-white p-1.5 shadow-mystic border border-gray-50 flex items-center justify-center"><img src="https://i.pravatar.cc/150?u=chef" className="w-full h-full object-cover rounded-[10px]" alt="Chef Avatar" /></div>
+              <div className="w-12 h-12 rounded-[14px] bg-white p-1 shadow-mystic border border-gray-50 flex items-center justify-center">
+                <img src="isa_icon.svg" className="w-full h-full object-contain rounded-[10px]" alt="Vault Icon" />
+              </div>
             </div>
             
             {activeTab === 'recipes' && (
@@ -448,13 +435,41 @@ export default function App() {
           )}
         </div>
       </div>
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1.5 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
+
+      {/* --- Optimized Navigation Bar with Perfectly Centered Indicator --- */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
-          <div className="absolute top-0 bottom-0 transition-all duration-300 ease-out bg-gray-100/90 rounded-full z-0" style={{ width: '50%', left: activeTab === 'recipes' ? '0%' : '50%' }} />
-          <button onClick={() => setActiveTab('recipes')} className="flex-1 flex flex-col items-center justify-center relative z-10"><RecipeIcon active={activeTab === 'recipes'} /><span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span></button>
-          <button onClick={() => setActiveTab('menu')} className="flex-1 flex flex-col items-center justify-center relative z-10"><MenuIcon active={activeTab === 'menu'} /><span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span></button>
+          {/* Centered Circle Indicator */}
+          <div 
+            className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0" 
+            style={{ 
+              left: activeTab === 'recipes' ? '25%' : '75%',
+              transform: 'translate(-50%, -50%)'
+            }} 
+          />
+          
+          <button 
+            onClick={() => setActiveTab('recipes')} 
+            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none"
+          >
+            <div className="flex flex-col items-center">
+              <RecipeIcon active={activeTab === 'recipes'} />
+              <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
+            </div>
+          </button>
+          
+          <button 
+            onClick={() => setActiveTab('menu')} 
+            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none"
+          >
+            <div className="flex flex-col items-center">
+              <MenuIcon active={activeTab === 'menu'} />
+              <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
+            </div>
+          </button>
         </div>
       </nav>
+
       {selectedIndex !== null && (
         <RecipeDetail selectedIndex={selectedIndex} onClose={() => setSelectedIndex(null)} checkedIngredients={checkedIngredients} onToggleIngredient={handleToggle} onResetIngredients={handleResetIngredients} recipes={filteredRecipes} />
       )}
