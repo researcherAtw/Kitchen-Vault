@@ -40,11 +40,16 @@ const MemoIcon = () => (
 
 // --- Utilities ---
 const getRecipeClassification = (name: string) => {
-  if (name.includes('雞')) return { label: '禽類料理', color: 'bg-red-50 text-red-600 border-red-100' };
-  if (name.includes('蛋')) return { label: '蛋/豆製品', color: 'bg-yellow-50 text-yellow-600 border-yellow-100' };
+  // 肉類料理: 改為棕色調 (Amber/Orange blend)
+  if (name.includes('雞') || name.includes('肉')) return { label: '肉類料理', color: 'bg-[#F4ECE6] text-[#8B5E3C] border-[#E5D5C9]' };
+  // 蛋料理: 維持黃色
+  if (name.includes('蛋')) return { label: '蛋料理', color: 'bg-yellow-50 text-yellow-600 border-yellow-100' };
+  // 海鮮料理
   if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮')) return { label: '海鮮料理', color: 'bg-blue-50 text-blue-600 border-blue-100' };
+  // 精緻歐陸
   if (name.includes('松露') || name.includes('法式') || name.includes('義式')) return { label: '精緻歐陸', color: 'bg-purple-50 text-purple-600 border-purple-100' };
-  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜')) return { label: '蔬食/熱炒', color: 'bg-orange-50 text-orange-600 border-orange-100' };
+  // 蔬食料理: 改為綠色調 (Emerald/Green)
+  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜') || name.includes('蔬')) return { label: '蔬食料理', color: 'bg-emerald-50 text-emerald-600 border-emerald-100' };
   return { label: '家常美食', color: 'bg-gray-50 text-gray-600 border-gray-100' };
 };
 
