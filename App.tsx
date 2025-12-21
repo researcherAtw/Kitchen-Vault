@@ -29,13 +29,22 @@ const MenuIcon = ({ active }: { active: boolean }) => (
   </svg>
 );
 
+const MemoIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z" />
+    <path d="M15 3v6h6" />
+    <line x1="8" y1="13" x2="16" y2="13" />
+    <line x1="8" y1="17" x2="14" y2="17" />
+  </svg>
+);
+
 // --- Utilities ---
 const getRecipeClassification = (name: string) => {
   if (name.includes('雞')) return { label: '禽類料理', color: 'bg-red-50 text-red-600 border-red-100' };
   if (name.includes('蛋')) return { label: '蛋/豆製品', color: 'bg-yellow-50 text-yellow-600 border-yellow-100' };
   if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮')) return { label: '海鮮料理', color: 'bg-blue-50 text-blue-600 border-blue-100' };
   if (name.includes('松露') || name.includes('法式') || name.includes('義式')) return { label: '精緻歐陸', color: 'bg-purple-50 text-purple-600 border-purple-100' };
-  if (name.includes('三杯') || name.includes('炒')) return { label: '台式熱炒', color: 'bg-orange-50 text-orange-600 border-orange-100' };
+  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜')) return { label: '蔬食/熱炒', color: 'bg-orange-50 text-orange-600 border-orange-100' };
   return { label: '家常美食', color: 'bg-gray-50 text-gray-600 border-gray-100' };
 };
 
@@ -156,6 +165,19 @@ const RecipeDetail: React.FC<{
               </div>
             )}
           </div>
+
+          {/* --- OPTIMIZED MEMO SECTION WITH MULTI-LINE SUPPORT --- */}
+          {activeTab === 'steps' && recipe.tips && (
+            <div className="mt-5 p-6 bg-amber-50/50 rounded-[24px] border border-amber-100/50 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="flex items-center gap-2 mb-3 text-amber-700">
+                <MemoIcon />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Chef's Memo</span>
+              </div>
+              <p className="text-[13px] text-amber-900/70 font-medium leading-relaxed whitespace-pre-line">
+                {recipe.tips}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

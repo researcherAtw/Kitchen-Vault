@@ -98,7 +98,7 @@ export const RECIPES: Recipe[] = [
       calories: '320',
       fat: '22g'
     },
-    image: 'Garlic Cauliflower.png',
+    image: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=1000',
     ingredients: [
       { id: 'i4-1', name: '雞蛋', amount: '4顆' },
       { id: 'i4-2', name: '菜脯', amount: '適量' },
@@ -114,5 +114,35 @@ export const RECIPES: Recipe[] = [
       '熱油鍋，將蛋液倒入，煎至兩面金黃即可熄火。'
     ],
     tips: '徹底打勻麵粉是關鍵，這會讓成品更有厚實的口感且不散開。'
+  },
+  {
+    id: 'recipe-5',
+    name: '奶油蒜香花椰菜',
+    category: 'Home-style',
+    description: '香醇奶油與濃厚蒜香的完美結合，搭配快速備餐的冷凍花椰菜，是一道兼具健康與美味的現代家常配菜。',
+    duration: '10 Min',
+    calories: '180 Cal',
+    nutrition: {
+      carbs: '12g',
+      protein: '5g',
+      calories: '180',
+      fat: '14g'
+    },
+    image: 'Garlic Cauliflower.png',
+    ingredients: [
+      { id: 'i5-1', name: 'Costco 冷凍花椰菜', amount: '適量' },
+      { id: 'i5-2', name: '蒜頭罐頭（含芥花油）', amount: '2 匙' },
+      { id: 'i5-3', name: '無鹽奶油', amount: '適量' },
+      { id: 'i5-4', name: '黑胡椒', amount: '少量' },
+      { id: 'i5-5', name: '烹大師', amount: '1 匙' }
+    ],
+    steps: [
+      '將 Costco 冷凍花椰菜放入微波爐，加熱至軟化。',
+      '取適量蒜頭罐頭放入鍋中，利用罐頭內的芥花油以小火爆香蒜粒。',
+      '待蒜香散發後，放入無鹽奶油與黑胡椒，加熱至奶油完全融化。',
+      '放入微波後的花椰菜及其他配料，視需求使用鍋鏟將較大塊的花椰菜切小。',
+      '撒入 1 匙烹大師，快速翻炒均勻，使食材充分包裹蒜香奶油醬汁後即可起鍋。'
+    ],
+    tips: '1. 蔬菜可能自帶鹽分，最後請根據實際口味適當調整調味。\n2. 可以自由選擇加入紅蘿蔔、蘆筍、白菇、金針菇等其餘配料'
   }
 ];
