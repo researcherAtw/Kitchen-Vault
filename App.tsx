@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { RECIPES } from './constants';
 import { Recipe } from './types';
 
@@ -31,13 +31,28 @@ const MenuIcon = ({ active }: { active: boolean }) => (
 
 // --- Utilities ---
 const getRecipeClassification = (name: string) => {
+  if (name.includes('甜') || name.includes('糕') || name.includes('餅') || name.includes('塔') || name.includes('糖')) return { label: '烘焙甜點', color: 'bg-[#C2A3A3] text-white border-[#B18F8F]' };
+  if (name.includes('湯') || name.includes('鍋') || name.includes('煲')) return { label: '湯品鍋物', color: 'bg-[#A3B8C2] text-white border-[#92A7B1]' };
+  if (name.includes('麵') || name.includes('通心粉') || name.includes('義大利') || name.includes('拉麵')) return { label: '麵類料理', color: 'bg-[#D9C5B2] text-white border-[#C4B2A1]' };
+  if (name.includes('飯') || name.includes('燉飯') || name.includes('粥')) return { label: '飯類料理', color: 'bg-[#BFB8AD] text-white border-[#A8A196]' };
   if (name.includes('雞') || name.includes('肉')) return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
-  if (name.includes('蛋')) return { label: '蛋料理', color: 'bg-[#F2D06B] text-[#7A6124] border-[#E5C35D]' };
   if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮')) return { label: '海鮮料理', color: 'bg-[#8FB0C2] text-white border-[#7E9EB0]' };
-  if (name.includes('松露') || name.includes('法式') || name.includes('義式')) return { label: '精緻歐陸', color: 'bg-[#B0A3C2] text-white border-[#9E90B0]' };
-  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜') || name.includes('蔬')) return { label: '蔬食料理', color: 'bg-[#A3C2A3] text-[#3D523D] border-[#8FB18F]' };
-  return { label: '家常美食', color: 'bg-[#D1D1D1] text-[#4A4A4A] border-[#C1C1C1]' };
+  if (name.includes('蛋')) return { label: '蛋類料理', color: 'bg-[#F2D06B] text-[#7A6124] border-[#E5C35D]' };
+  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜') || name.includes('蔬') || name.includes('菜')) return { label: '蔬食料理', color: 'bg-[#A3C2A3] text-[#3D523D] border-[#8FB18F]' };
+  return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
 };
+
+const CATEGORIES = [
+  '全部',
+  '肉類料理',
+  '海鮮料理',
+  '蔬食料理',
+  '湯品鍋物',
+  '蛋類料理',
+  '麵類料理',
+  '飯類料理',
+  '烘焙甜點'
+];
 
 // --- Sub-Components ---
 const StickerTag: React.FC<{ classification: { label: string, color: string }, className?: string }> = ({ classification, className }) => (
@@ -59,17 +74,16 @@ const RecipeDetail: React.FC<{
   onClose: () => void;
   checkedIngredients: Record<string, boolean>;
   onToggleIngredient: (id: string) => void;
-}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient }) => {
+  recipes: Recipe[];
+}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, recipes }) => {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'steps'>('ingredients');
   const [currentCardIndex, setCurrentCardIndex] = useState(selectedIndex);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 修復點擊卡片顯示錯誤頁面的核心邏輯
   useEffect(() => {
     const performScroll = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        // 確保子元素已經渲染且 selectedIndex 合法
         const card = container.children[selectedIndex] as HTMLElement;
         if (card) {
           container.scrollTo({
@@ -81,9 +95,7 @@ const RecipeDetail: React.FC<{
       }
     };
 
-    // 使用 requestAnimationFrame 確保在 DOM 佈局完成後才滾動
     const animationId = requestAnimationFrame(() => {
-      // 雙重確保，有時需要兩個 frame 確保寬度計算準確
       requestAnimationFrame(performScroll);
     });
 
@@ -98,38 +110,31 @@ const RecipeDetail: React.FC<{
     
     const newIndex = Math.round(container.scrollLeft / cardWidth);
 
-    if (newIndex !== currentCardIndex && newIndex >= 0 && newIndex < RECIPES.length) {
+    if (newIndex !== currentCardIndex && newIndex >= 0 && newIndex < recipes.length) {
       setCurrentCardIndex(newIndex);
-      // 切換頁面時重置滾動位置，確保內容從頭開始看
-      const scrollableAreas = container.querySelectorAll('.card-content-scroll');
-      scrollableAreas.forEach(area => {
-        area.scrollTop = 0;
-      });
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#FDFBF7] overflow-hidden font-sans max-w-md mx-auto">
+    <div className="fixed inset-0 z-[200] bg-[#FDFBF7] overflow-hidden font-sans max-w-md mx-auto">
       <div className="h-full relative flex flex-col bg-white">
-        {/* Back Button */}
         <button 
           onClick={onClose} 
-          className="fixed top-8 left-6 z-[120] p-3 bg-white/95 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform"
+          className="fixed top-8 left-6 z-[220] p-3 bg-white/95 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform"
         >
           <BackIcon />
         </button>
 
-        {/* Swipe Container */}
         <div 
           ref={scrollContainerRef}
           onScroll={handleHorizontalScroll}
           className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap"
         >
-          {RECIPES.map((recipe) => {
+          {recipes.map((recipe) => {
             const classification = getRecipeClassification(recipe.name);
             return (
               <div key={recipe.id} className="w-full h-full flex-shrink-0 snap-center flex flex-col">
-                <div className="card-content-scroll flex-1 overflow-y-auto hide-scrollbar flex flex-col pb-44">
+                <div className="flex-1 overflow-y-auto hide-scrollbar flex flex-col pb-44">
                   <div className="relative w-full aspect-[4/5] flex-shrink-0 overflow-hidden">
                     <img src={recipe.image} className="w-full h-full object-cover" alt={recipe.name} />
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/10" />
@@ -141,9 +146,25 @@ const RecipeDetail: React.FC<{
                       <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight mb-4">{recipe.name}</h1>
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4">{recipe.description}</p>
                       
-                      <div className="flex gap-1 p-1 bg-gray-50 rounded-2xl mb-8">
-                        <button onClick={() => setActiveTab('ingredients')} className={`flex-1 py-3 rounded-xl font-bold text-[10px] tracking-widest transition-all ${activeTab === 'ingredients' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'}`}>ITEMS ({recipe.ingredients.length})</button>
-                        <button onClick={() => setActiveTab('steps')} className={`flex-1 py-3 rounded-xl font-bold text-[10px] tracking-widest transition-all ${activeTab === 'steps' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'}`}>STEPS ({recipe.steps.length})</button>
+                      <div className="relative flex gap-1 p-1 bg-gray-50/80 rounded-2xl mb-8">
+                        <div 
+                          className="absolute h-[calc(100%-8px)] w-[calc(50%-4px)] bg-white shadow-sm rounded-xl transition-all duration-300 z-0"
+                          style={{
+                            transform: `translateX(${activeTab === 'ingredients' ? '0' : '100%'})`
+                          }}
+                        />
+                        <button 
+                          onClick={() => setActiveTab('ingredients')} 
+                          className={`relative z-10 flex-1 py-3.5 font-bold text-[10px] tracking-widest transition-colors duration-300 ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400'}`}
+                        >
+                          ITEMS ({recipe.ingredients.length})
+                        </button>
+                        <button 
+                          onClick={() => setActiveTab('steps')} 
+                          className={`relative z-10 flex-1 py-3.5 font-bold text-[10px] tracking-widest transition-colors duration-300 ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400'}`}
+                        >
+                          STEPS ({recipe.steps.length})
+                        </button>
                       </div>
 
                       <div className="space-y-4">
@@ -170,26 +191,20 @@ const RecipeDetail: React.FC<{
                                 <p className="text-gray-600 text-[14px] font-medium leading-relaxed">{step}</p>
                               </div>
                             ))}
-                            
-                            {/* --- Redesigned High-Quality MEMO --- */}
                             {recipe.tips && (
-                              <div className="mt-16 relative">
+                              <div className="mt-14 relative">
                                 <div className="absolute -top-3 left-6 z-20">
-                                  <div className="inline-flex items-center px-4 py-1.5 bg-[#5C5C78] rounded-full shadow-lg border-2 border-white">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" className="mr-2">
+                                  <div className="inline-flex items-center px-3 py-1 bg-[#5C5C78]/90 backdrop-blur-sm rounded-full border border-white/30 shadow-sm">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" className="mr-1.5 opacity-80">
                                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                                     </svg>
-                                    <span className="text-white text-[9px] font-black tracking-widest uppercase">Secret Tip</span>
+                                    <span className="text-white text-[8px] font-black tracking-[0.2em] uppercase opacity-90">Secret Tip</span>
                                   </div>
                                 </div>
-                                <div className="bg-[#FDFBF7] rounded-[32px] p-8 pt-10 border border-gray-100 shadow-sm relative overflow-hidden">
-                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#5C5C78] opacity-20" />
-                                  <p className="text-gray-500 text-[12.5px] font-medium leading-relaxed whitespace-pre-wrap">
+                                <div className="bg-[#FDFBF7] rounded-[32px] p-7 pt-11 border border-gray-100/50 shadow-sm relative overflow-hidden">
+                                  <p className="text-[#5A5A5A] text-[12.5px] font-semibold leading-[1.85] whitespace-pre-wrap">
                                     {recipe.tips}
                                   </p>
-                                  <div className="mt-6 flex justify-end">
-                                    <span className="text-[10px] font-serif italic text-gray-300">— Kitchen Vault Master</span>
-                                  </div>
                                 </div>
                               </div>
                             )}
@@ -218,7 +233,7 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   useEffect(() => { if (pin.length === 3) handleVerify(); }, [pin]);
 
   return (
-    <div className="min-h-[100dvh] bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans max-w-md mx-auto relative overflow-hidden">
+    <div className="h-[100dvh] bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans max-w-md mx-auto relative overflow-hidden">
       <div className="flex flex-col items-center text-center">
         <div className="mb-8 drop-shadow-2xl"><img src="chef_2.svg" className="w-24 h-24 object-contain" alt="Logo" /></div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
@@ -238,8 +253,13 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [activeTab, setActiveTab] = useState<'recipes' | 'menu'>('recipes');
+  const [selectedCategory, setSelectedCategory] = useState('全部');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [checkedIngredients, setCheckedIngredients] = useState<Record<string, boolean>>({});
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
+  
+  const navRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (sessionStorage.getItem('kitchen_auth') === 'true') setIsAuth(true);
@@ -247,117 +267,208 @@ export default function App() {
     if (saved) setCheckedIngredients(JSON.parse(saved));
   }, []);
 
+  useEffect(() => {
+    if (navRef.current) {
+      const activeBtn = navRef.current.querySelector('[data-active="true"]') as HTMLElement;
+      if (activeBtn) {
+        const containerWidth = navRef.current.offsetWidth;
+        const btnOffset = activeBtn.offsetLeft;
+        const btnWidth = activeBtn.offsetWidth;
+        navRef.current.scrollTo({
+          left: btnOffset - (containerWidth / 2) + (btnWidth / 2),
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [selectedCategory]);
+
   const handleToggle = (id: string) => {
     const newState = { ...checkedIngredients, [id]: !checkedIngredients[id] };
     setCheckedIngredients(newState);
     localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
   };
 
-  const navToRecipes = () => {
-    setSelectedIndex(null);
-    setActiveTab('recipes');
+  const filteredRecipes = useMemo(() => {
+    if (selectedCategory === '全部') return RECIPES;
+    return RECIPES.filter(r => getRecipeClassification(r.name).label === selectedCategory);
+  }, [selectedCategory]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = e.touches[0].clientX;
   };
 
-  const navToMenu = () => {
-    setSelectedIndex(null);
-    setActiveTab('menu');
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartRef.current === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStartRef.current - touchEnd;
+    const currentIndex = CATEGORIES.indexOf(selectedCategory);
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentIndex < CATEGORIES.length - 1) {
+        setSlideDirection('right');
+        setSelectedCategory(CATEGORIES[currentIndex + 1]);
+      } else if (diff < 0 && currentIndex > 0) {
+        setSlideDirection('left');
+        setSelectedCategory(CATEGORIES[currentIndex - 1]);
+      }
+    }
+    touchStartRef.current = null;
   };
 
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
 
   return (
-    <div className="min-h-[100dvh] bg-[#FDFBF7] font-sans overflow-hidden max-w-md mx-auto shadow-2xl relative flex flex-col">
-      <div className="flex-1 overflow-y-auto hide-scrollbar bg-white">
-        {activeTab === 'recipes' ? (
-          <div className="pb-32">
-            <header className="px-8 pt-16 pb-8">
-              <div className="flex justify-between items-start mb-10">
-                <h1 className="text-4xl font-serif font-bold text-gray-900">Kitchen Vault</h1>
-                <div className="w-12 h-12 rounded-2xl bg-gray-900 shadow-xl overflow-hidden border border-white/20">
-                  <img src="https://i.pravatar.cc/150?u=chef" className="w-full h-full object-cover" alt="Avatar" />
-                </div>
+    <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
+      {/* Main Container - The White Sheet */}
+      <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
+        
+        {/* --- FIXED TOP BLOCK (Frozen Section) --- */}
+        <div className="flex-shrink-0 z-[100] bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+          <header className="px-8 pt-10 pb-4">
+            <div className="flex justify-between items-end mb-8">
+              <h1 className="text-[36px] font-serif font-bold text-gray-900 leading-none">Kitchen Vault</h1>
+              <div className="w-12 h-12 rounded-[14px] bg-white p-1.5 shadow-mystic border border-gray-50 flex items-center justify-center">
+                <img src="https://i.pravatar.cc/150?u=chef" className="w-full h-full object-cover rounded-[10px]" alt="Chef Avatar" />
               </div>
-              <div className="relative w-full rounded-[40px] overflow-hidden shadow-mystic group">
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10" />
-                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=2000" className="w-full aspect-[16/9] object-cover transition-transform duration-1000 group-hover:scale-105" alt="Chef" />
-                <div className="absolute bottom-8 left-8 z-20">
-                  <span className="px-4 py-1 text-white text-[10px] font-black uppercase tracking-widest rounded-lg mb-3 inline-block bg-[#5C5C78] shadow-lg">Trending Now</span>
-                  <h2 className="text-2xl font-serif text-white font-bold leading-tight">Mastering the Art of<br/>Asian Fusion</h2>
+            </div>
+            
+            {/* Featured Trending Card */}
+            <div className="relative w-full aspect-[2.4/1] rounded-[36px] overflow-hidden shadow-mystic mb-6 group">
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=2000" 
+                className="w-full h-full object-cover" 
+                alt="Mastering Asian Fusion" 
+              />
+              <div className="absolute inset-0 flex flex-col justify-center px-8 z-20">
+                <div className="mb-2">
+                  <span className="inline-block px-3 py-1 bg-[#4A4A64] text-white text-[9px] font-black uppercase tracking-widest rounded-full">
+                    Trending Now
+                  </span>
                 </div>
+                <h2 className="text-[22px] font-serif text-white font-bold leading-tight">Mastering Asian Fusion</h2>
               </div>
-            </header>
+            </div>
 
-            <main className="px-8 mt-12">
-              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-8">Featured Recipes</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {RECIPES.map((recipe, index) => {
-                  const classification = getRecipeClassification(recipe.name);
+            {/* Category Navigation Pills - Only visible in Recipes Tab */}
+            {activeTab === 'recipes' && (
+              <div 
+                ref={navRef}
+                className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 scroll-smooth"
+              >
+                {CATEGORIES.map((cat, idx) => {
+                  const isActive = selectedCategory === cat;
                   return (
-                    <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-3 flex flex-col shadow-sm border border-gray-50 active:scale-[0.98] transition-all hover:shadow-mystic cursor-pointer">
-                      <StickerTag classification={classification} className="-top-1 -right-1" />
-                      <div className="w-full aspect-square rounded-[24px] overflow-hidden shadow-lg mb-4">
-                        <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={recipe.name} />
-                      </div>
-                      <h4 className="text-base font-serif font-bold text-gray-900 mb-1.5 leading-tight line-clamp-2 px-1">{recipe.name}</h4>
-                    </div>
+                    <button
+                      key={cat}
+                      data-active={isActive}
+                      onClick={() => {
+                        const oldIdx = CATEGORIES.indexOf(selectedCategory);
+                        setSlideDirection(idx > oldIdx ? 'right' : 'left');
+                        setSelectedCategory(cat);
+                      }}
+                      className={`
+                        px-5 py-2.5 rounded-full text-[11px] font-bold tracking-tight transition-all duration-300 whitespace-nowrap
+                        ${isActive 
+                          ? 'bg-[#5C5C78] text-white shadow-md' 
+                          : 'bg-gray-100 text-gray-400 hover:bg-gray-200/60'
+                        }
+                      `}
+                    >
+                      {cat}
+                    </button>
                   );
                 })}
               </div>
-            </main>
-          </div>
-        ) : (
-          <div className="px-8 pt-16 pb-32">
-            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-2">Today's Menu</h1>
-            <p className="text-sm text-gray-400 font-medium mb-12">Curate your dining experience.</p>
-            <div className="bg-white rounded-[40px] p-10 border border-dashed border-gray-200 flex flex-col items-center justify-center text-center space-y-6">
-              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={PRIMARY_COLOR} strokeWidth="2">
-                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
-                  <path d="M7 2v20"/>
-                  <path d="M21 15V2 v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
-                </svg>
+            )}
+          </header>
+        </div>
+
+        {/* --- SCROLLABLE CONTENT AREA --- */}
+        <div className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-32">
+          {activeTab === 'recipes' ? (
+            <main 
+              className="px-8 min-h-full select-none"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div 
+                key={selectedCategory} 
+                className={`grid grid-cols-2 gap-4 animate-in duration-500 ease-out fill-mode-both ${
+                  slideDirection === 'right' 
+                    ? 'slide-in-from-right-8 fade-in' 
+                    : 'slide-in-from-left-8 fade-in'
+                }`}
+              >
+                {filteredRecipes.length > 0 ? (
+                  filteredRecipes.map((recipe, index) => {
+                    const classification = getRecipeClassification(recipe.name);
+                    return (
+                      <div 
+                        key={recipe.id} 
+                        onClick={() => setSelectedIndex(index)} 
+                        className="group relative bg-white rounded-[32px] p-3 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer"
+                      >
+                        <StickerTag classification={classification} className="-top-1 -right-1" />
+                        <div className="w-full aspect-square rounded-[24px] overflow-hidden shadow-sm mb-4">
+                          <img src={recipe.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={recipe.name} />
+                        </div>
+                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2">{recipe.name}</h4>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="col-span-2 py-20 text-center">
+                    <p className="text-gray-400 font-serif italic mb-2">No secrets found here.</p>
+                    <button onClick={() => setSelectedCategory('全部')} className="text-[10px] font-black uppercase tracking-widest text-[#5C5C78] underline">Reset Filter</button>
+                  </div>
+                )}
               </div>
-              <h3 className="text-xl font-serif font-bold text-gray-900">Empty Vault</h3>
-              <button className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Generate Suggestion</button>
+            </main>
+          ) : (
+            <div className="px-8 pt-8 flex flex-col items-center justify-center text-center">
+              <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
+              <p className="text-sm text-gray-400 mb-12">Curate your next culinary masterpiece.</p>
+              <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
+                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={PRIMARY_COLOR} strokeWidth="2">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2 v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-serif font-bold">Empty Vault</h3>
+                <button className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Generate Suggestion</button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
+      {/* Persistent Bottom Nav */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1.5 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
           <div 
             className="absolute top-0 bottom-0 transition-all duration-300 ease-out bg-gray-100/90 rounded-full z-0"
-            style={{ 
-              width: '50%',
-              left: activeTab === 'recipes' ? '0%' : '50%',
-            }}
+            style={{ width: '50%', left: activeTab === 'recipes' ? '0%' : '50%' }}
           />
-          
-          <button 
-            onClick={navToRecipes}
-            className="flex-1 flex flex-col items-center justify-center relative z-10"
-          >
+          <button onClick={() => setActiveTab('recipes')} className="flex-1 flex flex-col items-center justify-center relative z-10">
             <RecipeIcon active={activeTab === 'recipes'} />
-            <span className={`text-[9px] font-black uppercase tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
+            <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
           </button>
-          
-          <button 
-            onClick={navToMenu}
-            className="flex-1 flex flex-col items-center justify-center relative z-10"
-          >
+          <button onClick={() => setActiveTab('menu')} className="flex-1 flex flex-col items-center justify-center relative z-10">
             <MenuIcon active={activeTab === 'menu'} />
-            <span className={`text-[9px] font-black uppercase tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
+            <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
           </button>
         </div>
       </nav>
 
+      {/* Fullscreen Detail View */}
       {selectedIndex !== null && (
         <RecipeDetail 
           selectedIndex={selectedIndex} 
           onClose={() => setSelectedIndex(null)} 
           checkedIngredients={checkedIngredients} 
           onToggleIngredient={handleToggle} 
+          recipes={filteredRecipes}
         />
       )}
     </div>
