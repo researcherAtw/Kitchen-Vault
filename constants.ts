@@ -15,7 +15,7 @@ export const RECIPES: Recipe[] = [
       calories: '421',
       fat: '28g'
     },
-    image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&q=80&w=1000',
+    image: '',
     ingredients: [
       { id: 'i1-1', name: '去骨雞腿肉', amount: '600g' },
       { id: 'i1-2', name: '老薑', amount: '10片' },
@@ -44,7 +44,7 @@ export const RECIPES: Recipe[] = [
       calories: '280',
       fat: '22g'
     },
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=1000',
+    image: '',
     ingredients: [
       { id: 'i2-1', name: '有機雞蛋', amount: '3顆' },
       { id: 'i2-2', name: '無鹽奶油', amount: '15g' },
@@ -71,7 +71,7 @@ export const RECIPES: Recipe[] = [
       calories: '350',
       fat: '24g'
     },
-    image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=1000',
+    image: '',
     ingredients: [
       { id: 'i3-1', name: '挪威鮭魚菲力', amount: '200g' },
       { id: 'i3-2', name: '蘆筍', amount: '6根' },
@@ -89,7 +89,7 @@ export const RECIPES: Recipe[] = [
     id: 'recipe-4',
     name: '菜脯蛋',
     category: 'Home-style',
-    description: '經典的台式家常滋味，爽脆的菜脯與軟嫩的煎蛋完美結合。加入少許低筋麵粉能讓蛋皮更加挺拔，是每一口都充滿驚喜的秘密配方。',
+    description: '經典的台式家常滋味，爽脆的菜脯與軟嫩的煎蛋完美結合。',
     duration: '10 Min',
     calories: '320 Cal',
     nutrition: {
@@ -98,7 +98,7 @@ export const RECIPES: Recipe[] = [
       calories: '320',
       fat: '22g'
     },
-    image: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=1000',
+    image: '',
     ingredients: [
       { id: 'i4-1', name: '雞蛋', amount: '4顆' },
       { id: 'i4-2', name: '菜脯', amount: '適量' },
@@ -119,7 +119,7 @@ export const RECIPES: Recipe[] = [
     id: 'recipe-5',
     name: '奶油蒜香花椰菜',
     category: 'Home-style',
-    description: '香醇奶油與濃厚蒜香的完美結合，搭配快速備餐的冷凍花椰菜，是一道兼具健康與美味的現代家常配菜。',
+    description: '香醇奶油與濃厚蒜香的完美結合，搭配快速備餐的冷凍花椰菜。',
     duration: '10 Min',
     calories: '180 Cal',
     nutrition: {
@@ -128,21 +128,48 @@ export const RECIPES: Recipe[] = [
       calories: '180',
       fat: '14g'
     },
-    image: 'Garlic Cauliflower.png',
+    image: '',
     ingredients: [
-      { id: 'i5-1', name: 'Costco 冷凍花椰菜', amount: '適量' },
-      { id: 'i5-2', name: '蒜頭罐頭（含芥花油）', amount: '2 匙' },
+      { id: 'i5-1', name: '冷凍花椰菜', amount: '適量' },
+      { id: 'i5-2', name: '蒜頭罐頭', amount: '2 匙' },
       { id: 'i5-3', name: '無鹽奶油', amount: '適量' },
       { id: 'i5-4', name: '黑胡椒', amount: '少量' },
       { id: 'i5-5', name: '烹大師', amount: '1 匙' }
     ],
     steps: [
-      '將 Costco 冷凍花椰菜放入微波爐，加熱至軟化。',
-      '取適量蒜頭罐頭放入鍋中，利用罐頭內的芥花油以小火爆香蒜粒。',
-      '待蒜香散發後，放入無鹽奶油與黑胡椒，加熱至奶油完全融化。',
-      '放入微波後的花椰菜及其他配料，視需求使用鍋鏟將較大塊的花椰菜切小。',
-      '撒入 1 匙烹大師，快速翻炒均勻，使食材充分包裹蒜香奶油醬汁後即可起鍋。'
+      '將冷凍花椰菜放入微波爐，加熱至軟化。',
+      '取適量蒜頭爆香蒜粒，放入奶油與黑胡椒融化。',
+      '放入微波後的花椰菜快速翻炒均勻即可。'
     ],
-    tips: '1.蔬菜可能自帶鹽分，最後請根據實際口味適當調整調味。\n2.可依喜好追加紅蘿蔔、蘆筍、白菇、金針菇等其餘配料'
+    tips: '1.蔬菜可能自帶鹽分，最後請調整調味。2.可依喜好追加配料。'
+  },
+  {
+    id: 'recipe-6',
+    name: '客家鹹湯圓',
+    category: 'Traditional',
+    description: '充滿靈魂的客家味，關鍵在於紅蔥頭與香菇煸出的濃育香氣。',
+    duration: '25 Min',
+    calories: '550 Cal',
+    nutrition: {
+      carbs: '65g',
+      protein: '18g',
+      calories: '550',
+      fat: '22g'
+    },
+    image: '',
+    ingredients: [
+      { id: 'i6-1', name: '鮮肉湯圓', amount: '適量' },
+      { id: 'i6-2', name: '乾香菇', amount: '適量' },
+      { id: 'i6-3', name: '紅蔥醬', amount: '2 匙' },
+      { id: 'i6-4', name: '芹菜', amount: '適量' },
+      { id: 'i6-5', name: '山茼蒿', amount: '1 把' }
+    ],
+    steps: [
+      '煸香香菇絲、蝦米與部分芹菜末。',
+      '放入紅蔥醬翻炒，倒入水熬製湯頭。',
+      '將湯圓煮至浮起，放入山茼蒿煮軟。',
+      '撒入芹菜末與白胡椒即可起鍋。'
+    ],
+    tips: '如果很餓的話可以加入冬粉或是麵條。'
   }
 ];
