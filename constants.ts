@@ -98,7 +98,7 @@ export const RECIPES: Recipe[] = [
       calories: '320',
       fat: '22g'
     },
-    image: 'https://images.unsplash.com/photo-1626700051175-6818013e184f?auto=format&fit=crop&q=80&w=1000',
+    image: 'Garlic Cauliflower.png',
     ingredients: [
       { id: 'i4-1', name: '雞蛋', amount: '4顆' },
       { id: 'i4-2', name: '菜脯', amount: '適量' },

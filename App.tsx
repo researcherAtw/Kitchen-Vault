@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RECIPES } from './constants';
 import { Recipe } from './types';
 
@@ -44,16 +44,47 @@ const getRecipeClassification = (name: string) => {
 const RecipeDetail: React.FC<{ 
   recipe: Recipe; 
   onClose: () => void;
+  onNext: () => void;
+  onPrev: () => void;
   checkedIngredients: Record<string, boolean>;
   onToggleIngredient: (id: string) => void;
-}> = ({ recipe, onClose, checkedIngredients, onToggleIngredient }) => {
+}> = ({ recipe, onClose, onNext, onPrev, checkedIngredients, onToggleIngredient }) => {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'steps'>('ingredients');
   const classification = getRecipeClassification(recipe.name);
+  
+  const touchStart = useRef<number | null>(null);
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart.current - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) onNext();
+    if (isRightSwipe) onPrev();
+    
+    touchStart.current = null;
+  };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#FDFBF7] animate-in slide-in-from-bottom duration-500 overflow-y-auto hide-scrollbar font-sans">
+    <div 
+      className="fixed inset-0 z-50 bg-[#FDFBF7] animate-in slide-in-from-bottom duration-300 overflow-y-auto hide-scrollbar font-sans"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <div className="relative h-[45vh] w-full overflow-hidden">
-        <img src={recipe.image} className="w-full h-full object-cover" alt={recipe.name} />
+        <img 
+          key={recipe.image}
+          src={recipe.image} 
+          className="w-full h-full object-cover animate-in fade-in duration-500" 
+          alt={recipe.name} 
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-transparent to-black/20" />
         <button onClick={onClose} className="absolute top-12 left-6 p-3 bg-white/90 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform">
           <BackIcon />
@@ -61,7 +92,7 @@ const RecipeDetail: React.FC<{
       </div>
 
       <div className="px-8 -mt-16 relative z-10 pb-20">
-        <div className="bg-white rounded-[40px] p-8 shadow-2xl border border-gray-100">
+        <div key={recipe.id} className="bg-white rounded-[40px] p-8 shadow-2xl border border-gray-100 animate-in fade-in slide-in-from-right-4 duration-500">
           <div className="mb-6">
             <span className={`inline-flex px-4 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-widest border mb-3 shadow-sm ${classification.color}`}>
               {classification.label}
@@ -133,7 +164,7 @@ const RecipeDetail: React.FC<{
 
 const MenuView: React.FC = () => {
   return (
-    <div className="px-8 pt-16 animate-in fade-in slide-in-from-bottom-6 duration-700">
+    <div className="px-8 pt-16 h-full overflow-y-auto hide-scrollbar">
       <div className="mb-12">
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-2">Today's Menu</h1>
         <p className="text-sm text-gray-400 font-medium">Curate your dining experience for today.</p>
@@ -141,7 +172,7 @@ const MenuView: React.FC = () => {
 
       <div className="bg-white rounded-[40px] p-10 border border-dashed border-gray-200 flex flex-col items-center justify-center text-center space-y-6">
         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={PRIMARY_COLOR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={PRIMARY_COLOR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2 v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
         </div>
         <div>
           <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">Empty Vault</h3>
@@ -152,7 +183,7 @@ const MenuView: React.FC = () => {
         </button>
       </div>
 
-      <div className="mt-12 space-y-4">
+      <div className="mt-12 space-y-4 pb-20">
         <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Saved Planner Items</h4>
         <div className="p-6 bg-gray-100/50 rounded-3xl flex items-center gap-4 opacity-50 grayscale">
           <div className="w-12 h-12 bg-white rounded-xl"></div>
@@ -184,33 +215,29 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     <div className="min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans">
       <div className="flex flex-col items-center text-center">
         <div className="mb-8 drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
-          {/* 在 Vite build 後，public 目錄內的檔案會被移動到根目錄 */}
           <img src="chef_2.svg" className="w-24 h-24 object-contain" alt="Kitchen Vault Chef Icon" />
         </div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
         <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em]">The Black Book</p>
       </div>
 
-      <div className={`flex gap-4 justify-center py-10 ${error ? 'animate-shake text-red-500' : ''}`}>
-        {[0, 1, 2].map(i => (
-          <div key={i} className={`w-4 h-4 rounded-full transition-all duration-300 ${pin.length > i ? 'bg-gray-900 scale-125' : 'bg-gray-200'}`} />
-        ))}
+      <div className="flex-1 flex items-center justify-center w-full">
+        <div className={`grid grid-cols-3 gap-6 w-full max-w-[280px] transition-colors duration-300 ${error ? 'animate-shake' : ''}`}>
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'].map((k, i) => (
+            <button
+              key={i}
+              disabled={!k}
+              onClick={() => k === '⌫' ? setPin(p => p.slice(0, -1)) : setPin(p => p + k)}
+              className={`w-16 h-16 rounded-[24px] flex items-center justify-center text-xl font-bold transition-all active:scale-90 ${
+                !k ? 'opacity-0' : `bg-white shadow-sm hover:shadow-md border border-gray-50 ${error ? 'text-red-500' : 'text-gray-900'}`
+              }`}
+            >
+              {k}
+            </button>
+          ))}
+        </div>
       </div>
-
-      <div className="grid grid-cols-3 gap-6 w-full max-w-[280px]">
-        {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'].map((k, i) => (
-          <button
-            key={i}
-            disabled={!k}
-            onClick={() => k === '⌫' ? setPin(p => p.slice(0, -1)) : setPin(p => p + k)}
-            className={`w-16 h-16 rounded-[24px] flex items-center justify-center text-xl font-bold transition-all active:scale-90 ${
-              !k ? 'opacity-0' : 'bg-white shadow-sm hover:shadow-md text-gray-900 border border-gray-50'
-            }`}
-          >
-            {k}
-          </button>
-        ))}
-      </div>
+      
       <div className="h-6" />
     </div>
   );
@@ -219,7 +246,7 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [activeTab, setActiveTab] = useState<'recipes' | 'menu'>('recipes');
-  const [selected, setSelected] = useState<Recipe | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [checkedIngredients, setCheckedIngredients] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -234,12 +261,26 @@ export default function App() {
     localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
   };
 
+  const goToNext = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex((selectedIndex + 1) % RECIPES.length);
+  };
+
+  const goToPrev = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex((selectedIndex - 1 + RECIPES.length) % RECIPES.length);
+  };
+
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pb-32 font-sans selection:bg-[#5C5C78]/20">
-      {activeTab === 'recipes' ? (
-        <>
+    <div className="min-h-screen bg-[#FDFBF7] font-sans selection:bg-[#5C5C78]/20 overflow-x-hidden">
+      {/* Horizontal Sliding Wrapper for Content - Speed optimized (300ms) */}
+      <div 
+        className="flex w-[200vw] min-h-screen transition-transform duration-300 ease-out" 
+        style={{ transform: `translateX(${activeTab === 'recipes' ? '0%' : '-50%'})` }}
+      >
+        <div className="w-[100vw] h-full overflow-y-auto hide-scrollbar pb-32">
           <header className="px-8 pt-16 pb-8">
             <div className="flex justify-between items-start mb-10">
               <div>
@@ -264,81 +305,97 @@ export default function App() {
             </div>
           </header>
 
-          <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
-            <section className="px-8 mt-12">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-2xl font-serif font-bold text-gray-900">Featured Recipes</h3>
-                <button className={`text-[10px] font-black uppercase tracking-widest border-b-2 pb-1 text-[#5C5C78] border-[#5C5C78]/20`}>VIEW ALL</button>
-              </div>
+          <main className="px-8 mt-12">
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-2xl font-serif font-bold text-gray-900">Featured Recipes</h3>
+              <button className={`text-[10px] font-black uppercase tracking-widest border-b-2 pb-1 text-[#5C5C78] border-[#5C5C78]/20`}>VIEW ALL</button>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:gap-10">
-                {RECIPES.map((recipe) => {
-                  const classification = getRecipeClassification(recipe.name);
-                  return (
-                    <div 
-                      key={recipe.id} 
-                      onClick={() => setSelected(recipe)}
-                      className="group relative bg-white rounded-[32px] p-3 sm:p-5 flex flex-col shadow-sm border border-gray-50 active:scale-[0.98] transition-all hover:shadow-xl cursor-pointer"
-                    >
-                      <div className="w-full aspect-square rounded-[24px] overflow-hidden shadow-lg mb-3">
-                        <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={recipe.name} />
+            <div className="grid grid-cols-2 gap-4 sm:gap-10">
+              {RECIPES.map((recipe, index) => {
+                const classification = getRecipeClassification(recipe.name);
+                return (
+                  <div 
+                    key={recipe.id} 
+                    onClick={() => setSelectedIndex(index)}
+                    className="group relative bg-white rounded-[32px] p-3 sm:p-5 flex flex-col shadow-sm border border-gray-50 active:scale-[0.98] transition-all hover:shadow-xl cursor-pointer"
+                  >
+                    <div className="w-full aspect-square rounded-[24px] overflow-hidden shadow-lg mb-3">
+                      <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={recipe.name} />
+                    </div>
+                    <div className="flex flex-col flex-1 px-1">
+                      <div className={`inline-flex self-start px-3 py-1 rounded-md text-[10px] sm:text-[11px] font-black uppercase tracking-widest border mb-1.5 shadow-sm ${classification.color}`}>
+                        {classification.label}
                       </div>
-                      <div className="flex flex-col flex-1 px-1">
-                        <div className={`inline-flex self-start px-3 py-1 rounded-md text-[10px] sm:text-[11px] font-black uppercase tracking-widest border mb-1.5 shadow-sm ${classification.color}`}>
-                          {classification.label}
-                        </div>
-                        <h4 className="text-base sm:text-xl font-serif font-bold text-gray-900 mb-1.5 leading-tight line-clamp-2">{recipe.name}</h4>
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-5 text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-tight mt-4 pb-1">
-                          <span className="flex items-center gap-1.5">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                            {recipe.ingredients.length} Items
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-                            {recipe.steps.length} Steps
-                          </span>
-                        </div>
+                      <h4 className="text-base sm:text-xl font-serif font-bold text-gray-900 mb-1.5 leading-tight line-clamp-2">{recipe.name}</h4>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-5 text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-tight mt-4 pb-1">
+                        <span className="flex items-center gap-1.5">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                          {recipe.ingredients.length} Items
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                          {recipe.steps.length} Steps
+                        </span>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </section>
+                  </div>
+                );
+              })}
+            </div>
           </main>
-        </>
-      ) : (
-        <MenuView />
-      )}
+        </div>
 
-      {/* Flatter Floating Navigation Bar */}
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-xl border border-white/40 px-6 py-2.5 rounded-full shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] flex items-center gap-8 z-40">
-        <button 
-          onClick={() => setActiveTab('recipes')}
-          className="flex flex-col items-center gap-0.5 group active:scale-95 transition-all px-3"
-        >
-          <div className={`p-1.5 rounded-full transition-colors ${activeTab === 'recipes' ? 'bg-[#5C5C78]/5' : ''}`}>
-            <RecipeIcon active={activeTab === 'recipes'} />
-          </div>
-          <span className={`text-[9px] font-black uppercase tracking-widest ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
-        </button>
-        
-        <div className="w-px h-6 bg-gray-100"></div>
-        
-        <button 
-          onClick={() => setActiveTab('menu')}
-          className="flex flex-col items-center gap-0.5 group active:scale-95 transition-all px-3"
-        >
-          <div className={`p-1.5 rounded-full transition-colors ${activeTab === 'menu' ? 'bg-[#5C5C78]/5' : ''}`}>
-            <MenuIcon active={activeTab === 'menu'} />
-          </div>
-          <span className={`text-[9px] font-black uppercase tracking-widest ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
-        </button>
+        <div className="w-[100vw] h-full overflow-y-auto hide-scrollbar pb-32">
+          <MenuView />
+        </div>
+      </div>
+
+      {/* FIXED NAVIGATION BAR - Redesigned for Pixel-Perfect Alignment */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 px-4 py-2.5 rounded-full shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] z-40">
+        <div className="relative flex items-center h-12">
+          {/* THE SLIDING INDICATOR BACKGROUND - Perfectly centered to buttons */}
+          <div 
+            className="absolute top-1/2 -translate-y-1/2 h-8 w-8 bg-[#5C5C78]/10 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0"
+            style={{ 
+              left: 0,
+              transform: `translateX(${activeTab === 'recipes' ? '24px' : '105px'})` 
+            }}
+          />
+          
+          {/* Recipes Button (w-20 = 80px) */}
+          <button 
+            onClick={() => setActiveTab('recipes')}
+            className="w-20 flex flex-col items-center justify-center group active:scale-90 transition-all relative z-10"
+          >
+            <div className="p-1.5 flex items-center justify-center">
+              <RecipeIcon active={activeTab === 'recipes'} />
+            </div>
+            <span className={`text-[9px] font-black uppercase tracking-widest mt-0.5 transition-colors ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
+          </button>
+          
+          {/* Visual Separator */}
+          <div className="w-px h-6 bg-gray-100/80 relative z-10"></div>
+          
+          {/* Menu Button (w-20 = 80px) */}
+          <button 
+            onClick={() => setActiveTab('menu')}
+            className="w-20 flex flex-col items-center justify-center group active:scale-90 transition-all relative z-10"
+          >
+            <div className="p-1.5 flex items-center justify-center">
+              <MenuIcon active={activeTab === 'menu'} />
+            </div>
+            <span className={`text-[9px] font-black uppercase tracking-widest mt-0.5 transition-colors ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
+          </button>
+        </div>
       </nav>
 
-      {selected && (
+      {selectedIndex !== null && (
         <RecipeDetail 
-          recipe={selected} 
-          onClose={() => setSelected(null)} 
+          recipe={RECIPES[selectedIndex]} 
+          onClose={() => setSelectedIndex(null)} 
+          onNext={goToNext}
+          onPrev={goToPrev}
           checkedIngredients={checkedIngredients}
           onToggleIngredient={handleToggle}
         />
