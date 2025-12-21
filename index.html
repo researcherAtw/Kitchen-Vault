@@ -3,23 +3,19 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Kitchen Vault - The Black Book</title>
     
     <!-- PWA Settings -->
     <meta name="theme-color" content="#5C5C78">
-    <!-- Modern standard -->
     <meta name="mobile-web-app-capable" content="yes">
-    <!-- Legacy iOS support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="book.svg">
-    <link rel="manifest" href="manifest.json">
 
     <!-- Assets -->
     <link rel="icon" type="image/svg+xml" href="book.svg">
     
-    <!-- Permissions Policy Fix -->
+    <!-- Permissions Policy -->
     <meta http-equiv="Permissions-Policy" content="browsing-topics=(), join-ad-interest-group=(), run-ad-auction=()">
 
     <!-- Tailwind Play CDN -->
@@ -35,6 +31,9 @@
             fontFamily: {
               sans: ['Inconsolata', 'sans-serif'],
               serif: ['Playfair Display', 'serif'],
+            },
+            boxShadow: {
+              'mystic': '0 20px 50px -12px rgba(92, 92, 120, 0.15)',
             }
           }
         }
@@ -43,10 +42,11 @@
     <style>
         body {
             font-family: 'Inconsolata', sans-serif;
-            background-color: #F9F7EF;
+            background-color: #F3F1E8; /* 稍微加深背景色，突顯容器感 */
             color: #1A1A1A;
             overflow-x: hidden;
             letter-spacing: -0.01em;
+            overscroll-behavior-y: none; /* 防止 PWA 橡皮筋回彈 */
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -71,7 +71,8 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite-plugin-pwa": "https://esm.sh/vite-plugin-pwa@^1.2.0"
   }
 }
 </script>
