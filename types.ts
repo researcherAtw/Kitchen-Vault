@@ -24,4 +24,5 @@ export interface Recipe {
   ingredients: Ingredient[];
   steps: string[];
   tips: string;
+  youtubeUrl?: string;
 }

@@ -36,110 +36,59 @@ const ResetIcon = () => (
   </svg>
 );
 
-// --- Custom Gourmet Illustrative Icons (Internal Components for Other Categories) ---
-const TofuIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="12" y="16" width="32" height="32" rx="4" fill="#F5F5F4" fillOpacity="0.9" stroke="#A8A29E" strokeWidth="1.5"/>
-    <path d="M44 20L52 24V52L44 48V20Z" fill="#E7E5E4" stroke="#A8A29E" strokeWidth="1.5"/>
-    <path d="M16 16L24 8H52L44 16H16Z" fill="#E7E5E4" stroke="#A8A29E" strokeWidth="1.5"/>
-    <circle cx="24" cy="28" r="1.5" fill="#15803D" fillOpacity="0.5"/>
-    <circle cx="34" cy="38" r="1" fill="#15803D" fillOpacity="0.5"/>
-  </svg>
-);
-
-const NoodleIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 28C12 44 18 52 32 52C46 52 52 44 52 28H12Z" fill="#FDE68A" fillOpacity="0.4" stroke="#D97706" strokeWidth="1.5"/>
-    <path d="M16 28C16 20 20 12 24 12" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M24 28C24 20 28 12 32 12" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M32 28C32 20 36 12 40 12" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M40 28C40 20 44 12 48 12" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M8 8L56 16" stroke="#57534E" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-);
-
-const RiceIllus = () => (
-  <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 36C12 20 20 12 32 12C44 12 52 20 52 36H12Z" fill="white" stroke="#D1D5DB" strokeWidth="1.5"/>
-    <path d="M8 36H56V44C56 52 48 56 32 56C16 56 8 52 8 44V36Z" fill="#E5E7EB" stroke="#9CA3AF" strokeWidth="1.5"/>
-    <path d="M28 24H36" stroke="#D1D5DB" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M30 20H34" stroke="#D1D5DB" strokeWidth="1.5" strokeLinecap="round"/>
+const YouTubeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
   </svg>
 );
 
 // --- Helper Functions ---
 const getRecipeIcon = (name: string, category: string) => {
-  // 1. 中式甜點 (指定 SVG)
-  if (category === '中式甜點' || name.includes('湯圓') || name.includes('紅豆') || name.includes('中式甜點')) {
-    return <img src="Chinese_desserts.svg" className="w-20 h-20 object-contain" alt="Chinese Dessert" />;
+  switch (category) {
+    case '中式甜點': return <img src="Chinese_desserts.svg" className="w-20 h-20 object-contain" alt="Chinese Dessert" />;
+    case '西式甜點': return <img src="cake.svg" className="w-20 h-20 object-contain" alt="Western Dessert" />;
+    case '自製醬料': return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
+    case '飲品': return <img src="liquor.svg" className="w-20 h-20 object-contain" alt="Drinks" />;
+    case '豆腐料理': return <img src="tofu.svg" className="w-20 h-20 object-contain" alt="Tofu" />;
+    case '麵類料理': return <img src="noodle.svg" className="w-20 h-20 object-contain" alt="Noodles" />;
+    case '飯類料理': return <img src="rice.svg" className="w-20 h-20 object-contain" alt="Rice" />;
+    case '肉類料理': return <img src="meat.svg" className="w-20 h-20 object-contain" alt="Meat" />;
+    case '海鮮料理': return <img src="seafood.svg" className="w-20 h-20 object-contain" alt="Seafood" />;
+    case '蛋類料理': return <img src="egg.svg" className="w-20 h-20 object-contain" alt="Egg" />;
+    case '蔬食料理': return <img src="vegetable.svg" className="w-20 h-20 object-contain" alt="Vegetable" />;
+    case '湯品鍋物': return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />;
+    default: return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Default" />;
   }
-  // 2. 西式甜點 (指定 SVG)
-  if (category === '西式甜點' || name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('派') || name.includes('慕斯')) {
-    return <img src="cake.svg" className="w-20 h-20 object-contain" alt="Western Dessert" />;
-  }
-  // 3. 自製醬餡 / 自製餡料 (指定 SVG)
-  if (category === '自製醬餡' || name.includes('醬') || name.includes('餡') || name.includes('抹醬')) {
-    return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
-  }
-  // 4. 肉類料理
-  if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛') || category === '肉類料理') {
-    return <img src="meat.svg" className="w-20 h-20 object-contain" alt="Meat" />;
-  }
-  // 5. 海鮮料理
-  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝') || category === '海鮮料理') {
-    return <img src="seafood.svg" className="w-20 h-20 object-contain" alt="Seafood" />;
-  }
-  // 6. 蛋類料理
-  if (name.includes('蛋') || category === '蛋類料理') {
-    return <img src="egg.svg" className="w-20 h-20 object-contain" alt="Egg" />;
-  }
-  // 7. 蔬食料理
-  if (name.includes('花椰菜') || name.includes('蔬') || name.includes('菜') || category === '蔬食料理') {
-    return <img src="vegetable.svg" className="w-20 h-20 object-contain" alt="Vegetable" />;
-  }
-  // 8. 湯品鍋物 (含鹹湯圓)
-  if (name.includes('湯') || name.includes('鍋') || name.includes('煲') || name.includes('鹹湯圓') || category === '湯品鍋物') {
-    return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />;
-  }
-  
-  // 剩餘類別使用內建插畫
-  if (name.includes('豆腐') || name.includes('豆皮') || name.includes('豆乾') || category === '豆腐料理') return <TofuIllus />;
-  if (name.includes('麵') || name.includes('通心粉') || name.includes('拉麵') || category === '麵類料理') return <NoodleIllus />;
-  if (name.includes('飯') || name.includes('燉飯') || category === '飯類料理') return <RiceIllus />;
-  
-  return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />; // Default fallback
 };
 
 const getRecipeClassification = (name: string) => {
-  if (name.includes('鹹湯圓')) return { label: '湯品鍋物', color: 'bg-[#A3B8C2] text-white border-[#92A7B1]' };
-  if (name.includes('醬') || name.includes('餡') || name.includes('抹醬')) return { label: '自製醬餡', color: 'bg-[#8FA8A3] text-white border-[#7E9893]' };
-  if (name.includes('湯圓') || name.includes('紅豆') || name.includes('中式') || name.includes('粥')) return { label: '中式甜點', color: 'bg-[#C2A3A3] text-white border-[#B18F8F]' };
-  if (name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('派') || name.includes('西式') || name.includes('慕斯')) return { label: '西式甜點', color: 'bg-[#D4B2C2] text-white border-[#C3A1B1]' };
-  if (name.includes('豆腐') || name.includes('豆皮') || name.includes('豆乾')) return { label: '豆腐料理', color: 'bg-[#E6D5C3] text-[#7A6B5A] border-[#D5C4B2]' };
-  if (name.includes('湯') || name.includes('鍋') || name.includes('煲')) return { label: '湯品鍋物', color: 'bg-[#A3B8C2] text-white border-[#92A7B1]' };
-  if (name.includes('麵') || name.includes('通心粉') || name.includes('義大利') || name.includes('拉麵')) return { label: '麵類料理', color: 'bg-[#D9C5B2] text-white border-[#C4B2A1]' };
-  if (name.includes('飯') || name.includes('燉飯')) return { label: '飯類料理', color: 'bg-[#BFB8AD] text-white border-[#A8A196]' };
-  if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛')) return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
-  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝')) return { label: '海鮮料理', color: 'bg-[#8FB0C2] text-white border-[#7E9EB0]' };
-  if (name.includes('蛋')) return { label: '蛋類料理', color: 'bg-[#F2D06B] text-[#7A6124] border-[#E5C35D]' };
-  if (name.includes('三杯') || name.includes('炒') || name.includes('花椰菜') || name.includes('蔬') || name.includes('菜')) return { label: '蔬食料理', color: 'bg-[#A3C2A3] text-[#3D523D] border-[#8FB18F]' };
-  
-  return { label: '肉類料理', color: 'bg-[#C2B2A3] text-white border-[#B1A08F]' };
+  if (name.includes('醬') || name.includes('餡') || name.includes('抹醬')) 
+    return { label: '自製醬料', color: 'bg-[#EDE3D7] text-[#5A4632]' };
+  if (name.includes('抹茶') || name.includes('茶') || name.includes('咖啡') || name.includes('拿鐵') || name.includes('汁') || name.includes('酒')) 
+    return { label: '飲品', color: 'bg-[#EEF2F6] text-[#2F3E4E]' };
+  if (name.includes('湯圓') || name.includes('紅豆') || name.includes('黑芝麻') || name.includes('雪梨') || name.includes('酥')) 
+    return { label: '中式甜點', color: 'bg-[#F6E7E2] text-[#6A3F3A]' };
+  if (name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('提拉米蘇') || name.includes('巧克力') || name.includes('派')) 
+    return { label: '西式甜點', color: 'bg-[#F1EDF7] text-[#4B3F63]' };
+  if (name.includes('豆腐') || name.includes('豆皮')) 
+    return { label: '豆腐料理', color: 'bg-[#F1F5E9] text-[#4C5A3E]' };
+  if (name.includes('麵') || name.includes('義大利麵') || name.includes('牛肉麵')) 
+    return { label: '麵類料理', color: 'bg-[#E6E1DC] text-[#4A4A4A]' };
+  if (name.includes('飯') || name.includes('炒飯') || name.includes('油飯')) 
+    return { label: '飯類料理', color: 'bg-[#F5F1EB] text-[#4F4B45]' };
+  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝')) 
+    return { label: '海鮮料理', color: 'bg-[#E8F0EE] text-[#2F4F4F]' };
+  if (name.includes('蛋')) 
+    return { label: '蛋類料理', color: 'bg-[#FFF3D9] text-[#6A5A3C]' };
+  if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛')) 
+    return { label: '肉類料理', color: 'bg-[#F2A19A] text-[#4A2E2B]' };
+  if (name.includes('湯') || name.includes('鍋') || name.includes('煲')) 
+    return { label: '湯品鍋物', color: 'bg-[#EFE9E4] text-[#5A4A42]' };
+  return { label: '蔬食料理', color: 'bg-[#EAF3E6] text-[#3F5A3C]' };
 };
 
 const CATEGORIES = [
-  '全部',
-  '肉類料理',
-  '海鮮料理',
-  '蔬食料理',
-  '湯品鍋物',
-  '蛋類料理',
-  '豆腐料理',
-  '麵類料理',
-  '飯類料理',
-  '中式甜點',
-  '西式甜點',
-  '自製醬餡'
+  '全部', '肉類料理', '海鮮料理', '蔬食料理', '湯品鍋物', '蛋類料理', '豆腐料理', '麵類料理', '飯類料理', '中式甜點', '西式甜點', '自製醬料', '飲品'
 ];
 
 // --- Sub-Components ---
@@ -147,8 +96,7 @@ const StickerTag: React.FC<{ classification: { label: string, color: string }, c
   <div className={`
     absolute z-[110] px-3 py-1.5 
     text-[10px] font-black uppercase tracking-widest 
-    shadow-[4px_4px_15px_-2px_rgba(0,0,0,0.4)] 
-    border border-white/30
+    shadow-[2px_2px_8px_-1px_rgba(0,0,0,0.1)] 
     rotate-[4deg] origin-center
     pointer-events-none
     ${classification.color} ${className}
@@ -221,7 +169,7 @@ const RecipeDetail: React.FC<{
                   <div className="px-8 pb-12 -mt-16 relative z-[80]">
                     <div className="bg-white rounded-[40px] p-2">
                       <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight mb-4">{recipe.name}</h1>
-                      <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4">{recipe.description}</p>
+                      <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
                       
                       <div className="relative flex gap-1 p-1 bg-gray-50/80 rounded-2xl mb-8">
                         <div className="absolute h-[calc(100%-8px)] w-[calc(50%-4px)] bg-white shadow-sm rounded-xl transition-all duration-300 z-0" style={{ transform: `translateX(${activeTab === 'ingredients' ? '0' : '100%'})` }} />
@@ -250,6 +198,17 @@ const RecipeDetail: React.FC<{
                           </>
                         ) : (
                           <div className="space-y-6 pt-4">
+                            {recipe.youtubeUrl && (
+                              <a 
+                                href={recipe.youtubeUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-3 w-full py-2.5 mb-4 bg-[#FF0000]/5 border border-[#FF0000]/10 rounded-xl text-[#FF0000] active:scale-[0.98] transition-all"
+                              >
+                                <YouTubeIcon />
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Watch Video Guide</span>
+                              </a>
+                            )}
                             {recipe.steps.map((step, i) => (
                               <div key={i} className="flex gap-4 items-start">
                                 <div className="w-6 h-6 rounded-lg bg-[#5C5C78] text-white flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5">{i + 1}</div>
@@ -436,10 +395,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* --- Optimized Navigation Bar with Perfectly Centered Indicator --- */}
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
-          {/* Centered Circle Indicator */}
           <div 
             className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0" 
             style={{ 
@@ -447,21 +404,13 @@ export default function App() {
               transform: 'translate(-50%, -50%)'
             }} 
           />
-          
-          <button 
-            onClick={() => setActiveTab('recipes')} 
-            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none"
-          >
+          <button onClick={() => setActiveTab('recipes')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <div className="flex flex-col items-center">
               <RecipeIcon active={activeTab === 'recipes'} />
               <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
             </div>
           </button>
-          
-          <button 
-            onClick={() => setActiveTab('menu')} 
-            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none"
-          >
+          <button onClick={() => setActiveTab('menu')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <div className="flex flex-col items-center">
               <MenuIcon active={activeTab === 'menu'} />
               <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
