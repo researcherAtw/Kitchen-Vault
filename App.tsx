@@ -47,7 +47,7 @@ const getRecipeIcon = (name: string, category: string) => {
   switch (category) {
     case '中式甜點': return <img src="Chinese_desserts.svg" className="w-20 h-20 object-contain" alt="Chinese Dessert" />;
     case '西式甜點': return <img src="cake.svg" className="w-20 h-20 object-contain" alt="Western Dessert" />;
-    case '自製醬料': return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
+    case '自製醬餡': return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
     case '飲品': return <img src="liquor.svg" className="w-20 h-20 object-contain" alt="Drinks" />;
     case '豆腐料理': return <img src="tofu.svg" className="w-20 h-20 object-contain" alt="Tofu" />;
     case '麵類料理': return <img src="noodle.svg" className="w-20 h-20 object-contain" alt="Noodles" />;
@@ -63,7 +63,7 @@ const getRecipeIcon = (name: string, category: string) => {
 
 const getRecipeClassification = (name: string) => {
   if (name.includes('醬') || name.includes('餡') || name.includes('抹醬')) 
-    return { label: '自製醬料', color: 'bg-[#EDE3D7] text-[#5A4632]' };
+    return { label: '自製醬餡', color: 'bg-[#EDE3D7] text-[#5A4632]' };
   if (name.includes('抹茶') || name.includes('茶') || name.includes('咖啡') || name.includes('拿鐵') || name.includes('汁') || name.includes('酒')) 
     return { label: '飲品', color: 'bg-[#EEF2F6] text-[#2F3E4E]' };
   if (name.includes('湯圓') || name.includes('紅豆') || name.includes('黑芝麻') || name.includes('雪梨') || name.includes('酥')) 
@@ -88,7 +88,7 @@ const getRecipeClassification = (name: string) => {
 };
 
 const CATEGORIES = [
-  '全部', '肉類料理', '海鮮料理', '蔬食料理', '湯品鍋物', '蛋類料理', '豆腐料理', '麵類料理', '飯類料理', '中式甜點', '西式甜點', '自製醬料', '飲品'
+  '全部', '肉類料理', '海鮮料理', '蔬食料理', '湯品鍋物', '蛋類料理', '豆腐料理', '麵類料理', '飯類料理', '中式甜點', '西式甜點', '自製醬餡', '飲品'
 ];
 
 // --- Sub-Components ---

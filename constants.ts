@@ -273,7 +273,7 @@ export const RECIPES: Recipe[] = [
   {
     id: 'recipe-12',
     name: '伯爵紅茶抹醬',
-    category: '自製醬料',
+    category: '自製醬餡',
     description: '早午餐的優雅良伴。濃郁乳香中透出伯爵茶特有的佛手柑清香，無論抹在吐司或是司康上都令人陶醉。',
     duration: '35 Min',
     calories: '150 Cal',
@@ -295,7 +295,7 @@ export const RECIPES: Recipe[] = [
   {
     id: 'recipe-19',
     name: '秘密黃金奶酥醬',
-    category: '自製醬料',
+    category: '自製醬餡',
     description: '超越市售的手工層次。精選奶油與高品質奶粉的黃金比例，烤過之後酥脆香甜，勾起童年回憶。',
     duration: '10 Min',
     calories: '120 Cal',
