@@ -48,12 +48,12 @@ const SecretStarIcon = () => (
   </svg>
 );
 
-// --- Bookmark Collection Icon (Flat style) ---
+// --- Bookmark Collection Icon (Direct switch, no opacity fade) ---
 const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
-  <div className={`relative flex items-center justify-center transition-transform duration-300 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
+  <div className={`relative flex items-center justify-center transition-transform duration-200 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
     <img 
       src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
-      className={`w-full h-full object-contain transition-all duration-300 ${active ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+      className="w-full h-full object-contain opacity-100"
       alt="Bookmark"
     />
   </div>
@@ -434,10 +434,10 @@ export default function App() {
                     const isFavorite = favorites.includes(recipe.id);
                     return (
                       <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                        {/* Bookmark Button - Hanging from edge */}
+                        {/* Bookmark Button - Absolutely aligned to top edge */}
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
-                          className="absolute top-0 left-6 z-[120] active:scale-75 transition-transform"
+                          className="absolute top-0 left-6 z-[120]"
                         >
                           <CollectionIcon active={isFavorite} className="w-8 h-8" />
                         </button>
@@ -465,10 +465,10 @@ export default function App() {
                     const recipeColor = getRecipeColor(recipe.category);
                     return (
                       <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                        {/* Bookmark Button in Menu view - Hanging from edge */}
+                        {/* Bookmark Button in Menu view - Absolutely aligned to top edge */}
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
-                          className="absolute top-0 left-6 z-[120] active:scale-75 transition-transform"
+                          className="absolute top-0 left-6 z-[120]"
                         >
                           <CollectionIcon active={true} className="w-8 h-8" />
                         </button>
@@ -490,7 +490,7 @@ export default function App() {
                   <p className="text-sm text-gray-400 mb-12">Curate your personal selection of secrets.</p>
                   <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
                     <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-                      <CollectionIcon active={false} className="w-12 h-12 opacity-20" />
+                      <CollectionIcon active={false} className="w-12 h-12" />
                     </div>
                     <h3 className="text-xl font-serif font-bold text-gray-300 uppercase tracking-tighter">Vault is Empty</h3>
                     <button onClick={() => setActiveTab('recipes')} className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Go Selecting</button>
