@@ -1,4 +1,3 @@
-
 import { Recipe } from './types';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { RECIPES } from './constants';
@@ -48,12 +47,13 @@ const SecretStarIcon = () => (
   </svg>
 );
 
-// --- Bookmark Collection Icon (Direct switch, no opacity fade) ---
+// --- Bookmark Collection Icon (Direct switch, fixed 100% opacity) ---
 const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center transition-transform duration-200 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
     <img 
       src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
       className="w-full h-full object-contain opacity-100"
+      style={{ opacity: 1 }}
       alt="Bookmark"
     />
   </div>
@@ -237,7 +237,7 @@ const RecipeDetail: React.FC<{
                               </div>
                             ))}
                             {recipe.tips && (
-                              <div className="mt-16 relative">
+                              <div className="mt-28 relative">
                                 <div className="absolute -top-4 left-6 z-20">
                                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
                                     <SecretStarIcon />
