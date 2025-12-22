@@ -1,4 +1,3 @@
-
 import { Recipe } from './types';
 
 export const RECIPES: Recipe[] = [
@@ -53,7 +52,7 @@ export const RECIPES: Recipe[] = [
     id: 'recipe-14',
     name: '金沙豆腐',
     category: '豆腐料理',
-    description: '外酥內嫩的鹹蛋黃料理。濃郁的金沙緊緊包裹住每一塊豆腐，鹹香與豆香在口中完美交織。',
+    description: '外酥內嫩的鹹蛋黃料理。濃郁的金沙緊緊包裹住每一塊豆腐，鹹香與豆香在口口中完美交織。',
     duration: '12 Min',
     calories: '350 Cal',
     nutrition: { carbs: '18g', protein: '22g', calories: '350', fat: '25g' },
@@ -70,6 +69,28 @@ export const RECIPES: Recipe[] = [
       '放入蒜末炒香，倒入豆腐快速翻炒，讓金沙均勻掛上後灑蔥花。'
     ],
     tips: '炒蛋黃時火一定要小，避免焦糊，泡泡越多口感越綿密。'
+  },
+  {
+    id: 'recipe-22',
+    name: '金沙蝦球',
+    category: '海鮮料理',
+    description: '鮮甜蝦仁與濃郁鹹蛋黃的華麗碰撞。鹹香順滑的金沙醬緊裹Ｑ彈蝦仁，每一口都充滿層次感，是一道視覺與味覺雙重享受的星級家常菜。',
+    duration: '15 Min',
+    calories: '380 Cal',
+    nutrition: { carbs: '8g', protein: '35g', calories: '380', fat: '22g' },
+    image: '',
+    ingredients: [
+      { id: 'i22-1', name: '蝦子', amount: '適量' },
+      { id: 'i22-2', name: '蒜頭末', amount: '2-3 顆' },
+      { id: 'i22-3', name: '鹹蛋黃醬/鹹蛋黃', amount: '2-3 大匙' },
+      { id: 'i22-4', name: '胡椒鹽', amount: '少量' }
+    ],
+    steps: [
+      '蝦子先撥殼並加熱至半熟備用。（可用微波爐加熱更方便！）',
+      '鍋內噴上少許的油量，熱鍋後將鹹蛋黃醬跟蒜頭末入鍋小火翻炒至小冒泡。',
+      '蝦子入鍋跟鹹蛋黃醬裹勻炒熟，稍微收汁並加入胡椒鹽調味後即可盛盤。'
+    ],
+    tips: '1.注意千萬不要把鹹蛋黃炒焦！\n2.由於鹹蛋黃醬已經有點鹹度了，所以胡椒鹽可適量或者不加。'
   },
   {
     id: 'recipe-8',
@@ -156,7 +177,7 @@ export const RECIPES: Recipe[] = [
     ],
     steps: [
       '鳳梨挖空留殼備用。肉丁與蝦仁炒熟盛起。',
-      '炒蛋後加入白飯大火翻炒，加入咖哩粉與魚露調味。',
+      '炒飯後加入白飯大火翻炒，加入咖哩粉與魚露調味。',
       '最後放入鳳梨塊與其他配料快速拌勻，裝入鳳梨殼中灑上肉鬆。'
     ],
     tips: '一定要用隔夜飯炒，才能保持米粒分明不濕軟。'
