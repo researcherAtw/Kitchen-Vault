@@ -1,3 +1,4 @@
+
 import { Recipe } from './types';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { RECIPES } from './constants';
@@ -47,7 +48,21 @@ const SecretStarIcon = () => (
   </svg>
 );
 
-// --- Bookmark Collection Icon (Direct switch, fixed 100% opacity) ---
+const SearchIcon = ({ className = "" }: { className?: string }) => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
+// --- Bookmark Collection Icon ---
 const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center transition-transform duration-200 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
     <img 
@@ -58,6 +73,26 @@ const CollectionIcon = ({ active, className = "" }: { active: boolean, className
     />
   </div>
 );
+
+// --- Highlighting Component ---
+const HighlightText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
+  if (!highlight.trim()) return <>{text}</>;
+  const regex = new RegExp(`(${highlight})`, 'gi');
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) => 
+        regex.test(part) ? (
+          <span key={i} className="bg-[#FFD154] text-gray-900 rounded-sm px-0.5 font-bold shadow-[0_0_8px_rgba(255,209,84,0.4)]">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
 
 // --- Helper Functions ---
 const getRecipeIcon = (name: string, category: string, className?: string) => {
@@ -124,7 +159,8 @@ const RecipeDetail: React.FC<{
   recipes: Recipe[];
   favorites: string[];
   onToggleFavorite: (id: string) => void;
-}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes, favorites, onToggleFavorite }) => {
+  searchQuery: string;
+}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes, favorites, onToggleFavorite, searchQuery }) => {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'steps'>('ingredients');
   const [currentCardIndex, setCurrentCardIndex] = useState(selectedIndex);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -144,6 +180,15 @@ const RecipeDetail: React.FC<{
     return () => cancelAnimationFrame(animationId);
   }, [selectedIndex]);
 
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const verticalScrollables = scrollContainerRef.current.querySelectorAll('.overflow-y-auto');
+      verticalScrollables.forEach(el => {
+        el.scrollTop = 0;
+      });
+    }
+  }, [currentCardIndex]);
+
   const handleHorizontalScroll = () => {
     if (!scrollContainerRef.current) return;
     const container = scrollContainerRef.current;
@@ -156,9 +201,9 @@ const RecipeDetail: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#FDFBF7] overflow-hidden font-sans max-w-md mx-auto">
+    <div className="fixed inset-0 z-[600] bg-[#FDFBF7] overflow-hidden font-sans max-w-md mx-auto shadow-2xl">
       <div className="h-full relative flex flex-col bg-white">
-        <button onClick={onClose} className="fixed top-8 left-6 z-[300] p-3 bg-white/95 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform">
+        <button onClick={onClose} className="fixed top-8 left-6 z-[650] p-3 bg-white/95 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform">
           <BackIcon />
         </button>
         <div ref={scrollContainerRef} onScroll={handleHorizontalScroll} className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap">
@@ -181,8 +226,10 @@ const RecipeDetail: React.FC<{
                   
                   <div className="px-8 pb-12 -mt-16 relative z-[80]">
                     <div className="bg-white rounded-[40px] p-2">
-                      <div className="flex justify-between items-start mb-4 gap-4">
-                        <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight flex-1">{recipe.name}</h1>
+                      <div className="flex justify-between items-start mb-1 gap-4">
+                        <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight flex-1">
+                          <HighlightText text={recipe.name} highlight={searchQuery} />
+                        </h1>
                         <button 
                           onClick={() => onToggleFavorite(recipe.id)}
                           className="mt-1 p-1 active:scale-90 transition-all bg-gray-50 rounded-2xl border border-white shadow-sm overflow-hidden"
@@ -190,6 +237,12 @@ const RecipeDetail: React.FC<{
                           <CollectionIcon active={isFavorite} className="w-10 h-10" />
                         </button>
                       </div>
+                      
+                      <div className="flex items-center gap-2 mb-6">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
+                        <span className="text-[12px] font-bold text-gray-400">{recipe.date}</span>
+                      </div>
+
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
                       
                       <div className="relative flex gap-1 p-1 bg-gray-50/80 rounded-2xl mb-8">
@@ -210,7 +263,9 @@ const RecipeDetail: React.FC<{
                                 <div key={ing.id} onClick={() => onToggleIngredient(ing.id)} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/60 border border-transparent active:border-gray-200 transition-all cursor-pointer">
                                   <div className="flex items-center gap-4">
                                     <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-[#5C5C78] border-[#5C5C78]' : 'border-gray-200'}`}>{isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>}</div>
-                                    <span className={`text-sm font-semibold ${isChecked ? 'text-gray-300 line-through' : 'text-gray-800'}`}>{ing.name}</span>
+                                    <span className={`text-sm font-semibold ${isChecked ? 'text-gray-300 line-through' : 'text-gray-800'}`}>
+                                      <HighlightText text={ing.name} highlight={searchQuery} />
+                                    </span>
                                   </div>
                                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{ing.amount}</span>
                                 </div>
@@ -237,7 +292,7 @@ const RecipeDetail: React.FC<{
                               </div>
                             ))}
                             {recipe.tips && (
-                              <div className="mt-28 relative">
+                              <div className="mt-36 relative">
                                 <div className="absolute -top-4 left-6 z-20">
                                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
                                     <SecretStarIcon />
@@ -312,8 +367,15 @@ export default function App() {
   const [checkedIngredients, setCheckedIngredients] = useState<Record<string, boolean>>({});
   const [favorites, setFavorites] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
+  const [categoryIndicatorStyle, setCategoryIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const navRef = useRef<HTMLDivElement>(null);
+  const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const touchStartRef = useRef<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (sessionStorage.getItem('kitchen_auth') === 'true') setIsAuth(true);
@@ -323,10 +385,30 @@ export default function App() {
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
+  // Reset scroll on search
   useEffect(() => {
-    if (navRef.current) {
-      const activeBtn = navRef.current.querySelector('[data-active="true"]') as HTMLElement;
-      if (activeBtn) {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchQuery, selectedCategory, activeTab]);
+
+  // Focus search input when opened
+  useEffect(() => {
+    if (isSearchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 300);
+    }
+  }, [isSearchOpen]);
+
+  // Update category indicator position
+  useEffect(() => {
+    const activeBtn = categoryRefs.current[selectedCategory];
+    if (activeBtn && activeTab === 'recipes') {
+      setCategoryIndicatorStyle({
+        left: activeBtn.offsetLeft,
+        width: activeBtn.offsetWidth
+      });
+      
+      if (navRef.current) {
         const containerWidth = navRef.current.offsetWidth;
         const btnOffset = activeBtn.offsetLeft;
         const btnWidth = activeBtn.offsetWidth;
@@ -361,19 +443,30 @@ export default function App() {
     localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
   };
 
-  const filteredRecipes = useMemo(() => {
-    if (selectedCategory === '全部') return RECIPES;
-    return RECIPES.filter(r => r.category === selectedCategory);
-  }, [selectedCategory]);
+  // Advanced searching logic
+  const performFilter = (list: Recipe[]) => {
+    let result = list;
+    if (selectedCategory !== '全部' && activeTab === 'recipes' && !searchQuery.trim()) {
+      result = result.filter(r => r.category === selectedCategory);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(r => 
+        r.name.toLowerCase().includes(q) || 
+        r.category.toLowerCase().includes(q) ||
+        r.ingredients.some(i => i.name.toLowerCase().includes(q))
+      );
+    }
+    return result;
+  };
 
-  const favoriteRecipes = useMemo(() => {
-    return RECIPES.filter(r => favorites.includes(r.id));
-  }, [favorites]);
+  const filteredRecipes = useMemo(() => performFilter(RECIPES), [selectedCategory, searchQuery, activeTab]);
+  const favoriteRecipes = useMemo(() => performFilter(RECIPES.filter(r => favorites.includes(r.id))), [favorites, searchQuery, activeTab]);
 
   const handleTouchStart = (e: React.TouchEvent) => { touchStartRef.current = e.touches[0].clientX; };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartRef.current === null || activeTab !== 'recipes') return;
+    if (touchStartRef.current === null || activeTab !== 'recipes' || isSearchOpen) return;
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStartRef.current - touchEnd;
     const currentIndex = CATEGORIES.indexOf(selectedCategory);
@@ -384,11 +477,53 @@ export default function App() {
     touchStartRef.current = null;
   };
 
+  const closeSearch = () => {
+    setSearchQuery('');
+    setIsSearchOpen(false);
+  };
+
+  const closeSearchIfEmpty = () => {
+    if (!searchQuery.trim()) {
+      closeSearch();
+    }
+  };
+
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
 
   return (
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
+        {/* Search Overlay Input - Higher index to cover header but under FAB */}
+        <div className={`absolute top-0 inset-x-0 z-[650] transition-all duration-500 ease-[cubic-bezier(0.2,1,0.2,1)] ${isSearchOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+          <div className="bg-white/60 backdrop-blur-2xl border-b border-gray-100 px-8 pt-12 pb-6 shadow-mystic">
+            <div className="relative flex items-center gap-3">
+              <div className="flex-1 relative">
+                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" />
+                <input 
+                  ref={searchInputRef}
+                  type="text" 
+                  placeholder="Search recipes, ingredients..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white/50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-semibold text-gray-900 focus:ring-2 focus:ring-[#5C5C78]/20 transition-all placeholder:text-gray-300"
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500">
+                    <CloseIcon />
+                  </button>
+                )}
+              </div>
+              <button 
+                onClick={closeSearch}
+                className="text-[10px] font-black uppercase tracking-widest text-[#5C5C78] px-2"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Header Section */}
         <div className="flex-shrink-0 z-[100] bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
           <header className="px-8 pt-10 pb-4">
             <div className="flex justify-between items-end mb-8">
@@ -399,11 +534,31 @@ export default function App() {
             </div>
             
             {activeTab === 'recipes' ? (
-              <div ref={navRef} className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 scroll-smooth">
+              <div ref={navRef} className="relative flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 scroll-smooth">
+                <div 
+                  className="absolute top-0 h-9 bg-[#5C5C78] rounded-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-0 shadow-md"
+                  style={{ 
+                    left: categoryIndicatorStyle.left, 
+                    width: categoryIndicatorStyle.width 
+                  }}
+                />
+                
                 {CATEGORIES.map((cat, idx) => {
                   const isActive = selectedCategory === cat;
                   return (
-                    <button key={cat} data-active={isActive} onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} className={`px-5 py-2.5 rounded-full text-[11px] font-bold tracking-tight transition-all duration-300 whitespace-nowrap ${isActive ? 'bg-[#5C5C78] text-white shadow-md' : 'bg-gray-100 text-gray-400 hover:bg-gray-200/60'}`}>{cat}</button>
+                    <button 
+                      key={cat} 
+                      ref={el => categoryRefs.current[cat] = el}
+                      onClick={() => { 
+                        const oldIdx = CATEGORIES.indexOf(selectedCategory); 
+                        setSlideDirection(idx > oldIdx ? 'right' : 'left'); 
+                        setSelectedCategory(cat); 
+                        if (searchQuery) setSearchQuery(''); // Clear search when category changes
+                      }} 
+                      className={`relative z-10 px-5 py-2.5 rounded-full text-[11px] font-bold tracking-tight transition-colors duration-300 whitespace-nowrap ${isActive && !searchQuery ? 'text-white' : 'bg-gray-100/50 text-gray-400 hover:bg-gray-200/60'}`}
+                    >
+                      {cat}
+                    </button>
                   );
                 })}
               </div>
@@ -424,17 +579,24 @@ export default function App() {
           </header>
         </div>
         
-        <div className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-32">
+        {/* Main Content Scrollable Area */}
+        <div 
+          ref={scrollContainerRef}
+          onClick={closeSearchIfEmpty}
+          className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44"
+        >
           {activeTab === 'recipes' ? (
             <main className="px-8 min-h-full select-none" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-              <div key={selectedCategory} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-500 ease-out fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-8 fade-in' : 'slide-in-from-left-8 fade-in'}`}>
+              <div key={selectedCategory + searchQuery} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-500 ease-out fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-8 fade-in' : 'slide-in-from-left-8 fade-in'}`}>
                 {filteredRecipes.length > 0 ? (
                   filteredRecipes.map((recipe, index) => {
                     const recipeColor = getRecipeColor(recipe.category);
                     const isFavorite = favorites.includes(recipe.id);
+                    // Find matched ingredients if searching
+                    const matchedIngredient = searchQuery.trim() ? recipe.ingredients.find(i => i.name.toLowerCase().includes(searchQuery.toLowerCase())) : null;
+
                     return (
-                      <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                        {/* Bookmark Button - Absolutely aligned to top edge */}
+                      <div key={recipe.id} onClick={() => setSelectedIndex(RECIPES.indexOf(recipe))} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
                           className="absolute top-0 left-6 z-[120]"
@@ -448,12 +610,34 @@ export default function App() {
                           </div>
                           <StickerTag label={recipe.category} color={recipeColor} className="top-2 -right-4" />
                         </div>
-                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2">{recipe.name}</h4>
+                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2 mb-1">
+                          <HighlightText text={recipe.name} highlight={searchQuery} />
+                        </h4>
+                        
+                        {/* Expanded Matched Content */}
+                        {matchedIngredient && (
+                          <div className="mt-1 px-1 py-1 rounded bg-[#FFD154]/10 border border-[#FFD154]/30 animate-in fade-in zoom-in duration-300">
+                             <p className="text-[9px] font-black text-[#5C5C78] uppercase tracking-tighter opacity-70">Matches:</p>
+                             <p className="text-[10px] font-bold text-gray-700 leading-tight">
+                               <HighlightText text={matchedIngredient.name} highlight={searchQuery} />
+                             </p>
+                          </div>
+                        )}
+
+                        <span className="mt-1 text-[12px] font-bold text-gray-400 px-1">{recipe.date}</span>
                       </div>
                     );
                   })
                 ) : (
-                  <div className="col-span-2 py-20 text-center"><p className="text-gray-400 font-serif italic mb-2">No secrets found here.</p><button onClick={() => setSelectedCategory('全部')} className="text-[10px] font-black uppercase tracking-widest text-[#5C5C78] underline">Reset Filter</button></div>
+                  <div className="col-span-2 py-20 text-center">
+                    <p className="text-gray-400 font-serif italic mb-2">No matching secrets found.</p>
+                    <button 
+                      onClick={() => { setSelectedCategory('全部'); setSearchQuery(''); }} 
+                      className="text-[10px] font-black uppercase tracking-widest text-[#5C5C78] underline"
+                    >
+                      Clear all filters
+                    </button>
+                  </div>
                 )}
               </div>
             </main>
@@ -463,9 +647,9 @@ export default function App() {
                 <div className="grid grid-cols-2 gap-x-4 gap-y-12 animate-in slide-in-from-bottom-8 fade-in duration-700">
                   {favoriteRecipes.map((recipe, index) => {
                     const recipeColor = getRecipeColor(recipe.category);
+                    const matchedIngredient = searchQuery.trim() ? recipe.ingredients.find(i => i.name.toLowerCase().includes(searchQuery.toLowerCase())) : null;
                     return (
-                      <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                        {/* Bookmark Button in Menu view - Absolutely aligned to top edge */}
+                      <div key={recipe.id} onClick={() => setSelectedIndex(RECIPES.indexOf(recipe))} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
                           className="absolute top-0 left-6 z-[120]"
@@ -479,7 +663,20 @@ export default function App() {
                           </div>
                           <StickerTag label={recipe.category} color={recipeColor} className="top-2 -right-4" />
                         </div>
-                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2">{recipe.name}</h4>
+                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2 mb-1">
+                          <HighlightText text={recipe.name} highlight={searchQuery} />
+                        </h4>
+                        
+                        {matchedIngredient && (
+                          <div className="mt-1 px-1 py-1 rounded bg-[#FFD154]/10 border border-[#FFD154]/30">
+                             <p className="text-[9px] font-black text-[#5C5C78] uppercase tracking-tighter opacity-70">Matches:</p>
+                             <p className="text-[10px] font-bold text-gray-700 leading-tight">
+                               <HighlightText text={matchedIngredient.name} highlight={searchQuery} />
+                             </p>
+                          </div>
+                        )}
+
+                        <span className="mt-1 text-[12px] font-bold text-gray-400 px-1">{recipe.date}</span>
                       </div>
                     );
                   })}
@@ -489,11 +686,16 @@ export default function App() {
                   <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
                   <p className="text-sm text-gray-400 mb-12">Curate your personal selection of secrets.</p>
                   <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
-                    <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-                      <CollectionIcon active={false} className="w-12 h-12" />
+                    <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center shadow-inner">
+                      <img src="chef_blue.svg" className="w-14 h-14 object-contain" alt="Chef Icon" />
                     </div>
                     <h3 className="text-xl font-serif font-bold text-gray-300 uppercase tracking-tighter">Vault is Empty</h3>
-                    <button onClick={() => setActiveTab('recipes')} className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Go Selecting</button>
+                    <button 
+                      onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} 
+                      className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all"
+                    >
+                      Go Selecting
+                    </button>
                   </div>
                 </div>
               )}
@@ -502,22 +704,31 @@ export default function App() {
         </div>
       </div>
 
+      {/* Floating Search Button - Increased z-index to stay above details and search overlay if needed */}
+      <button 
+        onClick={() => setIsSearchOpen(!isSearchOpen)}
+        className={`fixed bottom-28 right-8 z-[700] w-14 h-14 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-mystic active:scale-90 transition-all duration-300 ${isSearchOpen ? 'rotate-90 bg-[#5C5C78]' : ''}`}
+      >
+        {isSearchOpen ? <CloseIcon /> : <SearchIcon />}
+      </button>
+
+      {/* Bottom Main Nav */}
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0" 
+            className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" 
             style={{ 
               left: activeTab === 'recipes' ? '25%' : '75%',
               transform: 'translate(-50%, -50%)'
             }} 
           />
-          <button onClick={() => setActiveTab('recipes')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
+          <button onClick={() => { setActiveTab('recipes'); if(isSearchOpen) closeSearch(); }} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <div className="flex flex-col items-center">
               <RecipeIcon active={activeTab === 'recipes'} />
               <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
             </div>
           </button>
-          <button onClick={() => setActiveTab('menu')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
+          <button onClick={() => { setActiveTab('menu'); if(isSearchOpen) closeSearch(); }} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <div className="flex flex-col items-center">
               <MenuIcon active={activeTab === 'menu'} />
               <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
@@ -526,6 +737,7 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Detail View Overlay */}
       {selectedIndex !== null && (
         <RecipeDetail 
           selectedIndex={selectedIndex} 
@@ -533,9 +745,10 @@ export default function App() {
           checkedIngredients={checkedIngredients} 
           onToggleIngredient={handleToggle} 
           onResetIngredients={handleResetIngredients} 
-          recipes={activeTab === 'recipes' ? filteredRecipes : favoriteRecipes} 
+          recipes={RECIPES} 
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
+          searchQuery={searchQuery}
         />
       )}
     </div>
