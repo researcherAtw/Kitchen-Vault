@@ -42,49 +42,58 @@ const YouTubeIcon = () => (
   </svg>
 );
 
+const SecretStarIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-[#5C5C78]">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </svg>
+);
+
+// --- Bookmark Collection Icon (Flat style) ---
+const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
+  <div className={`relative flex items-center justify-center transition-transform duration-300 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
+    <img 
+      src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
+      className={`w-full h-full object-contain transition-all duration-300 ${active ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+      alt="Bookmark"
+    />
+  </div>
+);
+
 // --- Helper Functions ---
-const getRecipeIcon = (name: string, category: string) => {
+const getRecipeIcon = (name: string, category: string, className?: string) => {
+  const finalClass = className || "w-20 h-20 object-contain";
   switch (category) {
-    case '中式甜點': return <img src="Chinese_desserts.svg" className="w-20 h-20 object-contain" alt="Chinese Dessert" />;
-    case '西式甜點': return <img src="cake.svg" className="w-20 h-20 object-contain" alt="Western Dessert" />;
-    case '自製醬餡': return <img src="jam.svg" className="w-20 h-20 object-contain" alt="Sauce/Jam" />;
-    case '飲品': return <img src="liquor.svg" className="w-20 h-20 object-contain" alt="Drinks" />;
-    case '豆腐料理': return <img src="tofu.svg" className="w-20 h-20 object-contain" alt="Tofu" />;
-    case '麵類料理': return <img src="noodle.svg" className="w-20 h-20 object-contain" alt="Noodles" />;
-    case '飯類料理': return <img src="rice.svg" className="w-20 h-20 object-contain" alt="Rice" />;
-    case '肉類料理': return <img src="meat.svg" className="w-20 h-20 object-contain" alt="Meat" />;
-    case '海鮮料理': return <img src="seafood.svg" className="w-20 h-20 object-contain" alt="Seafood" />;
-    case '蛋類料理': return <img src="egg.svg" className="w-20 h-20 object-contain" alt="Egg" />;
-    case '蔬食料理': return <img src="vegetable.svg" className="w-20 h-20 object-contain" alt="Vegetable" />;
-    case '湯品鍋物': return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Soup" />;
-    default: return <img src="soup.svg" className="w-20 h-20 object-contain" alt="Default" />;
+    case '中式甜點': return <img src="Chinese_desserts.svg" className={finalClass} alt="Chinese Dessert" />;
+    case '西式甜點': return <img src="cake.svg" className={finalClass} alt="Western Dessert" />;
+    case '自製醬餡': return <img src="jam.svg" className={finalClass} alt="Sauce/Jam" />;
+    case '飲品': return <img src="cocktails.svg" className={finalClass} alt="Drinks" />; 
+    case '豆腐料理': return <img src="tofu.svg" className={finalClass} alt="Tofu" />;
+    case '麵類料理': return <img src="noodle.svg" className={finalClass} alt="Noodles" />;
+    case '飯類料理': return <img src="rice.svg" className={finalClass} alt="Rice" />;
+    case '肉類料理': return <img src="meat.svg" className={finalClass} alt="Meat" />;
+    case '海鮮料理': return <img src="seafood.svg" className={finalClass} alt="Seafood" />;
+    case '蛋類料理': return <img src="egg.svg" className={finalClass} alt="Egg" />;
+    case '蔬食料理': return <img src="vegetable.svg" className={finalClass} alt="Vegetable" />;
+    case '湯品鍋物': return <img src="soup.svg" className={finalClass} alt="Soup" />;
+    default: return <img src="soup.svg" className={finalClass} alt="Default" />;
   }
 };
 
-const getRecipeClassification = (name: string) => {
-  if (name.includes('醬') || name.includes('餡') || name.includes('抹醬')) 
-    return { label: '自製醬餡', color: 'bg-[#EDE3D7] text-[#5A4632]' };
-  if (name.includes('抹茶') || name.includes('茶') || name.includes('咖啡') || name.includes('拿鐵') || name.includes('汁') || name.includes('酒')) 
-    return { label: '飲品', color: 'bg-[#EEF2F6] text-[#2F3E4E]' };
-  if (name.includes('湯圓') || name.includes('紅豆') || name.includes('黑芝麻') || name.includes('雪梨') || name.includes('酥')) 
-    return { label: '中式甜點', color: 'bg-[#F6E7E2] text-[#6A3F3A]' };
-  if (name.includes('蛋糕') || name.includes('塔') || name.includes('餅乾') || name.includes('提拉米蘇') || name.includes('巧克力') || name.includes('派')) 
-    return { label: '西式甜點', color: 'bg-[#F1EDF7] text-[#4B3F63]' };
-  if (name.includes('豆腐') || name.includes('豆皮')) 
-    return { label: '豆腐料理', color: 'bg-[#F1F5E9] text-[#4C5A3E]' };
-  if (name.includes('麵') || name.includes('義大利麵') || name.includes('牛肉麵')) 
-    return { label: '麵類料理', color: 'bg-[#E6E1DC] text-[#4A4A4A]' };
-  if (name.includes('飯') || name.includes('炒飯') || name.includes('油飯')) 
-    return { label: '飯類料理', color: 'bg-[#F5F1EB] text-[#4F4B45]' };
-  if (name.includes('魚') || name.includes('蝦') || name.includes('海鮮') || name.includes('干貝')) 
-    return { label: '海鮮料理', color: 'bg-[#E8F0EE] text-[#2F4F4F]' };
-  if (name.includes('蛋')) 
-    return { label: '蛋類料理', color: 'bg-[#FFF3D9] text-[#6A5A3C]' };
-  if (name.includes('雞') || name.includes('肉') || name.includes('豬') || name.includes('牛')) 
-    return { label: '肉類料理', color: 'bg-[#F2A19A] text-[#4A2E2B]' };
-  if (name.includes('湯') || name.includes('鍋') || name.includes('煲')) 
-    return { label: '湯品鍋物', color: 'bg-[#EFE9E4] text-[#5A4A42]' };
-  return { label: '蔬食料理', color: 'bg-[#EAF3E6] text-[#3F5A3C]' };
+const getRecipeColor = (category: string) => {
+  switch (category) {
+    case '自製醬餡': return 'bg-[#EDE3D7] text-[#5A4632]';
+    case '飲品': return 'bg-[#EEF2F6] text-[#2F3E4E]';
+    case '中式甜點': return 'bg-[#F6E7E2] text-[#6A3F3A]';
+    case '西式甜點': return 'bg-[#F1EDF7] text-[#4B3F63]';
+    case '豆腐料理': return 'bg-[#F1F5E9] text-[#4C5A3E]';
+    case '麵類料理': return 'bg-[#E6E1DC] text-[#4A4A4A]';
+    case '飯類料理': return 'bg-[#F5F1EB] text-[#4F4B45]';
+    case '海鮮料理': return 'bg-[#E8F0EE] text-[#2F4F4F]';
+    case '蛋類料理': return 'bg-[#FFF3D9] text-[#6A5A3C]';
+    case '肉類料理': return 'bg-[#F2A19A] text-[#4A2E2B]';
+    case '湯品鍋物': return 'bg-[#EFE9E4] text-[#5A4A42]';
+    default: return 'bg-[#EAF3E6] text-[#3F5A3C]';
+  }
 };
 
 const CATEGORIES = [
@@ -92,16 +101,16 @@ const CATEGORIES = [
 ];
 
 // --- Sub-Components ---
-const StickerTag: React.FC<{ classification: { label: string, color: string }, className?: string }> = ({ classification, className }) => (
+const StickerTag: React.FC<{ label: string, color: string, className?: string }> = ({ label, color, className }) => (
   <div className={`
     absolute z-[110] px-3 py-1.5 
     text-[10px] font-black uppercase tracking-widest 
     shadow-[2px_2px_8px_-1px_rgba(0,0,0,0.1)] 
     rotate-[4deg] origin-center
     pointer-events-none
-    ${classification.color} ${className}
+    ${color} ${className}
   `}>
-    {classification.label}
+    {label}
     <div className="absolute bottom-0 right-0 w-2 h-2 bg-black/5" />
   </div>
 );
@@ -113,7 +122,9 @@ const RecipeDetail: React.FC<{
   onToggleIngredient: (id: string) => void;
   onResetIngredients: (ids: string[]) => void;
   recipes: Recipe[];
-}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes }) => {
+  favorites: string[];
+  onToggleFavorite: (id: string) => void;
+}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes, favorites, onToggleFavorite }) => {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'steps'>('ingredients');
   const [currentCardIndex, setCurrentCardIndex] = useState(selectedIndex);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -152,23 +163,33 @@ const RecipeDetail: React.FC<{
         </button>
         <div ref={scrollContainerRef} onScroll={handleHorizontalScroll} className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap">
           {recipes.map((recipe) => {
-            const classification = getRecipeClassification(recipe.name);
+            const recipeColor = getRecipeColor(recipe.category);
             const recipeIngIds = recipe.ingredients.map(i => i.id);
             const hasCheckedIngredients = recipeIngIds.some(id => checkedIngredients[id]);
+            const isFavorite = favorites.includes(recipe.id);
+
             return (
               <div key={recipe.id} className="w-full h-full flex-shrink-0 snap-center flex flex-col">
                 <div className="flex-1 overflow-y-auto hide-scrollbar flex flex-col pb-44">
                   <div className="relative w-full aspect-[4/3] flex-shrink-0 bg-gray-50 flex items-center justify-center overflow-visible border-b border-gray-100">
                     <div className="relative transform scale-[1.2] flex items-center justify-center">
-                      {getRecipeIcon(recipe.name, classification.label)}
+                      {getRecipeIcon(recipe.name, recipe.category)}
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-20" />
-                    <StickerTag classification={classification} className="bottom-12 right-6" />
+                    <StickerTag label={recipe.category} color={recipeColor} className="bottom-12 right-6" />
                   </div>
                   
                   <div className="px-8 pb-12 -mt-16 relative z-[80]">
                     <div className="bg-white rounded-[40px] p-2">
-                      <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight mb-4">{recipe.name}</h1>
+                      <div className="flex justify-between items-start mb-4 gap-4">
+                        <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight flex-1">{recipe.name}</h1>
+                        <button 
+                          onClick={() => onToggleFavorite(recipe.id)}
+                          className="mt-1 p-1 active:scale-90 transition-all bg-gray-50 rounded-2xl border border-white shadow-sm overflow-hidden"
+                        >
+                          <CollectionIcon active={isFavorite} className="w-10 h-10" />
+                        </button>
+                      </div>
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
                       
                       <div className="relative flex gap-1 p-1 bg-gray-50/80 rounded-2xl mb-8">
@@ -216,15 +237,27 @@ const RecipeDetail: React.FC<{
                               </div>
                             ))}
                             {recipe.tips && (
-                              <div className="mt-14 relative">
-                                <div className="absolute -top-3 left-6 z-20">
-                                  <div className="inline-flex items-center px-3 py-1 bg-[#5C5C78]/90 backdrop-blur-sm rounded-full border border-white/30 shadow-sm">
-                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" className="mr-1.5 opacity-80"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
-                                    <span className="text-white text-[8px] font-black tracking-[0.2em] uppercase opacity-90">Secret Tip</span>
+                              <div className="mt-16 relative">
+                                <div className="absolute -top-4 left-6 z-20">
+                                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
+                                    <SecretStarIcon />
+                                    <span className="text-[#5C5C78] text-[9px] font-black tracking-[0.25em] uppercase">Secret Tip</span>
                                   </div>
                                 </div>
-                                <div className="bg-[#FDFBF7] rounded-[32px] p-7 pt-11 border border-gray-100/50 shadow-sm relative overflow-hidden">
-                                  <p className="text-[#5A5A5A] text-[12.5px] font-semibold leading-[1.85] whitespace-pre-wrap">{recipe.tips}</p>
+                                <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
+                                  <div className="absolute -bottom-10 -right-10 opacity-[0.05] grayscale scale-[2.5] rotate-[-15deg] pointer-events-none transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-[-20deg]">
+                                    {getRecipeIcon(recipe.name, recipe.category, "w-32 h-32 object-contain")}
+                                  </div>
+
+                                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#5C5C78]/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-110" />
+                                  
+                                  <p className="text-[#4A4A4A] text-[13px] font-semibold leading-[1.8] tracking-tight whitespace-pre-wrap relative z-10">
+                                    {recipe.tips}
+                                  </p>
+                                  
+                                  <div className="mt-4 flex justify-end opacity-20 relative z-10">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  </div>
                                 </div>
                               </div>
                             )}
@@ -277,14 +310,17 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('全部');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [checkedIngredients, setCheckedIngredients] = useState<Record<string, boolean>>({});
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const navRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (sessionStorage.getItem('kitchen_auth') === 'true') setIsAuth(true);
-    const saved = localStorage.getItem('kitchen_checked_v8');
-    if (saved) setCheckedIngredients(JSON.parse(saved));
+    const savedChecked = localStorage.getItem('kitchen_checked_v8');
+    if (savedChecked) setCheckedIngredients(JSON.parse(savedChecked));
+    const savedFavorites = localStorage.getItem('kitchen_favorites_v11');
+    if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
   useEffect(() => {
@@ -305,6 +341,19 @@ export default function App() {
     localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
   };
 
+  const handleToggleFavorite = (id: string) => {
+    const newFavorites = favorites.includes(id) 
+      ? favorites.filter(fav => fav !== id) 
+      : [...favorites, id];
+    setFavorites(newFavorites);
+    localStorage.setItem('kitchen_favorites_v11', JSON.stringify(newFavorites));
+  };
+
+  const handleClearFavorites = () => {
+    setFavorites([]);
+    localStorage.setItem('kitchen_favorites_v11', JSON.stringify([]));
+  };
+
   const handleResetIngredients = (ids: string[]) => {
     const newState = { ...checkedIngredients };
     ids.forEach(id => { delete newState[id]; });
@@ -314,13 +363,17 @@ export default function App() {
 
   const filteredRecipes = useMemo(() => {
     if (selectedCategory === '全部') return RECIPES;
-    return RECIPES.filter(r => getRecipeClassification(r.name).label === selectedCategory);
+    return RECIPES.filter(r => r.category === selectedCategory);
   }, [selectedCategory]);
+
+  const favoriteRecipes = useMemo(() => {
+    return RECIPES.filter(r => favorites.includes(r.id));
+  }, [favorites]);
 
   const handleTouchStart = (e: React.TouchEvent) => { touchStartRef.current = e.touches[0].clientX; };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartRef.current === null) return;
+    if (touchStartRef.current === null || activeTab !== 'recipes') return;
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStartRef.current - touchEnd;
     const currentIndex = CATEGORIES.indexOf(selectedCategory);
@@ -345,7 +398,7 @@ export default function App() {
               </div>
             </div>
             
-            {activeTab === 'recipes' && (
+            {activeTab === 'recipes' ? (
               <div ref={navRef} className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 scroll-smooth">
                 {CATEGORIES.map((cat, idx) => {
                   const isActive = selectedCategory === cat;
@@ -354,23 +407,46 @@ export default function App() {
                   );
                 })}
               </div>
+            ) : (
+              <div className="pb-2 flex justify-between items-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#5C5C78]">Private Selection ({favorites.length})</p>
+                {favorites.length > 0 && (
+                  <button 
+                    onClick={handleClearFavorites}
+                    className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[9px] font-black uppercase tracking-widest text-[#5C5C78] active:scale-90 transition-all shadow-sm"
+                  >
+                    <ResetIcon />
+                    Reset
+                  </button>
+                )}
+              </div>
             )}
           </header>
         </div>
+        
         <div className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-32">
           {activeTab === 'recipes' ? (
             <main className="px-8 min-h-full select-none" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
               <div key={selectedCategory} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-500 ease-out fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-8 fade-in' : 'slide-in-from-left-8 fade-in'}`}>
                 {filteredRecipes.length > 0 ? (
                   filteredRecipes.map((recipe, index) => {
-                    const classification = getRecipeClassification(recipe.name);
+                    const recipeColor = getRecipeColor(recipe.category);
+                    const isFavorite = favorites.includes(recipe.id);
                     return (
                       <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
+                        {/* Bookmark Button - Hanging from edge */}
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
+                          className="absolute top-0 left-6 z-[120] active:scale-75 transition-transform"
+                        >
+                          <CollectionIcon active={isFavorite} className="w-8 h-8" />
+                        </button>
+
                         <div className={`w-full aspect-square rounded-[24px] overflow-visible shadow-sm mb-4 flex items-center justify-center relative transition-all duration-500 group-hover:shadow-md bg-gray-50/50`}>
                           <div className="transition-transform duration-700 group-hover:scale-110 flex items-center justify-center">
-                            {getRecipeIcon(recipe.name, classification.label)}
+                            {getRecipeIcon(recipe.name, recipe.category)}
                           </div>
-                          <StickerTag classification={classification} className="top-2 -right-4" />
+                          <StickerTag label={recipe.category} color={recipeColor} className="top-2 -right-4" />
                         </div>
                         <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2">{recipe.name}</h4>
                       </div>
@@ -382,14 +458,45 @@ export default function App() {
               </div>
             </main>
           ) : (
-            <div className="px-8 pt-8 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
-              <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
-              <p className="text-sm text-gray-400 mb-12">Curate your next culinary masterpiece.</p>
-              <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
-                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={PRIMARY_COLOR} strokeWidth="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2 v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></div>
-                <h3 className="text-xl font-serif font-bold">Empty Vault</h3>
-                <button className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Generate Suggestion</button>
-              </div>
+            <div className="px-8 min-h-full">
+              {favoriteRecipes.length > 0 ? (
+                <div className="grid grid-cols-2 gap-x-4 gap-y-12 animate-in slide-in-from-bottom-8 fade-in duration-700">
+                  {favoriteRecipes.map((recipe, index) => {
+                    const recipeColor = getRecipeColor(recipe.category);
+                    return (
+                      <div key={recipe.id} onClick={() => setSelectedIndex(index)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.97] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
+                        {/* Bookmark Button in Menu view - Hanging from edge */}
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }}
+                          className="absolute top-0 left-6 z-[120] active:scale-75 transition-transform"
+                        >
+                          <CollectionIcon active={true} className="w-8 h-8" />
+                        </button>
+
+                        <div className={`w-full aspect-square rounded-[24px] overflow-visible shadow-sm mb-4 flex items-center justify-center relative transition-all duration-500 group-hover:shadow-md bg-gray-50/50`}>
+                          <div className="transition-transform duration-700 group-hover:scale-110 flex items-center justify-center">
+                            {getRecipeIcon(recipe.name, recipe.category)}
+                          </div>
+                          <StickerTag label={recipe.category} color={recipeColor} className="top-2 -right-4" />
+                        </div>
+                        <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2">{recipe.name}</h4>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="pt-8 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
+                  <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
+                  <p className="text-sm text-gray-400 mb-12">Curate your personal selection of secrets.</p>
+                  <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
+                    <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
+                      <CollectionIcon active={false} className="w-12 h-12 opacity-20" />
+                    </div>
+                    <h3 className="text-xl font-serif font-bold text-gray-300 uppercase tracking-tighter">Vault is Empty</h3>
+                    <button onClick={() => setActiveTab('recipes')} className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all">Go Selecting</button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -420,7 +527,16 @@ export default function App() {
       </nav>
 
       {selectedIndex !== null && (
-        <RecipeDetail selectedIndex={selectedIndex} onClose={() => setSelectedIndex(null)} checkedIngredients={checkedIngredients} onToggleIngredient={handleToggle} onResetIngredients={handleResetIngredients} recipes={filteredRecipes} />
+        <RecipeDetail 
+          selectedIndex={selectedIndex} 
+          onClose={() => setSelectedIndex(null)} 
+          checkedIngredients={checkedIngredients} 
+          onToggleIngredient={handleToggle} 
+          onResetIngredients={handleResetIngredients} 
+          recipes={activeTab === 'recipes' ? filteredRecipes : favoriteRecipes} 
+          favorites={favorites}
+          onToggleFavorite={handleToggleFavorite}
+        />
       )}
     </div>
   );
