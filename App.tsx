@@ -734,15 +734,16 @@ export default function App() {
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
         
+        {/* 極透視搜尋膠囊：Capsule Shape with Ultra-Clear Glassmorphism */}
         <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-[900] w-[calc(100%-2rem)] max-w-[360px] transition-all duration-500 transform ${isSearchOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-20 opacity-0 scale-95 pointer-events-none'}`}>
           <div className="relative group">
-            <div className="absolute inset-0 bg-white/40 backdrop-blur-xl rounded-full border border-white/50 shadow-mystic pointer-events-none" />
+            <div className="absolute inset-0 bg-white/15 backdrop-blur-[1px] rounded-full border border-white/30 shadow-glass pointer-events-none" />
             <div className="relative flex items-center px-6 py-4 gap-3">
-              <span className="text-[#5C5C78]"><SearchIcon /></span>
+              <span className="text-gray-900"><SearchIcon /></span>
               <input 
                 ref={searchInputRef}
                 type="text" 
-                placeholder="Search everything..." 
+                placeholder="Search the book..." 
                 className="flex-1 bg-transparent border-none outline-none text-[14px] font-bold text-gray-900 placeholder-gray-400"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -754,10 +755,11 @@ export default function App() {
           </div>
         </div>
 
+        {/* 極透視 FAB：Floating Action Button with Ultra-Clear Glassmorphism */}
         <div className="fixed bottom-28 right-6 z-[800]">
           <button 
             onClick={isSearchOpen ? handleCloseSearch : handleOpenSearch}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border-4 backdrop-blur-[1px] ${isSearchOpen ? 'bg-[#5C5C78] text-white border-[#5C5C78]/20 rotate-90 shadow-mystic' : 'bg-white/25 text-[#5C5C78] border-white/40'}`}
+            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border border-white/30 backdrop-blur-[1px] ${isSearchOpen ? 'bg-[#5C5C78] text-white rotate-90 shadow-mystic' : 'bg-white/15 text-gray-900'}`}
           >
             {isSearchOpen ? <CloseIcon /> : <SearchIcon />}
           </button>
@@ -774,7 +776,6 @@ export default function App() {
             
             {activeTab === 'recipes' ? (
               <div ref={navRef} className="relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth">
-                {/* 焦點指示器：優化定位策略，使用絕對高度 h-9 並由 translate-y 控制居中 */}
                 <div 
                   className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
                   style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
@@ -900,7 +901,8 @@ export default function App() {
 
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
-          <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
+          {/* 修改點：調整動畫曲線與時間，移除彈跳感 */}
+          <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
           <button onClick={() => setActiveTab('recipes')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <RecipeIcon active={activeTab === 'recipes'} />
             <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
