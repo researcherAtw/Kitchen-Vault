@@ -82,8 +82,8 @@ const ChefHatIcon = ({ active }: { active: boolean }) => (
 const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
     <img 
-      src={active ? "offBookmark_on.svg" : "offBookmark_off.svg"} 
-      className="w-full h-full object-contain"
+      src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
+      className="w-full h-full object-contain opacity-100"
       alt="Bookmark"
     />
   </div>
@@ -110,27 +110,109 @@ const getRecipeIcon = (name: string, category: string, className?: string) => {
 };
 
 const getCategoryMiniIcon = (category: string) => {
+  const commonProps = {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    className: "transition-all duration-300 flex-shrink-0"
+  } as const;
+
   switch (category) {
     case '全部': return (
-      <div className="w-5 h-5 bg-gradient-to-tr from-[#5C5C78] to-[#8C8CA8] rounded-[6px] flex items-center justify-center">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-        </svg>
-      </div>
+      <svg {...commonProps}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
     );
-    case '肉類料理': return <img src="meat.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '海鮮料理': return <img src="seafood.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '蔬食料理': return <img src="vegetable.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '湯品鍋物': return <img src="soup.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '蛋類料理': return <img src="egg.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '豆腐料理': return <img src="tofu.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '麵類料理': return <img src="noodle.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '飯類料理': return <img src="rice.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '中式甜點': return <img src="Chinese_desserts.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '西式甜點': return <img src="cake.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '自製醬餡': return <img src="jam.svg" className="w-5 h-5 object-contain" alt="" />;
-    case '飲品': return <img src="cocktails.svg" className="w-5 h-5 object-contain" alt="" />;
+    case '肉類料理': return (
+      <svg {...commonProps}>
+        <path d="M12 2c3.5 0 9 2.5 9 10s-5.5 10-9 10-9-2.5-9-10 5.5-10 9-10z" />
+        <path d="M12 22s2-4 2-10-2-10-2-10" />
+      </svg>
+    );
+    case '海鮮料理': return (
+      <svg {...commonProps}>
+        <path d="M2 12s5-7 10-7 10 7 10 7-5 7-10 7-10-7-10-7Z" />
+        <path d="M12 5v14" />
+      </svg>
+    );
+    case '蔬食料理': return (
+      <svg {...commonProps}>
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 21 2c-1 5-1.5 5.5-1 11.2A7 7 0 0 1 11 20Z" />
+        <path d="M11 13v7" />
+      </svg>
+    );
+    case '湯品鍋物': return (
+      <svg {...commonProps}>
+        <path d="M3 12h18" />
+        <path d="M6 12c0 4.4 3.6 8 8 8s8-3.6 8-8" />
+        <path d="M9 7c0-2 1-3 3-3" />
+        <path d="M15 7c0-2 1-3 3-3" />
+      </svg>
+    );
+    case '蛋類料理': return (
+      <svg {...commonProps}>
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
+    );
+    case '豆腐料理': return (
+      <svg {...commonProps}>
+        <rect x="4" y="4" width="16" height="16" rx="2" />
+        <path d="M9 4v16" />
+        <path d="M15 4v16" />
+        <path d="M4 9h16" />
+        <path d="M4 15h16" />
+      </svg>
+    );
+    case '麵類料理': return (
+      <svg {...commonProps}>
+        <path d="M22 12s-3-4-10-4-10 4-10 4" />
+        <path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10" />
+        <path d="M7 8V4" />
+        <path d="M12 8V4" />
+        <path d="M17 8V4" />
+      </svg>
+    );
+    case '飯類料理': return (
+      <svg {...commonProps}>
+        <path d="M3 12h18" />
+        <path d="M3 12c0 5 4 9 9 9s9-4 9-9" />
+        <path d="M12 3c3 0 6 3 6 6H6c0-3 3-6 6-6Z" />
+      </svg>
+    );
+    case '中式甜點': return (
+      <svg {...commonProps}>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2v20" />
+        <path d="M2 12h20" />
+      </svg>
+    );
+    case '西式甜點': return (
+      <svg {...commonProps}>
+        <path d="m20 10-8-8-8 8v10h16V10Z" />
+        <path d="M4 14h16" />
+      </svg>
+    );
+    case '自製醬餡': return (
+      <svg {...commonProps}>
+        <path d="M6 18h12v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3Z" />
+        <path d="M8 18v-8h8v8" />
+        <path d="M7 6h10" />
+      </svg>
+    );
+    case '飲品': return (
+      <svg {...commonProps}>
+        <path d="M18 2h-3L7 11.1c-1.1 1.2-1.1 3 0 4.1L12.9 21c1.2 1.1 3 1.1 4.1 0L22 16" />
+        <path d="m11 15 4 4" />
+        <path d="m15 11 4 4" />
+      </svg>
+    );
     default: return null;
   }
 };
@@ -244,7 +326,7 @@ const RecipeDetail: React.FC<{
                           onClick={() => onToggleFavorite(recipe.id)}
                           className="mt-1 p-1 active:scale-90 transition-all bg-gray-50 rounded-2xl border border-white shadow-sm overflow-hidden"
                         >
-                          <CollectionIcon active={isFavorite} className="w-10 h-10" />
+                          <CollectionIcon active={isFavorite} className="w-14 h-14" />
                         </button>
                       </div>
                       
@@ -668,7 +750,7 @@ export default function App() {
         <div className="fixed bottom-28 right-6 z-[800]">
           <button 
             onClick={isSearchOpen ? handleCloseSearch : handleOpenSearch}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border-4 backdrop-blur-md ${isSearchOpen ? 'bg-[#5C5C78] text-white border-[#5C5C78]/20 rotate-90 shadow-mystic' : 'bg-white/15 text-[#5C5C78] border-white/40'}`}
+            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border-4 backdrop-blur-[1px] ${isSearchOpen ? 'bg-[#5C5C78] text-white border-[#5C5C78]/20 rotate-90 shadow-mystic' : 'bg-white/25 text-[#5C5C78] border-white/40'}`}
           >
             {isSearchOpen ? <CloseIcon /> : <SearchIcon />}
           </button>
@@ -684,23 +766,23 @@ export default function App() {
             </div>
             
             {activeTab === 'recipes' ? (
-              <div ref={navRef} className="relative flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 scroll-smooth">
-                {/* 焦點指示器 (已修正彈跳曲線為平滑減速) */}
+              <div ref={navRef} className="relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth">
+                {/* 焦點指示器：優化定位策略，使用絕對高度 h-9 並由 translate-y 控制居中 */}
                 <div 
-                  className="absolute top-0 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
+                  className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
                   style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
                 />
                 {CATEGORIES.map((cat, idx) => (
                   <button 
                     key={cat} 
-                    ref={el => categoryRefs.current[cat] = el} 
+                    ref={el => { categoryRefs.current[cat] = el; }} 
                     onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
-                    className={`group relative z-10 px-5 py-2.5 rounded-full flex items-center gap-2.5 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-gray-100/80 backdrop-blur-sm'}`}
+                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-gray-100/80 backdrop-blur-sm'}`}
                   >
-                    <div className={`transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
+                    <div className={`w-5 h-5 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
                       {getCategoryMiniIcon(cat)}
                     </div>
-                    {cat}
+                    <span>{cat}</span>
                   </button>
                 ))}
               </div>
@@ -713,7 +795,7 @@ export default function App() {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 leading-none mb-1">Selection</span>
-                      <span className="text-[13px] font-black text-[#5C5C78] leading-none">{favorites.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
+                      <span className="text-[13px] font-black text-[#5C5C78] line-height-none">{favorites.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
                     </div>
                   </div>
                   
@@ -750,8 +832,8 @@ export default function App() {
 
                   return (
                     <div key={recipe.id} onClick={() => setSelectedIndex(RECIPES.indexOf(recipe))} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.96] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                      <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }} className="absolute top-0 left-6 z-[120]">
-                        <CollectionIcon active={isFavorite} className="w-8 h-8" />
+                      <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }} className="absolute -top-3 -left-3 z-[120]">
+                        <CollectionIcon active={isFavorite} className="w-12 h-12" />
                       </button>
                       <div className={`w-full aspect-square rounded-[24px] overflow-visible shadow-sm mb-4 flex items-center justify-center relative transition-all duration-700 group-hover:shadow-md bg-gray-50/50`}>
                         <div className="transition-transform duration-700 group-hover:scale-110 flex items-center justify-center">
