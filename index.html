@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -33,6 +34,7 @@
             },
             boxShadow: {
               'mystic': '0 20px 50px -12px rgba(92, 92, 120, 0.15)',
+              'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
             }
           }
         }
@@ -41,11 +43,11 @@
     <style>
         body {
             font-family: 'Inconsolata', sans-serif;
-            background-color: #F3F1E8; /* 稍微加深背景色，突顯容器感 */
+            background-color: #F3F1E8;
             color: #1A1A1A;
             overflow-x: hidden;
             letter-spacing: -0.01em;
-            overscroll-behavior-y: none; /* 防止 PWA 橡皮筋回彈 */
+            overscroll-behavior-y: none;
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -61,6 +63,14 @@
         }
         .animate-shake {
             animation: shake 0.4s ease-in-out;
+        }
+        /* 搜尋高亮樣式 */
+        mark.search-highlight {
+            background-color: #FFD666;
+            color: #1A1A1A;
+            padding: 0 2px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
     </style>
 <script type="importmap">
