@@ -492,6 +492,13 @@ export default function App() {
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
+  // 新增：切換分頁時自動捲動至頂端
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
+
   useEffect(() => {
     const updateIndicator = () => {
       const activeBtn = categoryRefs.current[selectedCategory];
