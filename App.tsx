@@ -51,7 +51,7 @@ const SecretStarIcon = () => (
 const SearchIcon = ({ className = "" }: { className?: string }) => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <line x1="21" cy="21" x2="16.65" y2="16.65" />
   </svg>
 );
 
@@ -66,7 +66,7 @@ const CloseIcon = () => (
 const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center transition-transform duration-200 ${active ? 'scale-110' : 'scale-100'} ${className}`}>
     <img 
-      src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
+      src={active ? "offBookmark_on.svg" : "offBookmark_off.svg"} 
       className="w-full h-full object-contain opacity-100"
       style={{ opacity: 1 }}
       alt="Bookmark"
@@ -401,21 +401,29 @@ export default function App() {
 
   // Update category indicator position
   useEffect(() => {
-    const activeBtn = categoryRefs.current[selectedCategory];
-    if (activeBtn && activeTab === 'recipes') {
-      setCategoryIndicatorStyle({
-        left: activeBtn.offsetLeft,
-        width: activeBtn.offsetWidth
-      });
-      
-      if (navRef.current) {
-        const containerWidth = navRef.current.offsetWidth;
-        const btnOffset = activeBtn.offsetLeft;
-        const btnWidth = activeBtn.offsetWidth;
-        navRef.current.scrollTo({ left: btnOffset - (containerWidth / 2) + (btnWidth / 2), behavior: 'smooth' });
+    const updateIndicator = () => {
+      const activeBtn = categoryRefs.current[selectedCategory];
+      if (activeBtn && activeTab === 'recipes') {
+        setCategoryIndicatorStyle({
+          left: activeBtn.offsetLeft,
+          width: activeBtn.offsetWidth
+        });
+        
+        if (navRef.current) {
+          const containerWidth = navRef.current.offsetWidth;
+          const btnOffset = activeBtn.offsetLeft;
+          const btnWidth = activeBtn.offsetWidth;
+          navRef.current.scrollTo({ left: btnOffset - (containerWidth / 2) + (btnWidth / 2), behavior: 'smooth' });
+        }
       }
-    }
-  }, [selectedCategory, activeTab]);
+    };
+
+    // Use requestAnimationFrame to ensure the DOM has updated and offset widths are available
+    const rafId = requestAnimationFrame(() => {
+      updateIndicator();
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [selectedCategory, activeTab, isAuth]);
 
   const handleToggle = (id: string) => {
     const newState = { ...checkedIngredients, [id]: !checkedIngredients[id] };
@@ -493,7 +501,7 @@ export default function App() {
   return (
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
-        {/* Search Overlay Input - Higher index to cover header but under FAB */}
+        {/* Search Overlay Input - Semi-transparent glass background */}
         <div className={`absolute top-0 inset-x-0 z-[650] transition-all duration-500 ease-[cubic-bezier(0.2,1,0.2,1)] ${isSearchOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
           <div className="bg-white/60 backdrop-blur-2xl border-b border-gray-100 px-8 pt-12 pb-6 shadow-mystic">
             <div className="relative flex items-center gap-3">
@@ -545,6 +553,8 @@ export default function App() {
                 
                 {CATEGORIES.map((cat, idx) => {
                   const isActive = selectedCategory === cat;
+                  // Only apply white text if the indicator is positioned/visible (width > 0)
+                  const showActiveColor = isActive && !searchQuery && categoryIndicatorStyle.width > 0;
                   return (
                     <button 
                       key={cat} 
@@ -555,7 +565,7 @@ export default function App() {
                         setSelectedCategory(cat); 
                         if (searchQuery) setSearchQuery(''); // Clear search when category changes
                       }} 
-                      className={`relative z-10 px-5 py-2.5 rounded-full text-[11px] font-bold tracking-tight transition-colors duration-300 whitespace-nowrap ${isActive && !searchQuery ? 'text-white' : 'bg-gray-100/50 text-gray-400 hover:bg-gray-200/60'}`}
+                      className={`relative z-10 px-5 py-2.5 rounded-full text-[11px] font-bold tracking-tight transition-colors duration-300 whitespace-nowrap ${showActiveColor ? 'text-white' : 'bg-gray-100/50 text-gray-400 hover:bg-gray-200/60'}`}
                     >
                       {cat}
                     </button>
@@ -614,7 +624,7 @@ export default function App() {
                           <HighlightText text={recipe.name} highlight={searchQuery} />
                         </h4>
                         
-                        {/* Expanded Matched Content */}
+                        {/* Expanded Matched Content - Shows when searching and keyword is in ingredients */}
                         {matchedIngredient && (
                           <div className="mt-1 px-1 py-1 rounded bg-[#FFD154]/10 border border-[#FFD154]/30 animate-in fade-in zoom-in duration-300">
                              <p className="text-[9px] font-black text-[#5C5C78] uppercase tracking-tighter opacity-70">Matches:</p>
@@ -685,17 +695,19 @@ export default function App() {
                 <div className="pt-8 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
                   <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Menu</h1>
                   <p className="text-sm text-gray-400 mb-12">Curate your personal selection of secrets.</p>
-                  <div className="bg-white rounded-[40px] p-12 border border-dashed border-gray-200 flex flex-col items-center space-y-6">
-                    <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center shadow-inner">
-                      <img src="chef_blue.svg" className="w-14 h-14 object-contain" alt="Chef Icon" />
+                  <div className="flex flex-col items-center space-y-10">
+                    <div className="flex items-center justify-center animate-pulse duration-[3000ms]">
+                      <img src="chef_blue.svg" className="w-48 h-48 object-contain" alt="Chef Icon" />
                     </div>
-                    <h3 className="text-xl font-serif font-bold text-gray-300 uppercase tracking-tighter">Vault is Empty</h3>
-                    <button 
-                      onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} 
-                      className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all"
-                    >
-                      Go Selecting
-                    </button>
+                    <div className="flex flex-col items-center space-y-4">
+                      <h3 className="text-xl font-serif font-bold text-gray-300 uppercase tracking-tighter">Vault is Empty</h3>
+                      <button 
+                        onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} 
+                        className="bg-gray-900 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest uppercase shadow-xl active:scale-95 transition-all"
+                      >
+                        Go Selecting
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -704,7 +716,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Floating Search Button - Increased z-index to stay above details and search overlay if needed */}
+      {/* Floating Search Button - Increased z-index to stay above details overlay (600) and search overlay (650) */}
       <button 
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         className={`fixed bottom-28 right-8 z-[700] w-14 h-14 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-mystic active:scale-90 transition-all duration-300 ${isSearchOpen ? 'rotate-90 bg-[#5C5C78]' : ''}`}
@@ -745,7 +757,7 @@ export default function App() {
           checkedIngredients={checkedIngredients} 
           onToggleIngredient={handleToggle} 
           onResetIngredients={handleResetIngredients} 
-          recipes={RECIPES} 
+          recipes={activeTab === 'recipes' ? filteredRecipes : favoriteRecipes}
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
           searchQuery={searchQuery}
@@ -754,3 +766,4 @@ export default function App() {
     </div>
   );
 }
+
