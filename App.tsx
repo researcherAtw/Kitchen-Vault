@@ -689,7 +689,18 @@ export default function App() {
       scrollMemoryRef.current = scrollContainerRef.current.scrollTop;
     }
     setIsSearchOpen(true);
-    setTimeout(() => searchInputRef.current?.focus(), 300);
+    
+    // 行動端對焦優化：同步呼叫 focus() 更有助於觸發軟體鍵盤
+    searchInputRef.current?.focus();
+    
+    // 動畫定位後的補強對焦
+    setTimeout(() => {
+      if (searchInputRef.current) {
+        searchInputRef.current.focus();
+        // 某些 Android 瀏覽器可能需要額外的 click 模擬
+        searchInputRef.current.click();
+      }
+    }, 50);
   }, []);
 
   const handleCloseSearch = useCallback(() => {
@@ -782,6 +793,9 @@ export default function App() {
               <input 
                 ref={searchInputRef}
                 type="text" 
+                inputMode="search"
+                enterKeyHint="search"
+                autoComplete="off"
                 placeholder="Search globally..." 
                 className="flex-1 bg-transparent border-none outline-none text-[14px] font-bold text-gray-900 placeholder-gray-400"
                 value={searchQuery}
