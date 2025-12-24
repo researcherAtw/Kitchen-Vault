@@ -329,7 +329,7 @@ const RecipeDetail: React.FC<{
         <button onClick={onClose} className="fixed top-8 left-6 z-[650] p-3 bg-white/95 backdrop-blur-md rounded-2xl text-gray-900 shadow-xl active:scale-90 transition-transform">
           <BackIcon />
         </button>
-        <div ref={scrollContainerRef} onScroll={handleHorizontalScroll} className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap">
+        <div ref={scrollContainerRef} onScroll={handleHorizontalScroll} className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap pb-20">
           {recipes.map((recipe) => {
             const recipeColor = getRecipeColor(recipe.category);
             const recipeIngIds = recipe.ingredients.map(i => i.id);
@@ -396,7 +396,7 @@ const RecipeDetail: React.FC<{
                           <>
                             <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 pointer-events-none'}`}>
                               <button 
-                                onClick={() => onResetIngredients(recipeIngIds)} 
+                                onClick={(e) => { e.stopPropagation(); onResetIngredients(recipeIngIds); }} 
                                 className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group"
                               >
                                 <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
@@ -671,6 +671,10 @@ export default function App() {
     return list;
   }, [favorites, deferredSearchQuery, isSearchOpen, filterFunction]);
 
+  const currentDisplayList = useMemo(() => {
+    return activeTab === 'recipes' ? filteredRecipes : favoriteRecipes;
+  }, [activeTab, filteredRecipes, favoriteRecipes]);
+
   useLayoutEffect(() => {
     if (isSearchOpen && deferredSearchQuery) {
       const timer = requestAnimationFrame(() => highlightText(deferredSearchQuery));
@@ -824,7 +828,7 @@ export default function App() {
                     key={cat} 
                     ref={el => { categoryRefs.current[cat] = el; }} 
                     onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
-                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-100/80 backdrop-blur-sm'}`}
+                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap active:scale-95 transition-transform ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-100/80 backdrop-blur-sm'}`}
                   >
                     <div className={`w-5 h-5 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
                       {getCategoryMiniIcon(cat)}
@@ -870,10 +874,10 @@ export default function App() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {(activeTab === 'recipes' ? filteredRecipes : favoriteRecipes).length > 0 ? (
+          {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full select-none">
               <div key={(isSearchOpen && searchQuery ? 'global_search' : selectedCategory) + (activeTab === 'menu' ? '_menu' : '')} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
-                {(activeTab === 'recipes' ? filteredRecipes : favoriteRecipes).map((recipe) => {
+                {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
                   const q = deferredSearchQuery.toLowerCase().trim();
                   
@@ -883,8 +887,8 @@ export default function App() {
                   const qInDescription = q && recipe.description.toLowerCase().includes(q);
 
                   return (
-                    <div key={recipe.id} onClick={() => setSelectedIndex(RECIPES.indexOf(recipe))} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.96] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
-                      <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }} className="absolute -top-3 -left-3 z-[120]">
+                    <div key={recipe.id} onClick={() => setSelectedIndex(idx)} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.96] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
+                      <button onClick={(e) => { e.stopPropagation(); handleToggleFavorite(recipe.id); }} className="absolute -top-3 -left-3 z-[120] active:scale-90 transition-transform">
                         <CollectionIcon active={isFavorite} className="w-12 h-12" />
                       </button>
                       <div className={`w-full aspect-square rounded-[24px] overflow-visible shadow-sm mb-4 flex items-center justify-center relative transition-all duration-700 group-hover:shadow-md bg-gray-50/50`}>
@@ -950,13 +954,13 @@ export default function App() {
         </div>
       </div>
 
-      {/* 底部導航列 - 提升 z-index 並加入點擊縮放效果 */}
+      {/* 底部導航列 - 提升 z-index 並加入點擊反饋 */}
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px] transition-all duration-300">
         <div className="relative flex items-center h-14">
           <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
           <button 
             onClick={() => {
-              if (selectedIndex !== null) setSelectedIndex(null); // 如果正在看食譜詳情，點擊導航先關閉詳情
+              if (selectedIndex !== null) setSelectedIndex(null);
               if (activeTab === 'recipes') {
                 setSelectedCategory('全部');
                 if (isSearchOpen) handleCloseSearch();
@@ -972,7 +976,7 @@ export default function App() {
           </button>
           <button 
             onClick={() => {
-              if (selectedIndex !== null) setSelectedIndex(null); // 同步處理詳情關閉
+              if (selectedIndex !== null) setSelectedIndex(null);
               setActiveTab('menu');
             }} 
             className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none active:scale-90 transition-transform duration-200"
@@ -990,7 +994,7 @@ export default function App() {
           checkedIngredients={checkedIngredients} 
           onToggleIngredient={handleToggle} 
           onResetIngredients={handleResetIngredients} 
-          recipes={RECIPES}
+          recipes={currentDisplayList}
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
           searchQuery={deferredSearchQuery}
