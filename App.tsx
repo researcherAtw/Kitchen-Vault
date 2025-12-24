@@ -1,24 +1,24 @@
 
 import { Recipe } from './types';
-import React, { useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect, useDeferredValue } from 'react';
 import { RECIPES } from './constants';
 
 const CORRECT_PASSWORD = '333';
 const PRIMARY_COLOR = '#5C5C78';
 
-// --- UI Framework Icons ---
-const BackIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>;
+// --- Optimized UI Components with React.memo ---
+const BackIcon = React.memo(() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>);
 
-const RecipeIcon = ({ active }: { active: boolean }) => (
+const RecipeIcon = React.memo(({ active }: { active: boolean }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? PRIMARY_COLOR : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
     {active && <line x1="8" x2="16" y1="6" y2="6" strokeWidth="1.5" />}
     {active && <line x1="8" x2="16" y1="10" y2="10" strokeWidth="1.5" />}
   </svg>
-);
+));
 
-const MenuIcon = ({ active }: { active: boolean }) => (
+const MenuIcon = React.memo(({ active }: { active: boolean }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? PRIMARY_COLOR : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="8" y1="6" x2="21" y2="6" />
     <line x1="8" y1="12" x2="21" y2="12" />
@@ -27,59 +27,59 @@ const MenuIcon = ({ active }: { active: boolean }) => (
     <path d="M3 12h.01" strokeWidth="3" />
     <path d="M3 18h.01" strokeWidth="3" />
   </svg>
-);
+));
 
-const SearchIcon = () => (
+const SearchIcon = React.memo(() => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
   </svg>
-);
+));
 
-const CloseIcon = () => (
+const CloseIcon = React.memo(() => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <line x1="18" y1="6" x2="6" y2="18"></line>
     <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
-);
+));
 
-const ResetIcon = () => (
+const ResetIcon = React.memo(() => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <path d="M23 4v6h-6" />
     <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
   </svg>
-);
+));
 
-const YouTubeIcon = () => (
+const YouTubeIcon = React.memo(() => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
   </svg>
-);
+));
 
-const SecretStarIcon = () => (
+const SecretStarIcon = React.memo(() => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-[#5C5C78]">
     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
   </svg>
-);
+));
 
-const BasketIcon = ({ active }: { active: boolean }) => (
+const BasketIcon = React.memo(({ active }: { active: boolean }) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? "3" : "2"}>
     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
     <line x1="3" y1="6" x2="21" y2="6" />
     <path d="M16 10a4 4 0 0 1-8 0" />
   </svg>
-);
+));
 
-const ChefHatIcon = ({ active }: { active: boolean }) => (
+const ChefHatIcon = React.memo(({ active }: { active: boolean }) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? "3" : "2"}>
     <path d="M6 13.8V21h12v-7.2" />
     <path d="M9 21v-3" />
     <path d="M15 21v-3" />
     <path d="M12 3c-4.4 0-8 3.6-8 8 0 .8.2 1.6.5 2.3.4.9 1 1.7 1.8 2.3l1.7-1.7V5h8v8.9l1.7 1.7c.8-.6 1.4-1.4 1.8-2.3.3-.7.5-1.5.5-2.3 0-4.4-3.6-8-8-8Z" />
   </svg>
-);
+));
 
-const CollectionIcon = ({ active, className = "" }: { active: boolean, className?: string }) => (
+const CollectionIcon = React.memo(({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
     <img 
       src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
@@ -87,7 +87,7 @@ const CollectionIcon = ({ active, className = "" }: { active: boolean, className
       alt="Bookmark"
     />
   </div>
-);
+));
 
 // --- Helper Functions ---
 const getRecipeIcon = (name: string, category: string, className?: string) => {
@@ -239,7 +239,7 @@ const CATEGORIES = [
 ];
 
 // --- Sub-Components ---
-const StickerTag: React.FC<{ label: string, color: string, className?: string }> = ({ label, color, className }) => (
+const StickerTag = React.memo(({ label, color, className }: { label: string, color: string, className?: string }) => (
   <div className={`
     absolute z-[110] px-3 py-1.5 
     text-[10px] font-black uppercase tracking-widest 
@@ -251,7 +251,7 @@ const StickerTag: React.FC<{ label: string, color: string, className?: string }>
     {label}
     <div className="absolute bottom-0 right-0 w-2 h-2 bg-black/5" />
   </div>
-);
+));
 
 const RecipeDetail: React.FC<{ 
   selectedIndex: number;
@@ -262,10 +262,32 @@ const RecipeDetail: React.FC<{
   recipes: Recipe[];
   favorites: string[];
   onToggleFavorite: (id: string) => void;
-}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes, favorites, onToggleFavorite }) => {
+  searchQuery?: string;
+  onRefreshHighlight?: () => void;
+}> = ({ selectedIndex, onClose, checkedIngredients, onToggleIngredient, onResetIngredients, recipes, favorites, onToggleFavorite, searchQuery, onRefreshHighlight }) => {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'steps'>('ingredients');
   const [currentCardIndex, setCurrentCardIndex] = useState(selectedIndex);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // --- 高亮同步邏輯 ---
+  useEffect(() => {
+    if (onRefreshHighlight) onRefreshHighlight();
+  }, [activeTab, currentCardIndex, onRefreshHighlight]);
+
+  // --- 根據關鍵字智慧切換標籤 ---
+  useEffect(() => {
+    const recipe = recipes[currentCardIndex];
+    if (searchQuery && recipe) {
+      const q = searchQuery.toLowerCase().trim();
+      const inIngredients = recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
+      const inSteps = recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q));
+      
+      // 如果食材沒中但步驟中了，自動切換到步驟分頁
+      if (!inIngredients && inSteps) {
+        setActiveTab('steps');
+      }
+    }
+  }, [searchQuery, currentCardIndex, recipes]);
 
   useEffect(() => {
     const performScroll = () => {
@@ -281,7 +303,18 @@ const RecipeDetail: React.FC<{
     requestAnimationFrame(() => { requestAnimationFrame(performScroll); });
   }, [selectedIndex]);
 
-  const handleHorizontalScroll = () => {
+  // --- 換頁時自動捲動至頂部 ---
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const activeCard = scrollContainerRef.current.children[currentCardIndex];
+      const scrollArea = activeCard?.querySelector('.search-scroll-target');
+      if (scrollArea) {
+        scrollArea.scrollTop = 0;
+      }
+    }
+  }, [currentCardIndex]);
+
+  const handleHorizontalScroll = useCallback(() => {
     if (!scrollContainerRef.current) return;
     const container = scrollContainerRef.current;
     const cardWidth = container.clientWidth;
@@ -290,7 +323,7 @@ const RecipeDetail: React.FC<{
     if (newIndex !== currentCardIndex && newIndex >= 0 && newIndex < recipes.length) {
       setCurrentCardIndex(newIndex);
     }
-  };
+  }, [currentCardIndex, recipes.length]);
 
   return (
     <div className="fixed inset-0 z-[600] bg-[#FDFBF7] overflow-hidden font-sans max-w-md mx-auto shadow-2xl">
@@ -438,11 +471,11 @@ const RecipeDetail: React.FC<{
 const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   const [pin, setPin] = useState('');
   const [error, setError] = useState(false);
-  const handleVerify = () => {
+  const handleVerify = useCallback(() => {
     if (pin === CORRECT_PASSWORD) onLogin();
     else { setError(true); setTimeout(() => { setError(false); setPin(''); }, 600); }
-  };
-  useEffect(() => { if (pin.length === 3) handleVerify(); }, [pin]);
+  }, [pin, onLogin]);
+  useEffect(() => { if (pin.length === 3) handleVerify(); }, [pin, handleVerify]);
   return (
     <div className="h-[100dvh] bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans max-w-md mx-auto relative overflow-hidden">
       <div className="flex flex-col items-center text-center">
@@ -473,9 +506,10 @@ export default function App() {
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [categoryIndicatorStyle, setCategoryIndicatorStyle] = useState({ left: 0, width: 0 });
   
-  // 搜尋功能相關 State
+  // 搜尋功能相關 State - 實作 DeferredValue 以優化性能
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const scrollMemoryRef = useRef<number>(0);
 
   const navRef = useRef<HTMLDivElement>(null);
@@ -492,12 +526,12 @@ export default function App() {
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
-  // 新增：切換分頁時自動捲動至頂端
+  // --- 切換分頁、全域搜尋文字變更時，重置列表捲動位置 ---
   useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0;
     }
-  }, [activeTab]);
+  }, [activeTab, deferredSearchQuery, selectedCategory]);
 
   useEffect(() => {
     const updateIndicator = () => {
@@ -515,15 +549,14 @@ export default function App() {
     requestAnimationFrame(updateIndicator);
   }, [selectedCategory, activeTab, isAuth]);
 
-  // --- Search Logic ---
+  // --- Optimized Search Logic ---
   
   const clearHighlights = useCallback(() => {
     const container = document.getElementById('recipes-container');
-    const detailContainer = document.querySelector('.fixed.inset-0.z-\\[600\\]');
-    const targets = [container, detailContainer].filter(Boolean);
+    const detailModal = document.querySelector('.fixed.inset-0.z-\\[600\\]');
+    const targets = [container, detailModal].filter(Boolean) as Element[];
 
     targets.forEach(target => {
-      if (!target) return;
       const highlights = target.querySelectorAll('mark.search-highlight');
       highlights.forEach(h => {
         const parent = h.parentNode;
@@ -550,11 +583,12 @@ export default function App() {
     if (!cleanQuery) return;
 
     const container = document.getElementById('recipes-container');
-    const detailContainer = document.querySelector('.fixed.inset-0.z-\\[600\\]');
-    const targets = [container, detailContainer].filter(Boolean);
+    const detailModal = document.querySelector('.fixed.inset-0.z-\\[600\\]');
+    const targets = [container, detailModal].filter(Boolean) as Element[];
+
+    const regex = new RegExp(`(${cleanQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
 
     targets.forEach(target => {
-      if (!target) return;
       const walk = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) => {
           const parent = node.parentElement;
@@ -569,8 +603,6 @@ export default function App() {
       let node;
       while (node = walk.nextNode()) nodes.push(node as Text);
 
-      const regex = new RegExp(`(${cleanQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-
       nodes.forEach(textNode => {
         const text = textNode.nodeValue || '';
         if (regex.test(text)) {
@@ -582,13 +614,12 @@ export default function App() {
       });
     });
 
-    // 智慧導航：搜尋後自動捲動到第一個匹配結果
     requestAnimationFrame(() => {
-      const detailModal = document.querySelector('.fixed.inset-0.z-\\[600\\]');
+      const detailModalInner = document.querySelector('.fixed.inset-0.z-\\[600\\]');
       let firstMark: HTMLElement | null = null;
       
-      if (detailModal) {
-        const swiper = detailModal.querySelector('.flex-1.flex.overflow-x-auto');
+      if (detailModalInner) {
+        const swiper = detailModalInner.querySelector('.flex-1.flex.overflow-x-auto');
         if (swiper) {
           const width = swiper.clientWidth;
           const currentIndex = Math.round(swiper.scrollLeft / width);
@@ -599,7 +630,7 @@ export default function App() {
         }
         
         if (!firstMark) {
-          firstMark = detailModal.querySelector('mark.search-highlight') as HTMLElement;
+          firstMark = detailModalInner.querySelector('mark.search-highlight') as HTMLElement;
         }
       }
 
@@ -613,52 +644,53 @@ export default function App() {
     });
   }, [clearHighlights]);
 
+  // --- 全域篩選核心邏輯 ---
+  const filterFunction = useCallback((r: Recipe, q: string) => {
+    return r.name.toLowerCase().includes(q) ||
+           r.category.toLowerCase().includes(q) ||
+           r.description.toLowerCase().includes(q) ||
+           r.ingredients.some(ing => ing.name.toLowerCase().includes(q)) ||
+           r.steps.some(step => step.toLowerCase().includes(q)) ||
+           (r.tips && r.tips.toLowerCase().includes(q));
+  }, []);
+
   const filteredRecipes = useMemo(() => {
-    let list = selectedCategory === '全部' ? RECIPES : RECIPES.filter(r => r.category === selectedCategory);
-    
-    if (isSearchOpen && searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      list = list.filter(r => 
-        r.name.toLowerCase().includes(q) ||
-        r.category.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q) ||
-        r.ingredients.some(ing => ing.name.toLowerCase().includes(q))
-      );
+    const q = deferredSearchQuery.toLowerCase().trim();
+    // 關鍵變更：如果搜尋文字存在，則忽略 selectedCategory，進行全域搜尋
+    if (isSearchOpen && q) {
+      return RECIPES.filter(r => filterFunction(r, q));
     }
-    return list;
-  }, [selectedCategory, searchQuery, isSearchOpen]);
+    // 否則，按當前分類篩選
+    return selectedCategory === '全部' ? RECIPES : RECIPES.filter(r => r.category === selectedCategory);
+  }, [selectedCategory, deferredSearchQuery, isSearchOpen, filterFunction]);
 
   const favoriteRecipes = useMemo(() => {
     let list = RECIPES.filter(r => favorites.includes(r.id));
-    if (isSearchOpen && searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      list = list.filter(r => 
-        r.name.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q) ||
-        r.ingredients.some(ing => ing.name.toLowerCase().includes(q))
-      );
+    const q = deferredSearchQuery.toLowerCase().trim();
+    if (isSearchOpen && q) {
+      list = list.filter(r => filterFunction(r, q));
     }
     return list;
-  }, [favorites, searchQuery, isSearchOpen]);
+  }, [favorites, deferredSearchQuery, isSearchOpen, filterFunction]);
 
   useLayoutEffect(() => {
-    if (isSearchOpen && searchQuery) {
-      const timer = requestAnimationFrame(() => highlightText(searchQuery));
+    if (isSearchOpen && deferredSearchQuery) {
+      const timer = requestAnimationFrame(() => highlightText(deferredSearchQuery));
       return () => cancelAnimationFrame(timer);
     } else {
       clearHighlights();
     }
-  }, [searchQuery, filteredRecipes, isSearchOpen, highlightText, clearHighlights, activeTab]);
+  }, [deferredSearchQuery, filteredRecipes, isSearchOpen, highlightText, clearHighlights, activeTab, selectedIndex]);
 
-  const handleOpenSearch = () => {
+  const handleOpenSearch = useCallback(() => {
     if (scrollContainerRef.current) {
       scrollMemoryRef.current = scrollContainerRef.current.scrollTop;
     }
     setIsSearchOpen(true);
     setTimeout(() => searchInputRef.current?.focus(), 300);
-  };
+  }, []);
 
-  const handleCloseSearch = () => {
+  const handleCloseSearch = useCallback(() => {
     setIsSearchOpen(false);
     setSearchQuery('');
     clearHighlights();
@@ -671,7 +703,7 @@ export default function App() {
         });
       }
     });
-  };
+  }, [clearHighlights]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -681,36 +713,43 @@ export default function App() {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchOpen, searchQuery]);
+  }, [isSearchOpen, searchQuery, handleCloseSearch]);
 
-  const handleToggle = (id: string) => {
-    const newState = { ...checkedIngredients, [id]: !checkedIngredients[id] };
-    setCheckedIngredients(newState);
-    localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
-  };
+  const handleToggle = useCallback((id: string) => {
+    setCheckedIngredients(prev => {
+      const newState = { ...prev, [id]: !prev[id] };
+      localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
+      return newState;
+    });
+  }, []);
 
-  const handleToggleFavorite = (id: string) => {
-    const newFavorites = favorites.includes(id) ? favorites.filter(fav => fav !== id) : [...favorites, id];
-    setFavorites(newFavorites);
-    localStorage.setItem('kitchen_favorites_v11', JSON.stringify(newFavorites));
-  };
+  const handleToggleFavorite = useCallback((id: string) => {
+    setFavorites(prev => {
+      const newFavorites = prev.includes(id) ? prev.filter(fav => fav !== id) : [...prev, id];
+      localStorage.setItem('kitchen_favorites_v11', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  }, []);
 
-  const handleClearFavorites = () => {
+  const handleClearFavorites = useCallback(() => {
     setFavorites([]);
     localStorage.setItem('kitchen_favorites_v11', JSON.stringify([]));
-  };
+  }, []);
 
-  const handleResetIngredients = (ids: string[]) => {
-    const newState = { ...checkedIngredients };
-    ids.forEach(id => { delete newState[id]; });
-    setCheckedIngredients(newState);
-    localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
-  };
+  const handleResetIngredients = useCallback((ids: string[]) => {
+    setCheckedIngredients(prev => {
+      const newState = { ...prev };
+      ids.forEach(id => { delete newState[id]; });
+      localStorage.setItem('kitchen_checked_v8', JSON.stringify(newState));
+      return newState;
+    });
+  }, []);
 
-  const handleTouchStart = (e: React.TouchEvent) => { touchStartRef.current = e.touches[0].clientX; };
+  const handleTouchStart = useCallback((e: React.TouchEvent) => { touchStartRef.current = e.touches[0].clientX; }, []);
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartRef.current === null || activeTab !== 'recipes' || isSearchOpen) return;
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    // 當搜尋開啟且有輸入內容時，禁用手勢切換分類，避免衝突
+    if (touchStartRef.current === null || activeTab !== 'recipes' || (isSearchOpen && searchQuery)) return;
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStartRef.current - touchEnd;
     const currentIndex = CATEGORIES.indexOf(selectedCategory);
@@ -726,7 +765,7 @@ export default function App() {
       }
     }
     touchStartRef.current = null;
-  };
+  }, [activeTab, isSearchOpen, searchQuery, selectedCategory]);
 
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
 
@@ -734,7 +773,7 @@ export default function App() {
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
         
-        {/* 極透視搜尋膠囊：Capsule Shape with Ultra-Clear Glassmorphism */}
+        {/* 全域搜尋列 */}
         <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-[900] w-[calc(100%-2rem)] max-w-[360px] transition-all duration-500 transform ${isSearchOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-20 opacity-0 scale-95 pointer-events-none'}`}>
           <div className="relative group">
             <div className="absolute inset-0 bg-white/15 backdrop-blur-[1px] rounded-full border border-white/30 shadow-glass pointer-events-none" />
@@ -743,7 +782,7 @@ export default function App() {
               <input 
                 ref={searchInputRef}
                 type="text" 
-                placeholder="Search the book..." 
+                placeholder="Search globally..." 
                 className="flex-1 bg-transparent border-none outline-none text-[14px] font-bold text-gray-900 placeholder-gray-400"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -755,7 +794,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* 極透視 FAB：Floating Action Button with Ultra-Clear Glassmorphism */}
+        {/* 搜尋按鈕 (全域) */}
         <div className="fixed bottom-28 right-6 z-[800]">
           <button 
             onClick={isSearchOpen ? handleCloseSearch : handleOpenSearch}
@@ -775,7 +814,13 @@ export default function App() {
             </div>
             
             {activeTab === 'recipes' ? (
-              <div ref={navRef} className="relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth">
+              <div ref={navRef} className={`relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth transition-opacity duration-300 ${isSearchOpen && searchQuery ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
+                {/* 搜尋時顯示全域搜尋提示 */}
+                {isSearchOpen && searchQuery && (
+                   <div className="absolute inset-0 z-50 flex items-center bg-[#FDFBF7]/80">
+                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#5C5C78]">Global Search Mode Active</span>
+                   </div>
+                )}
                 <div 
                   className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
                   style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
@@ -785,7 +830,7 @@ export default function App() {
                     key={cat} 
                     ref={el => { categoryRefs.current[cat] = el; }} 
                     onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
-                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-gray-100/80 backdrop-blur-sm'}`}
+                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-100/80 backdrop-blur-sm'}`}
                   >
                     <div className={`w-5 h-5 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
                       {getCategoryMiniIcon(cat)}
@@ -802,12 +847,14 @@ export default function App() {
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 leading-none mb-1">Selection</span>
-                      <span className="text-[13px] font-black text-[#5C5C78] line-height-none">{favorites.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 leading-none mb-1">
+                        {isSearchOpen && searchQuery ? 'Filtered Menu' : 'Selection'}
+                      </span>
+                      <span className="text-[13px] font-black text-[#5C5C78] line-height-none">{favoriteRecipes.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
                     </div>
                   </div>
                   
-                  {favorites.length > 0 && (
+                  {!isSearchOpen && favorites.length > 0 && (
                     <button 
                       onClick={handleClearFavorites} 
                       className="flex items-center gap-2 px-5 py-2.5 bg-[#5C5C78] rounded-[14px] text-[10px] font-black uppercase tracking-widest text-white active:scale-95 transition-all shadow-lg shadow-[#5C5C78]/20 group"
@@ -831,12 +878,16 @@ export default function App() {
         >
           {(activeTab === 'recipes' ? filteredRecipes : favoriteRecipes).length > 0 ? (
             <main className="px-8 min-h-full select-none">
-              <div key={selectedCategory + (isSearchOpen ? '_search' : '')} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
+              <div key={(isSearchOpen && searchQuery ? 'global_search' : selectedCategory) + (activeTab === 'menu' ? '_menu' : '')} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
                 {(activeTab === 'recipes' ? filteredRecipes : favoriteRecipes).map((recipe) => {
                   const isFavorite = favorites.includes(recipe.id);
-                  const q = searchQuery.toLowerCase().trim();
-                  const isDescriptionMatch = q && recipe.description.toLowerCase().includes(q);
-                  const isIngredientMatch = q && recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
+                  const q = deferredSearchQuery.toLowerCase().trim();
+                  
+                  // 判斷搜尋命中的位置以提供視覺反饋
+                  const qInName = q && recipe.name.toLowerCase().includes(q);
+                  const qInIngredients = q && recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
+                  const qInSteps = q && (recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q)));
+                  const qInDescription = q && recipe.description.toLowerCase().includes(q);
 
                   return (
                     <div key={recipe.id} onClick={() => setSelectedIndex(RECIPES.indexOf(recipe))} className="group relative bg-white rounded-[32px] p-4 flex flex-col shadow-sm border border-gray-100 active:scale-[0.96] transition-all hover:shadow-mystic cursor-pointer overflow-visible">
@@ -852,15 +903,20 @@ export default function App() {
                       <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2 mb-1">{recipe.name}</h4>
                       
                       {isSearchOpen && q && (
-                        <div className="mt-2 space-y-1 border-t border-gray-50 pt-2">
-                          {isDescriptionMatch && (
+                        <div className="mt-2 space-y-1 border-t border-gray-50 pt-2 px-1">
+                          {qInDescription && !qInName && (
                             <p className="text-[10px] text-gray-400 line-clamp-2 leading-normal">
                               {recipe.description}
                             </p>
                           )}
-                          {isIngredientMatch && (
+                          {qInIngredients && (
                             <p className="text-[9px] text-[#5C5C78] font-bold uppercase tracking-wider">
-                              {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}
+                              食材匹配: {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}
+                            </p>
+                          )}
+                          {qInSteps && !qInIngredients && !qInName && (
+                            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                              <ChefHatIcon active={false} /> 匹配步驟內容
                             </p>
                           )}
                         </div>
@@ -877,10 +933,10 @@ export default function App() {
               <div className="pt-2 flex flex-col items-center text-center h-full">
                 <div className="space-y-4 mb-10">
                   <h3 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">
-                    {isSearchOpen ? 'No Matches Found' : 'The Black Book is Empty'}
+                    {isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}
                   </h3>
                   <p className="text-sm text-gray-400 max-w-[240px] mx-auto leading-relaxed">
-                    {isSearchOpen ? 'Try searching for specific ingredients or categories.' : 'Your curated collection will appear here.'}
+                    {isSearchOpen ? 'We couldn\'t find anything across all categories for your query.' : 'Your curated collection will appear here.'}
                   </p>
                 </div>
                 <div className="mb-8 relative">
@@ -890,7 +946,9 @@ export default function App() {
                     alt="Chef Icon" 
                   />
                 </div>
-                {!isSearchOpen && (
+                {isSearchOpen ? (
+                   <button onClick={handleCloseSearch} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all">Clear Search</button>
+                ) : (
                   <button onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all hover:bg-[#5C5C78]">Begin Curating</button>
                 )}
               </div>
@@ -901,7 +959,6 @@ export default function App() {
 
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
-          {/* 修改點：調整動畫曲線與時間，移除彈跳感 */}
           <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
           <button onClick={() => setActiveTab('recipes')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
             <RecipeIcon active={activeTab === 'recipes'} />
@@ -924,6 +981,8 @@ export default function App() {
           recipes={RECIPES}
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
+          searchQuery={deferredSearchQuery}
+          onRefreshHighlight={() => highlightText(deferredSearchQuery)}
         />
       )}
     </div>
