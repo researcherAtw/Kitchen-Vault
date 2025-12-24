@@ -44,7 +44,7 @@ const CloseIcon = React.memo(() => (
 ));
 
 const ResetIcon = React.memo(() => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <path d="M23 4v6h-6" />
     <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
   </svg>
@@ -282,7 +282,6 @@ const RecipeDetail: React.FC<{
       const inIngredients = recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
       const inSteps = recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q));
       
-      // 如果食材沒中但步驟中了，自動切換到步驟分頁
       if (!inIngredients && inSteps) {
         setActiveTab('steps');
       }
@@ -303,7 +302,6 @@ const RecipeDetail: React.FC<{
     requestAnimationFrame(() => { requestAnimationFrame(performScroll); });
   }, [selectedIndex]);
 
-  // --- 換頁時自動捲動至頂部 ---
   useEffect(() => {
     if (scrollContainerRef.current) {
       const activeCard = scrollContainerRef.current.children[currentCardIndex];
@@ -396,9 +394,16 @@ const RecipeDetail: React.FC<{
                       <div className="space-y-4">
                         {activeTab === 'ingredients' ? (
                           <>
-                            <div className={`flex justify-end transition-all duration-300 overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
-                              <button onClick={() => onResetIngredients(recipeIngIds)} className="flex items-center gap-2 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-[#5C5C78] hover:text-[#4A4A64] active:scale-95 transition-all"><ResetIcon />Reset Checklist</button>
+                            <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+                              <button 
+                                onClick={() => onResetIngredients(recipeIngIds)} 
+                                className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group"
+                              >
+                                <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
+                                Reset List
+                              </button>
                             </div>
+                            
                             {recipe.ingredients.map((ing) => {
                               const isChecked = checkedIngredients[ing.id];
                               return (
@@ -506,7 +511,6 @@ export default function App() {
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [categoryIndicatorStyle, setCategoryIndicatorStyle] = useState({ left: 0, width: 0 });
   
-  // 搜尋功能相關 State - 實作 DeferredValue 以優化性能
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -526,7 +530,6 @@ export default function App() {
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
-  // --- 切換分頁、全域搜尋文字變更時，重置列表捲動位置 ---
   useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0;
@@ -549,8 +552,6 @@ export default function App() {
     requestAnimationFrame(updateIndicator);
   }, [selectedCategory, activeTab, isAuth]);
 
-  // --- Optimized Search Logic ---
-  
   const clearHighlights = useCallback(() => {
     const container = document.getElementById('recipes-container');
     const detailModal = document.querySelector('.fixed.inset-0.z-\\[600\\]');
@@ -644,7 +645,6 @@ export default function App() {
     });
   }, [clearHighlights]);
 
-  // --- 全域篩選核心邏輯 ---
   const filterFunction = useCallback((r: Recipe, q: string) => {
     return r.name.toLowerCase().includes(q) ||
            r.category.toLowerCase().includes(q) ||
@@ -656,11 +656,9 @@ export default function App() {
 
   const filteredRecipes = useMemo(() => {
     const q = deferredSearchQuery.toLowerCase().trim();
-    // 關鍵變更：如果搜尋文字存在，則忽略 selectedCategory，進行全域搜尋
     if (isSearchOpen && q) {
       return RECIPES.filter(r => filterFunction(r, q));
     }
-    // 否則，按當前分類篩選
     return selectedCategory === '全部' ? RECIPES : RECIPES.filter(r => r.category === selectedCategory);
   }, [selectedCategory, deferredSearchQuery, isSearchOpen, filterFunction]);
 
@@ -748,7 +746,6 @@ export default function App() {
   const handleTouchStart = useCallback((e: React.TouchEvent) => { touchStartRef.current = e.touches[0].clientX; }, []);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    // 當搜尋開啟且有輸入內容時，禁用手勢切換分類，避免衝突
     if (touchStartRef.current === null || activeTab !== 'recipes' || (isSearchOpen && searchQuery)) return;
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStartRef.current - touchEnd;
@@ -773,7 +770,6 @@ export default function App() {
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
         
-        {/* 全域搜尋列 */}
         <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-[900] w-[calc(100%-2rem)] max-w-[360px] transition-all duration-500 transform ${isSearchOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-20 opacity-0 scale-95 pointer-events-none'}`}>
           <div className="relative group">
             <div className="absolute inset-0 bg-white/15 backdrop-blur-[1px] rounded-full border border-white/30 shadow-glass pointer-events-none" />
@@ -794,7 +790,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* 搜尋按鈕 (全域) */}
         <div className="fixed bottom-28 right-6 z-[800]">
           <button 
             onClick={isSearchOpen ? handleCloseSearch : handleOpenSearch}
@@ -815,7 +810,6 @@ export default function App() {
             
             {activeTab === 'recipes' ? (
               <div ref={navRef} className={`relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth transition-opacity duration-300 ${isSearchOpen && searchQuery ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-                {/* 搜尋時顯示全域搜尋提示 */}
                 {isSearchOpen && searchQuery && (
                    <div className="absolute inset-0 z-50 flex items-center bg-[#FDFBF7]/80">
                       <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#5C5C78]">Global Search Mode Active</span>
@@ -883,7 +877,6 @@ export default function App() {
                   const isFavorite = favorites.includes(recipe.id);
                   const q = deferredSearchQuery.toLowerCase().trim();
                   
-                  // 判斷搜尋命中的位置以提供視覺反饋
                   const qInName = q && recipe.name.toLowerCase().includes(q);
                   const qInIngredients = q && recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
                   const qInSteps = q && (recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q)));
@@ -957,14 +950,33 @@ export default function App() {
         </div>
       </div>
 
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[150] w-[calc(100%-4rem)] max-w-[320px]">
+      {/* 底部導航列 - 提升 z-index 並加入點擊縮放效果 */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px] transition-all duration-300">
         <div className="relative flex items-center h-14">
           <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
-          <button onClick={() => setActiveTab('recipes')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
+          <button 
+            onClick={() => {
+              if (selectedIndex !== null) setSelectedIndex(null); // 如果正在看食譜詳情，點擊導航先關閉詳情
+              if (activeTab === 'recipes') {
+                setSelectedCategory('全部');
+                if (isSearchOpen) handleCloseSearch();
+                scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                setActiveTab('recipes');
+              }
+            }} 
+            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none active:scale-90 transition-transform duration-200"
+          >
             <RecipeIcon active={activeTab === 'recipes'} />
             <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
           </button>
-          <button onClick={() => setActiveTab('menu')} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none">
+          <button 
+            onClick={() => {
+              if (selectedIndex !== null) setSelectedIndex(null); // 同步處理詳情關閉
+              setActiveTab('menu');
+            }} 
+            className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none active:scale-90 transition-transform duration-200"
+          >
             <MenuIcon active={activeTab === 'menu'} />
             <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
           </button>
