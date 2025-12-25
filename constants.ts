@@ -447,7 +447,7 @@ export const RECIPES: Recipe[] = [
       { id: 'i24-1', name: '湯圓', amount: '1 盒' },
       { id: 'i24-2', name: '乾香菇', amount: '6 朵' },
       { id: 'i24-3', name: '牛頭牌紅蔥醬', amount: '2 匙' },
-      { id: 'i24-4', name: '芹菜', amount: '3 支 (切末)' },
+      { id: 'i24-4', name: '芹菜末', amount: '3 支' },
       { id: 'i24-5', name: '山茼蒿', amount: '適量' },
       { id: 'i24-6', name: '蝦米', amount: '1 匙' },
       { id: 'i24-7', name: '白胡椒', amount: '適量' },
@@ -506,11 +506,11 @@ export const RECIPES: Recipe[] = [
       { id: 'i26-2', name: '聖女小番茄', amount: '6-8 顆' },
       { id: 'i26-3', name: '蒜末', amount: '6-7 瓣' },
       { id: 'i26-4', name: '九層塔 (只取葉子)', amount: '1 把' },
-      { id: 'i26-5', name: '辣椒段', amount: '1-2 根' },
+      { id: 'i26-5', name: '辣椒段', amount: '3-4 根' },
       { id: 'i26-6', name: '米酒/清酒', amount: '1 大匙' },
       { id: 'i26-7', name: '[醬料] 清醬油', amount: '2 大匙' },
       { id: 'i26-8', name: '[醬料] 冰糖', amount: '3-4 顆' },
-      { id: 'i26-9', name: '[醬料] 魚露', amount: '2 大匙' },
+      { id: 'i26-9', name: '[醬料] 魚露', amount: '3 大匙' },
       { id: 'i26-10', name: '[醬料] 檸檬汁', amount: '1-2 大匙' }
     ],
     steps: [

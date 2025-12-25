@@ -953,7 +953,7 @@ export default function App() {
                 <div className="mb-8 relative">
                   <img 
                     src="chef_blue.svg" 
-                    className="w-[11.25rem] h-[11.25rem] object-contain animate-pulse duration-[5000ms]" 
+                    className="w-[11.25rem] h-[11.25rem] object-contain" 
                     alt="Chef Icon" 
                   />
                 </div>
