@@ -10,11 +10,11 @@ const PRIMARY_COLOR = '#5C5C78';
 const BackIcon = React.memo(() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>);
 
 const RecipeIcon = React.memo(({ active }: { active: boolean }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? PRIMARY_COLOR : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-    {active && <line x1="8" x2="16" y1="6" y2="6" strokeWidth="1.5" />}
-    {active && <line x1="8" x2="16" y1="10" y2="10" strokeWidth="1.5" />}
+  <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? PRIMARY_COLOR : "none"} stroke={active ? "none" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" fill={active ? PRIMARY_COLOR : "none"} />
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill={active ? PRIMARY_COLOR : "none"} />
+    {active && <rect x="8" y="6" width="8" height="1.5" fill="white" rx="0.75" />}
+    {active && <rect x="8" y="10" width="8" height="1.5" fill="white" rx="0.75" />}
   </svg>
 ));
 
@@ -23,9 +23,9 @@ const MenuIcon = React.memo(({ active }: { active: boolean }) => (
     <line x1="8" y1="6" x2="21" y2="6" />
     <line x1="8" y1="12" x2="21" y2="12" />
     <line x1="8" y1="18" x2="21" y2="18" />
-    <path d="M3 6h.01" strokeWidth="3" />
-    <path d="M3 12h.01" strokeWidth="3" />
-    <path d="M3 18h.01" strokeWidth="3" />
+    <path d="M3 6h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
+    <path d="M3 12h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
+    <path d="M3 18h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
   </svg>
 ));
 
@@ -63,18 +63,16 @@ const SecretStarIcon = React.memo(() => (
 ));
 
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? "3" : "2"}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active ? "1" : "2"}>
     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="6" x2="21" y2="6" strokeWidth="2" />
     <path d="M16 10a4 4 0 0 1-8 0" />
   </svg>
 ));
 
 const ChefHatIcon = React.memo(({ active }: { active: boolean }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? "3" : "2"}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active ? "1" : "2"}>
     <path d="M6 13.8V21h12v-7.2" />
-    <path d="M9 21v-3" />
-    <path d="M15 21v-3" />
     <path d="M12 3c-4.4 0-8 3.6-8 8 0 .8.2 1.6.5 2.3.4.9 1 1.7 1.8 2.3l1.7-1.7V5h8v8.9l1.7 1.7c.8-.6 1.4-1.4 1.8-2.3.3-.7.5-1.5.5-2.3 0-4.4-3.6-8-8-8Z" />
   </svg>
 ));
@@ -111,106 +109,98 @@ const getRecipeIcon = (name: string, category: string, className?: string) => {
 
 const getCategoryMiniIcon = (category: string) => {
   const commonProps = {
-    width: "18",
-    height: "18",
+    width: "20",
+    height: "20",
     viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
     className: "transition-all duration-300 flex-shrink-0"
   } as const;
+
+  const inactiveFill = "#9CA3AF";
 
   switch (category) {
     case '全部': return (
       <svg {...commonProps}>
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z" fill="currentColor" />
+        <rect x="8" y="6" width="8" height="2" rx="1" fill={inactiveFill} opacity="0.3" />
       </svg>
     );
     case '肉類料理': return (
-      <svg {...commonProps}>
-        <path d="M12 2c3.5 0 9 2.5 9 10s-5.5 10-9 10-9-2.5-9-10 5.5-10 9-10z" />
-        <path d="M12 22s2-4 2-10-2-10-2-10" />
+      <svg {...commonProps} viewBox="0 0 512 512">
+        <path d="M380.5 178.6c-45-56-128.5-62.5-195.5-35.5-85 34-115 110-105 195s95 135 185 115 170-110 170-205c0-26.5-19.5-43.5-54.5-69.5z" fill="currentColor" />
+        <circle cx="210" cy="220" r="45" fill={inactiveFill} opacity="0.4" />
       </svg>
     );
     case '海鮮料理': return (
-      <svg {...commonProps}>
-        <path d="M2 12s5-7 10-7 10 7 10 7-5 7-10 7-10-7-10-7Z" />
-        <path d="M12 5v14" />
+      <svg {...commonProps} viewBox="0 0 512 512">
+        <path d="M430 180c-50-60-160-80-260-20-30 18-55 45-70 80l-80-40v120l80-40c15 35 40 62 70 80 100 60 210 40 260-20s50-100 0-160z" fill="currentColor" />
+        <circle cx="360" cy="230" r="25" fill={inactiveFill} opacity="0.4" />
       </svg>
     );
     case '蔬食料理': return (
-      <svg {...commonProps}>
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 21 2c-1 5-1.5 5.5-1 11.2A7 7 0 0 1 11 20Z" />
-        <path d="M11 13v7" />
+      <svg {...commonProps} viewBox="0 0 512 512">
+        <path d="M220 350h72v120h-72zM256 120c55 0 100 45 100 100s-45 100-100 100-100-45-100-100 45-100 100-100z" fill="currentColor" />
+        <circle cx="170" cy="260" r="60" fill="currentColor" opacity="0.8" />
+        <circle cx="342" cy="260" r="60" fill="currentColor" opacity="0.8" />
       </svg>
     );
     case '湯品鍋物': return (
       <svg {...commonProps}>
-        <path d="M3 12h18" />
-        <path d="M6 12c0 4.4 3.6 8 8 8s8-3.6 8-8" />
-        <path d="M9 7c0-2 1-3 3-3" />
-        <path d="M15 7c0-2 1-3 3-3" />
+        <path d="M4 12c0-2 2-4 4-4h8c2 0 4 2 4 4v2H4v-2z" fill="currentColor" />
+        <path d="M4 15c0 4 3 7 8 7s8-3 8-7H4z" fill="currentColor" opacity="0.8" />
+        <rect x="2" y="12" width="3" height="2" rx="1" fill="currentColor" />
+        <rect x="19" y="12" width="3" height="2" rx="1" fill="currentColor" />
+        <circle cx="12" cy="6" r="1.5" fill="currentColor" opacity="0.6" />
       </svg>
     );
     case '蛋類料理': return (
       <svg {...commonProps}>
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="4" />
+        <circle cx="12" cy="12" r="10" fill="currentColor" />
+        <circle cx="12" cy="12" r="4" fill={inactiveFill} opacity="0.4" />
       </svg>
     );
     case '豆腐料理': return (
       <svg {...commonProps}>
-        <rect x="4" y="4" width="16" height="16" rx="2" />
-        <path d="M9 4v16" />
-        <path d="M15 4v16" />
-        <path d="M4 9h16" />
-        <path d="M4 15h16" />
+        <rect x="4" y="4" width="16" height="16" rx="3" fill="currentColor" />
+        <path d="M10 4v16M4 10h16" stroke={inactiveFill} strokeWidth="1.5" opacity="0.3" />
       </svg>
     );
     case '麵類料理': return (
       <svg {...commonProps}>
-        <path d="M22 12s-3-4-10-4-10 4-10 4" />
-        <path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10" />
-        <path d="M7 8V4" />
-        <path d="M12 8V4" />
-        <path d="M17 8V4" />
+        <path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10H2z" fill="currentColor" />
+        <path d="M7 3v7M12 2v8M17 3v7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     );
     case '飯類料理': return (
       <svg {...commonProps}>
-        <path d="M3 12h18" />
-        <path d="M3 12c0 5 4 9 9 9s9-4 9-9" />
-        <path d="M12 3c3 0 6 3 6 6H6c0-3 3-6 6-6Z" />
+        <path d="M12 3c-5 0-9 4-9 9h18c0-5-4-9-9-9z" fill="currentColor" />
+        <path d="M3 14c0 5 4 9 9 9s9-4 9-9H3z" fill="currentColor" opacity="0.8" />
       </svg>
     );
     case '中式甜點': return (
       <svg {...commonProps}>
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 2v20" />
-        <path d="M2 12h20" />
+        <circle cx="12" cy="12" r="10" fill="currentColor" />
+        <path d="M12 5v14M5 12h14" stroke={inactiveFill} strokeWidth="2" opacity="0.4" />
       </svg>
     );
     case '西式甜點': return (
       <svg {...commonProps}>
-        <path d="m20 10-8-8-8 8v10h16V10Z" />
-        <path d="M4 14h16" />
+        <path d="M20 12v8H4v-8l8-8 8 8z" fill="currentColor" />
+        <circle cx="12" cy="10" r="2" fill={inactiveFill} opacity="0.4" />
       </svg>
     );
     case '自製醬餡': return (
       <svg {...commonProps}>
-        <path d="M6 18h12v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3Z" />
-        <path d="M8 18v-8h8v8" />
-        <path d="M7 6h10" />
+        <path d="M7 7.5a1.5 1.5 0 0 1 1.5-1.5h7a1.5 1.5 0 0 1 1.5 1.5V9H7V7.5z" fill="currentColor" opacity="0.6" />
+        <path d="M6 10h12v9a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-9z" fill="currentColor" />
+        <rect x="9" y="13" width="6" height="4" rx="0.5" fill={inactiveFill} opacity="0.4" />
+        <rect x="8" y="4" width="8" height="2" rx="1" fill="currentColor" />
       </svg>
     );
     case '飲品': return (
       <svg {...commonProps}>
-        <path d="M18 2h-3L7 11.1c-1.1 1.2-1.1 3 0 4.1L12.9 21c1.2 1.1 3 1.1 4.1 0L22 16" />
-        <path d="m11 15 4 4" />
-        <path d="m15 11 4 4" />
+        <path d="M5 4h14l-1 2H6L5 4z" fill="currentColor" opacity="0.5" />
+        <path d="M6 7h12l-1 12c-.2 2-2 3.5-4 3.5h-2c-2 0-3.8-1.5-4-3.5L6 7z" fill="currentColor" />
+        <rect x="11.5" y="2" width="1" height="20" rx="0.5" fill="currentColor" opacity="0.3" />
       </svg>
     );
     default: return null;
@@ -695,15 +685,10 @@ export default function App() {
       scrollMemoryRef.current = scrollContainerRef.current.scrollTop;
     }
     setIsSearchOpen(true);
-    
-    // 行動端對焦優化：同步呼叫 focus() 更有助於觸發軟體鍵盤
     searchInputRef.current?.focus();
-    
-    // 動畫定位後的補強對焦
     setTimeout(() => {
       if (searchInputRef.current) {
         searchInputRef.current.focus();
-        // 某些 Android 瀏覽器可能需要額外的 click 模擬
         searchInputRef.current.click();
       }
     }, 50);
@@ -834,11 +819,6 @@ export default function App() {
             
             {activeTab === 'recipes' ? (
               <div ref={navRef} className={`relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth transition-opacity duration-300 ${isSearchOpen && searchQuery ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-                {isSearchOpen && searchQuery && (
-                   <div className="absolute inset-0 z-50 flex items-center bg-[#FDFBF7]/80">
-                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#5C5C78]">Global Search Mode Active</span>
-                   </div>
-                )}
                 <div 
                   className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
                   style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
@@ -850,7 +830,7 @@ export default function App() {
                     onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
                     className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap active:scale-95 transition-transform ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-100/80 backdrop-blur-sm'}`}
                   >
-                    <div className={`w-5 h-5 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
+                    <div className={`flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-90 opacity-70 group-hover:opacity-100'}`}>
                       {getCategoryMiniIcon(cat)}
                     </div>
                     <span>{cat}</span>
@@ -952,7 +932,7 @@ export default function App() {
                   <h3 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">
                     {isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}
                   </h3>
-                  <p className="text-sm text-gray-400 max-w-[240px] mx-auto leading-relaxed">
+                  <p className={`text-sm text-gray-400 mx-auto leading-relaxed ${isSearchOpen ? 'max-w-[300px]' : 'whitespace-nowrap'}`}>
                     {isSearchOpen ? 'We couldn\'t find anything across all categories for your query.' : 'Your curated collection will appear here.'}
                   </p>
                 </div>
@@ -974,7 +954,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* 底部導航列 - 提升 z-index 並加入點擊反饋 */}
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px] transition-all duration-300">
         <div className="relative flex items-center h-14">
           <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
