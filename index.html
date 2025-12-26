@@ -15,15 +15,14 @@
     <!-- Assets -->
     <link rel="icon" type="image/svg+xml" href="book.svg">
     
-    <!-- Permissions Policy -->
-    <meta http-equiv="Permissions-Policy" content="browsing-topics=(), join-ad-interest-group=(), run-ad-auction=()">
+    <!-- Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <!-- Tailwind Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Explicitly requesting weights for Playfair (Display), Noto Serif TC (Chinese), and Inconsolata (Labels) -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Playfair+Display:wght@700&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
