@@ -23,7 +23,8 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <!-- Explicitly requesting weight 700 for all fonts to ensure bold appearance -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Playfair+Display:wght@700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -31,6 +32,7 @@
             fontFamily: {
               sans: ['Inconsolata', 'sans-serif'],
               serif: ['Noto Serif TC', 'serif'],
+              display: ['Playfair Display', 'serif'],
             },
             boxShadow: {
               'mystic': '0 20px 50px -12px rgba(92, 92, 120, 0.15)',

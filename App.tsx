@@ -20,9 +20,9 @@ const RecipeIcon = React.memo(({ active }: { active: boolean }) => (
 
 const MenuIcon = React.memo(({ active }: { active: boolean }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? PRIMARY_COLOR : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="8" y1="6" x2="21" y2="6" />
-    <line x1="8" y1="12" x2="21" y2="12" />
-    <line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="8" x2="21" y1="6" y2="6" />
+    <line x1="8" x2="21" y1="12" y2="12" />
+    <line x1="8" x2="21" y1="18" y2="18" />
     <path d="M3 6h.01" strokeWidth="3" />
     <path d="M3 12h.01" strokeWidth="3" />
     <path d="M3 18h.01" strokeWidth="3" />
@@ -242,7 +242,7 @@ const CATEGORIES = [
 const StickerTag = React.memo(({ label, color, className }: { label: string, color: string, className?: string }) => (
   <div className={`
     absolute z-[110] px-3 py-1.5 
-    text-[10px] font-black uppercase tracking-widest 
+    text-[10px] font-bold uppercase tracking-widest 
     shadow-[2px_2px_8px_-1px_rgba(0,0,0,0.1)] 
     rotate-[4deg] origin-center
     pointer-events-none
@@ -350,6 +350,7 @@ const RecipeDetail: React.FC<{
                   <div className="px-8 pb-12 -mt-16 relative z-[80]">
                     <div className="bg-white rounded-[40px] p-2">
                       <div className="flex justify-between items-start mb-1 gap-4">
+                        {/* Recipe Name uses Noto Serif TC bold */}
                         <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight flex-1">
                           {recipe.name}
                         </h1>
@@ -362,7 +363,8 @@ const RecipeDetail: React.FC<{
                       </div>
                       
                       <div className="flex items-center gap-2 mb-6">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
+                        {/* Label uses Playfair Display bold */}
+                        <span className="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
                         <span className="text-[12px] font-bold text-gray-400">{recipe.date}</span>
                       </div>
 
@@ -374,9 +376,10 @@ const RecipeDetail: React.FC<{
                           style={{ transform: `translateX(${activeTab === 'ingredients' ? '0' : '100%'})` }} 
                         />
                         
+                        {/* Tab buttons use Playfair Display bold */}
                         <button 
                           onClick={() => setActiveTab('ingredients')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-500'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-display font-bold text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-500'}`}
                         >
                           <BasketIcon active={activeTab === 'ingredients'} />
                           ITEMS ({recipe.ingredients.length})
@@ -384,7 +387,7 @@ const RecipeDetail: React.FC<{
                         
                         <button 
                           onClick={() => setActiveTab('steps')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-500'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-display font-bold text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-500'}`}
                         >
                           <ChefHatIcon active={activeTab === 'steps'} />
                           STEPS ({recipe.steps.length})
@@ -397,7 +400,7 @@ const RecipeDetail: React.FC<{
                             <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0 pointer-events-none'}`}>
                               <button 
                                 onClick={(e) => { e.stopPropagation(); onResetIngredients(recipeIngIds); }} 
-                                className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group"
+                                className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-display font-bold uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group"
                               >
                                 <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
                                 Reset List
@@ -429,12 +432,12 @@ const RecipeDetail: React.FC<{
                                 className="flex items-center justify-center gap-3 w-full py-2.5 mb-4 bg-[#FF0000]/5 border border-[#FF0000]/10 rounded-xl text-[#FF0000] active:scale-[0.98] transition-all"
                               >
                                 <YouTubeIcon />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Watch Video Guide</span>
+                                <span className="text-[10px] font-display font-bold uppercase tracking-[0.2em]">Watch Video Guide</span>
                               </a>
                             )}
                             {recipe.steps.map((step, i) => (
                               <div key={i} className="flex gap-4 items-start">
-                                <div className="w-6 h-6 rounded-lg bg-[#5C5C78] text-white flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5">{i + 1}</div>
+                                <div className="w-6 h-6 rounded-lg bg-[#5C5C78] text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">{i + 1}</div>
                                 <p className="text-gray-600 text-[14px] font-medium leading-relaxed">{step}</p>
                               </div>
                             ))}
@@ -443,7 +446,7 @@ const RecipeDetail: React.FC<{
                                 <div className="absolute -top-4 left-6 z-20">
                                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
                                     <SecretStarIcon />
-                                    <span className="text-[#5C5C78] text-[9px] font-black tracking-[0.25em] uppercase">Secret Tip</span>
+                                    <span className="text-[#5C5C78] text-[9px] font-display font-bold tracking-[0.25em] uppercase">Secret Tip</span>
                                   </div>
                                 </div>
                                 <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
@@ -493,8 +496,8 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
         <div className="mb-8 drop-shadow-2xl">
           <img src="chef_blue.svg" className="w-24 h-24 object-contain" alt="Logo" />
         </div>
-        <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
-        <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em]">The Black Book</p>
+        <h1 className="text-3xl font-display font-bold text-gray-900 mb-3">Kitchen Vault</h1>
+        <p className="text-[10px] text-gray-400 font-display font-bold uppercase tracking-[0.4em]">The Black Book</p>
       </div>
       <div className="flex-1 flex items-center justify-center w-full">
         <div className={`grid grid-cols-3 gap-6 w-full max-w-[280px] ${error ? 'animate-shake' : ''}`}>
@@ -695,15 +698,10 @@ export default function App() {
       scrollMemoryRef.current = scrollContainerRef.current.scrollTop;
     }
     setIsSearchOpen(true);
-    
-    // 行動端對焦優化：同步呼叫 focus() 更有助於觸發軟體鍵盤
     searchInputRef.current?.focus();
-    
-    // 動畫定位後的補強對焦
     setTimeout(() => {
       if (searchInputRef.current) {
         searchInputRef.current.focus();
-        // 某些 Android 瀏覽器可能需要額外的 click 模擬
         searchInputRef.current.click();
       }
     }, 50);
@@ -713,7 +711,6 @@ export default function App() {
     setIsSearchOpen(false);
     setSearchQuery('');
     clearHighlights();
-    
     requestAnimationFrame(() => {
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollTo({ 
@@ -791,9 +788,10 @@ export default function App() {
     <div className="h-[100dvh] bg-[#1A1A1A] font-sans max-w-md mx-auto relative flex flex-col shadow-2xl overflow-hidden">
       <div className="flex-1 bg-[#FDFBF7] relative flex flex-col h-full overflow-hidden">
         
+        {/* Search Overlay - Updated for Porcelain Glass */}
         <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-[900] w-[calc(100%-2rem)] max-w-[360px] transition-all duration-500 transform ${isSearchOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-20 opacity-0 scale-95 pointer-events-none'}`}>
           <div className="relative group">
-            <div className="absolute inset-0 bg-white/15 backdrop-blur-[1px] rounded-full border border-white/30 shadow-glass pointer-events-none" />
+            <div className="absolute inset-0 bg-white/95 backdrop-blur-[2px] rounded-full border border-gray-200/50 shadow-glass pointer-events-none" />
             <div className="relative flex items-center px-6 py-4 gap-3">
               <span className="text-gray-900"><SearchIcon /></span>
               <input 
@@ -814,71 +812,86 @@ export default function App() {
           </div>
         </div>
 
+        {/* Global Search Button - Updated for Porcelain Glass */}
         <div className="fixed bottom-28 right-6 z-[800]">
           <button 
             onClick={isSearchOpen ? handleCloseSearch : handleOpenSearch}
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border border-white/30 backdrop-blur-[1px] ${isSearchOpen ? 'bg-[#5C5C78] text-white rotate-90 shadow-mystic' : 'bg-white/15 text-gray-900'}`}
+            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 active:scale-90 shadow-glass border border-gray-200/50 backdrop-blur-[2px] ${isSearchOpen ? 'bg-[#5C5C78] text-white rotate-90 shadow-mystic' : 'bg-white/95 text-gray-900'}`}
           >
             {isSearchOpen ? <CloseIcon /> : <SearchIcon />}
           </button>
         </div>
 
-        <div className="flex-shrink-0 z-[100] bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+        {/* Header Section - Modern Open Layout (Removed bg, border, and shadow) */}
+        <div className="flex-shrink-0 z-[100] bg-transparent">
           <header className="px-8 pt-10 pb-4">
             <div className="flex justify-between items-end mb-8">
-              <h1 className="text-[36px] font-serif font-bold text-gray-900 leading-none">Kitchen Vault</h1>
-              <div className="w-12 h-12 rounded-[14px] bg-white p-1 shadow-mystic border border-gray-50 flex items-center justify-center">
-                <img src="isa_icon.svg" className="w-full h-full object-contain rounded-[10px]" alt="Vault Icon" />
+              {/* Main Title uses Playfair Display bold */}
+              <h1 className="text-[36px] font-display font-bold text-gray-900 leading-none">Kitchen Vault</h1>
+              <div className="relative group">
+                <div className="absolute inset-0 scale-125 bg-[#5C5C78]/5 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative w-14 h-14 rounded-[20px] bg-white border border-gray-100 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.08),inset_0_0_10px_rgba(92,92,120,0.02)] flex items-center justify-center transition-all duration-500 hover:shadow-mystic active:scale-95 overflow-hidden">
+                  <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(45deg,#5C5C78_25%,transparent_25%,transparent_50%,#5C5C78_50%,#5C5C78_75%,transparent_75%,transparent)] [background-size:4px_4px]" />
+                  <div className="relative z-10 w-9 h-9 transition-transform duration-500 group-hover:scale-110">
+                    <img 
+                      src="isa_icon.svg" 
+                      className="w-full h-full object-contain opacity-80" 
+                      style={{ filter: 'invert(37%) sepia(13%) saturate(1004%) hue-rotate(201deg) brightness(95%) contrast(87%)' }} 
+                      alt="Vault Icon" 
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/60 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+                </div>
               </div>
             </div>
             
             {activeTab === 'recipes' ? (
-              <div ref={navRef} className={`relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth transition-opacity duration-300 ${isSearchOpen && searchQuery ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-                {isSearchOpen && searchQuery && (
-                   <div className="absolute inset-0 z-50 flex items-center bg-[#FDFBF7]/80">
-                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#5C5C78]">Global Search Mode Active</span>
-                   </div>
-                )}
-                <div 
-                  className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" 
-                  style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
-                />
-                {CATEGORIES.map((cat, idx) => (
-                  <button 
-                    key={cat} 
-                    ref={el => { categoryRefs.current[cat] = el; }} 
-                    onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
-                    className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap active:scale-95 transition-transform ${selectedCategory === cat && categoryIndicatorStyle.width > 0 ? 'text-white' : 'bg-white/40 text-gray-400 hover:bg-100/80 backdrop-blur-sm'}`}
-                  >
-                    <div className={`w-5 h-5 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
-                      {getCategoryMiniIcon(cat)}
-                    </div>
-                    <span>{cat}</span>
-                  </button>
-                ))}
+              <div className="relative">
+                {/* Upper Track Container - Now Open and Borderless */}
+                <div ref={navRef} className={`relative flex items-center h-12 overflow-x-auto hide-scrollbar gap-1 px-1 scroll-smooth transition-opacity duration-300 z-10 ${isSearchOpen && searchQuery ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
+                  {isSearchOpen && searchQuery && (
+                     <div className="absolute inset-0 z-50 flex items-center bg-[#FDFBF7]/95 rounded-full">
+                        <span className="ml-6 text-[10px] font-display font-bold uppercase tracking-[0.25em] text-[#5C5C78]">Search Active</span>
+                     </div>
+                  )}
+                  
+                  {/* Category Indicator滑塊 - Premium paper feel floating over the track */}
+                  <div 
+                    className="absolute top-1/2 -translate-y-1/2 h-9 bg-white border border-gray-100 rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0 shadow-[0_2px_10px_rgba(0,0,0,0.05)]" 
+                    style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} 
+                  />
+
+                  {CATEGORIES.map((cat, idx) => (
+                    <button 
+                      key={cat} 
+                      ref={el => { categoryRefs.current[cat] = el; }} 
+                      onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} 
+                      className={`group relative z-10 px-5 h-9 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap active:scale-95 transition-transform ${selectedCategory === cat ? 'text-[#5C5C78]' : 'text-gray-400 hover:text-gray-600'}`}
+                    >
+                      <div className={`w-4 h-4 flex items-center justify-center transition-all duration-500 ${selectedCategory === cat ? 'scale-110' : 'scale-95 opacity-80'}`}>
+                        {getCategoryMiniIcon(cat)}
+                      </div>
+                      <span>{cat}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             ) : (
-              <div className="pb-3 px-1">
-                <div className="flex items-center justify-between p-2 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[20px] shadow-glass">
+              <div className="pb-1 px-1">
+                <div className="flex items-center justify-between p-2 bg-white/95 backdrop-blur-[2px] border border-gray-200/50 rounded-[20px] shadow-sm">
                   <div className="flex items-center gap-3 pl-3">
                     <div className="p-1.5 bg-[#5C5C78]/10 rounded-lg text-[#5C5C78]">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 leading-none mb-1">
-                        {isSearchOpen && searchQuery ? 'Filtered Menu' : 'Selection'}
-                      </span>
-                      <span className="text-[13px] font-black text-[#5C5C78] line-height-none">{favoriteRecipes.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
+                      {/* Label uses Playfair Display bold */}
+                      <span className="text-[10px] font-display font-bold uppercase tracking-[0.25em] text-gray-400 leading-none mb-1">Selection</span>
+                      <span className="text-[13px] font-bold text-[#5C5C78] line-height-none">{favoriteRecipes.length} <span className="text-[10px] opacity-40">ITEMS</span></span>
                     </div>
                   </div>
-                  
                   {!isSearchOpen && favorites.length > 0 && (
-                    <button 
-                      onClick={handleClearFavorites} 
-                      className="flex items-center gap-2 px-5 py-2.5 bg-[#5C5C78] rounded-[14px] text-[10px] font-black uppercase tracking-widest text-white active:scale-95 transition-all shadow-lg shadow-[#5C5C78]/20 group"
-                    >
-                      <span className="group-active:rotate-180 transition-transform duration-500"><ResetIcon /></span>
-                      Reset
+                    <button onClick={handleClearFavorites} className="flex items-center gap-2 px-5 py-2.5 bg-[#5C5C78]/10 rounded-[14px] text-[10px] font-display font-bold uppercase tracking-widest text-[#5C5C78] active:scale-95 transition-all group">
+                      <ResetIcon /> Reset
                     </button>
                   )}
                 </div>
@@ -887,20 +900,14 @@ export default function App() {
           </header>
         </div>
         
-        <div 
-          ref={scrollContainerRef}
-          id="recipes-container"
-          className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        {/* Main Content */}
+        <div ref={scrollContainerRef} id="recipes-container" className="flex-1 overflow-y-auto hide-scrollbar pt-2 pb-44" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
           {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full select-none">
               <div key={(isSearchOpen && searchQuery ? 'global_search' : selectedCategory) + (activeTab === 'menu' ? '_menu' : '')} className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] fill-mode-both ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
                 {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
                   const q = deferredSearchQuery.toLowerCase().trim();
-                  
                   const qInName = q && recipe.name.toLowerCase().includes(q);
                   const qInIngredients = q && recipe.ingredients.some(i => i.name.toLowerCase().includes(q));
                   const qInSteps = q && (recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q)));
@@ -917,28 +924,15 @@ export default function App() {
                         </div>
                         <StickerTag label={recipe.category} color={getRecipeColor(recipe.category)} className="top-2 -right-4" />
                       </div>
+                      {/* Recipe Name uses Noto Serif TC bold */}
                       <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2 mb-1">{recipe.name}</h4>
-                      
                       {isSearchOpen && q && (
                         <div className="mt-2 space-y-1 border-t border-gray-50 pt-2 px-1">
-                          {qInDescription && !qInName && (
-                            <p className="text-[10px] text-gray-400 line-clamp-2 leading-normal">
-                              {recipe.description}
-                            </p>
-                          )}
-                          {qInIngredients && (
-                            <p className="text-[9px] text-[#5C5C78] font-bold uppercase tracking-wider">
-                              食材匹配: {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}
-                            </p>
-                          )}
-                          {qInSteps && !qInIngredients && !qInName && (
-                            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                              <ChefHatIcon active={false} /> 匹配步驟內容
-                            </p>
-                          )}
+                          {qInDescription && !qInName && <p className="text-[10px] text-gray-400 line-clamp-2 leading-normal">{recipe.description}</p>}
+                          {qInIngredients && <p className="text-[9px] text-[#5C5C78] font-bold uppercase tracking-wider">食材匹配: {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}</p>}
+                          {qInSteps && !qInIngredients && !qInName && <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><ChefHatIcon active={false} /> 匹配步驟內容</p>}
                         </div>
                       )}
-                      
                       <span className="mt-1 text-[12px] font-bold text-gray-400 px-1">{recipe.date}</span>
                     </div>
                   );
@@ -949,24 +943,14 @@ export default function App() {
             <div className="px-8 min-h-full">
               <div className="pt-2 flex flex-col items-center text-center h-full">
                 <div className="space-y-4 mb-10">
-                  <h3 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">
-                    {isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}
-                  </h3>
-                  <p className="text-sm text-gray-400 max-w-[240px] mx-auto leading-relaxed">
-                    {isSearchOpen ? 'We couldn\'t find anything across all categories for your query.' : 'Your curated collection will appear here.'}
-                  </p>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
+                  <p className="text-sm text-gray-400 max-w-[240px] mx-auto leading-relaxed">{isSearchOpen ? 'We couldn\'t find anything across all categories for your query.' : 'Your curated collection will appear here.'}</p>
                 </div>
-                <div className="mb-8 relative">
-                  <img 
-                    src="chef_blue.svg" 
-                    className="w-[11.25rem] h-[11.25rem] object-contain" 
-                    alt="Chef Icon" 
-                  />
-                </div>
+                <div className="mb-8 relative"><img src="chef_blue.svg" className="w-[11.25rem] h-[11.25rem] object-contain" alt="Chef Icon" /></div>
                 {isSearchOpen ? (
-                   <button onClick={handleCloseSearch} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all">Clear Search</button>
+                   <button onClick={handleCloseSearch} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-display font-bold tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all">Clear Search</button>
                 ) : (
-                  <button onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all hover:bg-[#5C5C78]">Begin Curating</button>
+                  <button onClick={() => { setActiveTab('recipes'); setSelectedCategory('全部'); }} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-display font-bold tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-all hover:bg-[#5C5C78]">Begin Curating</button>
                 )}
               </div>
             </div>
@@ -974,10 +958,14 @@ export default function App() {
         </div>
       </div>
 
-      {/* 底部導航列 - 提升 z-index 並加入點擊反饋 */}
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px] transition-all duration-300">
+      {/* 底部導航列 - 瓷白玻璃 (Porcelain Glassmorphism) - Opacity 95%, Blur 2px to fix "dirty" look */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-[2px] border border-gray-200/50 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px] transition-all duration-300">
         <div className="relative flex items-center h-14">
-          <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
+          {/* 選取指示器 - Clean subtle depth */}
+          <div 
+            className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 backdrop-blur-sm rounded-full border border-white/60 transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0 shadow-sm" 
+            style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} 
+          />
           <button 
             onClick={() => {
               if (selectedIndex !== null) setSelectedIndex(null);
@@ -992,7 +980,8 @@ export default function App() {
             className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none active:scale-90 transition-transform duration-200"
           >
             <RecipeIcon active={activeTab === 'recipes'} />
-            <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
+            {/* Label uses Playfair Display bold */}
+            <span className={`text-[9px] font-display font-bold uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
           </button>
           <button 
             onClick={() => {
@@ -1002,7 +991,8 @@ export default function App() {
             className="flex-1 h-full flex flex-col items-center justify-center relative z-10 outline-none active:scale-90 transition-transform duration-200"
           >
             <MenuIcon active={activeTab === 'menu'} />
-            <span className={`text-[9px] font-black uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
+            {/* Label uses Playfair Display bold */}
+            <span className={`text-[9px] font-display font-bold uppercase mt-1 tracking-tighter transition-colors duration-300 ${activeTab === 'menu' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Menu</span>
           </button>
         </div>
       </nav>
