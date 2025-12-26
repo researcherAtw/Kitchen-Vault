@@ -23,20 +23,24 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Explicitly requesting weight 700 for all fonts to ensure bold appearance -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Playfair+Display:wght@700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <!-- Explicitly requesting weights for Playfair (Display), Noto Serif TC (Chinese), and Inconsolata (Labels) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Playfair+Display:wght@700&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inconsolata', 'sans-serif'],
+              sans: ['Inconsolata', 'monospace'],
               serif: ['Noto Serif TC', 'serif'],
               display: ['Playfair Display', 'serif'],
             },
             boxShadow: {
               'mystic': '0 20px 50px -12px rgba(92, 92, 120, 0.15)',
               'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+            },
+            letterSpacing: {
+              'fine': '0.1em',
+              'tight-info': '0.02em',
             }
           }
         }
@@ -44,11 +48,10 @@
     </script>
     <style>
         body {
-            font-family: 'Inconsolata', sans-serif;
-            background-color: #F3F1E8;
+            font-family: 'Inconsolata', monospace;
+            background-color: #FDFBF7;
             color: #1A1A1A;
             overflow-x: hidden;
-            letter-spacing: -0.01em;
             overscroll-behavior-y: none;
         }
         .hide-scrollbar::-webkit-scrollbar {
@@ -66,7 +69,6 @@
         .animate-shake {
             animation: shake 0.4s ease-in-out;
         }
-        /* 搜尋高亮樣式 */
         mark.search-highlight {
             background-color: #FFD666;
             color: #1A1A1A;
