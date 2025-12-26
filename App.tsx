@@ -6,17 +6,19 @@ import { RECIPES } from './constants';
 const CORRECT_PASSWORD = '333';
 const PRIMARY_COLOR = '#5C5C78';
 
-// --- Generic Icon Mask Component for Harmonious Coloring & Full Visibility ---
+// --- Optimized Icon Mask to prevent flickering during tab changes ---
 const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, className?: string }) => (
   <div 
-    className={`${className} transition-all duration-300 flex-shrink-0`}
+    className={`${className} flex-shrink-0 transform-gpu`}
     style={{
-      maskImage: `url("./${src}")`,
-      WebkitMaskImage: `url("./${src}")`,
+      maskImage: `url("${src}")`,
+      WebkitMaskImage: `url("${src}")`,
       maskRepeat: 'no-repeat',
       maskPosition: 'center',
       maskSize: 'contain',
-      backgroundColor: 'currentColor'
+      backgroundColor: 'currentColor',
+      // Explicitly set transitions only for needed properties to avoid redraw flickering
+      transition: 'opacity 0.2s ease, transform 0.2s ease, color 0.2s ease'
     }}
   />
 ));
@@ -77,7 +79,6 @@ const SecretStarIcon = React.memo(() => (
   </svg>
 ));
 
-// --- Updated Tab Icons with High Contrast (Deep Palette) ---
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
   <IconMask src="playlist.svg" className={`w-5 h-5 ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
 ));
@@ -93,7 +94,7 @@ const StepIcon = React.memo(() => (
 const CollectionIcon = React.memo(({ active, className = "" }: { active: boolean, className?: string }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
     <img 
-      src={active ? "./Bookmark_on.svg" : "./Bookmark_off.svg"} 
+      src={active ? "Bookmark_on.svg" : "Bookmark_off.svg"} 
       className="w-full h-full object-contain"
       alt="Bookmark"
     />
@@ -104,21 +105,19 @@ const CollectionIcon = React.memo(({ active, className = "" }: { active: boolean
 const getRecipeIcon = (name: string, category: string, className?: string) => {
   const finalClass = className || "w-20 h-20 object-contain";
   switch (category) {
-    case '中式甜點': return <img src="./Chinese_desserts.svg" className={finalClass} alt="Chinese Dessert" />;
-    case '西式甜點': return <img src="./cake.svg" className={finalClass} alt="Western Dessert" />;
-    case '自製醬餡': return <img src="./jam.svg" className={finalClass} alt="Sauce/Jam" />;
-    case '飲品': return <img src="./cocktails.svg" className={finalClass} alt="Drinks" />; 
-    case '豆腐料理': return <img src="./tofu.svg" className={finalClass} alt="Tofu" />;
-    case '麵類料理': return <img src="./noodle.svg" className={finalClass} alt="Noodles" />;
-    case '飯類料理': return <img src="./rice.svg" className={finalClass} alt="Rice" />;
-    // --- Assigned Card Icons as requested ---
-    case '肉類料理': return <img src="./meat_2.svg" className={finalClass} alt="Meat" />;
-    case '海鮮料理': return <img src="./seafood.svg" className={finalClass} alt="Seafood" />;
-    case '蔬食料理': return <img src="./vegetable.svg" className={finalClass} alt="Vegetable" />;
-    // ----------------------------------------
-    case '湯品鍋物': return <img src="./soup.svg" className={finalClass} alt="Soup" />;
-    case '蛋類料理': return <img src="./egg.svg" className={finalClass} alt="Egg" />;
-    default: return <img src="./soup.svg" className={finalClass} alt="Default" />;
+    case '中式甜點': return <img src="Chinese_desserts.svg" className={finalClass} alt="Chinese Dessert" />;
+    case '西式甜點': return <img src="cake.svg" className={finalClass} alt="Western Dessert" />;
+    case '自製醬餡': return <img src="jam.svg" className={finalClass} alt="Sauce/Jam" />;
+    case '飲品': return <img src="cocktails.svg" className={finalClass} alt="Drinks" />; 
+    case '豆腐料理': return <img src="tofu.svg" className={finalClass} alt="Tofu" />;
+    case '麵類料理': return <img src="noodle.svg" className={finalClass} alt="Noodles" />;
+    case '飯類料理': return <img src="rice.svg" className={finalClass} alt="Rice" />;
+    case '肉類料理': return <img src="meat_2.svg" className={finalClass} alt="Meat" />;
+    case '海鮮料理': return <img src="seafood.svg" className={finalClass} alt="Seafood" />;
+    case '蔬食料理': return <img src="vegetable.svg" className={finalClass} alt="Vegetable" />;
+    case '湯品鍋物': return <img src="soup.svg" className={finalClass} alt="Soup" />;
+    case '蛋類料理': return <img src="egg.svg" className={finalClass} alt="Egg" />;
+    default: return <img src="soup.svg" className={finalClass} alt="Default" />;
   }
 };
 
@@ -162,6 +161,90 @@ const getRecipeColor = (category: string) => {
 const CATEGORIES = [
   '全部', '肉類料理', '海鮮料理', '蔬食料理', '湯品鍋物', '蛋類料理', '豆腐料理', '麵類料理', '飯類料理', '中式甜點', '西式甜點', '自製醬餡', '飲品'
 ];
+
+// --- Memoized Content Section to Fix Flickering ---
+const TabContent = React.memo(({ 
+  activeTab, 
+  recipe, 
+  checkedIngredients, 
+  onToggleIngredient, 
+  onResetIngredients 
+}: { 
+  activeTab: 'ingredients' | 'steps', 
+  recipe: Recipe, 
+  checkedIngredients: Record<string, boolean>,
+  onToggleIngredient: (id: string) => void,
+  onResetIngredients: (ids: string[]) => void
+}) => {
+  const recipeIngIds = useMemo(() => recipe.ingredients.map(i => i.id), [recipe.ingredients]);
+  const hasCheckedIngredients = useMemo(() => recipeIngIds.some(id => checkedIngredients[id]), [recipeIngIds, checkedIngredients]);
+
+  return (
+    <div className="space-y-4 min-h-[360px] transform-gpu">
+      {activeTab === 'ingredients' ? (
+        <div className="animate-in fade-in duration-300">
+          <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
+            <button onClick={(e) => { e.stopPropagation(); onResetIngredients(recipeIngIds); }} className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group">
+              <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
+              Reset List
+            </button>
+          </div>
+          <div className="space-y-3">
+            {recipe.ingredients.map((ing) => {
+              const isChecked = checkedIngredients[ing.id];
+              return (
+                <div key={ing.id} onClick={() => onToggleIngredient(ing.id)} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/60 border border-transparent active:border-gray-200 transition-all cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-[#5C5C78] border-[#5C5C78]' : 'border-gray-200'}`}>{isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>}</div>
+                    <span className={`text-sm font-semibold ${isChecked ? 'text-gray-300 line-through' : 'text-gray-800'}`}>{ing.name}</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{ing.amount}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6 pt-4 animate-in fade-in duration-300">
+          {recipe.youtubeUrl && (
+            <a href={recipe.youtubeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-2.5 mb-4 bg-[#FF0000]/5 border border-[#FF0000]/10 rounded-xl text-[#FF0000] active:scale-[0.98] transition-all">
+              <YouTubeIcon />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Watch Video Guide</span>
+            </a>
+          )}
+          {recipe.steps.map((step, i) => (
+            <div key={i} className="flex gap-4 items-start">
+              <div className="w-6 h-6 rounded-lg bg-[#5C5C78] text-white flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5">{i + 1}</div>
+              <p className="text-gray-600 text-[14px] font-medium leading-relaxed">{step}</p>
+            </div>
+          ))}
+          {recipe.tips && (
+            <div className="mt-36 relative">
+              <div className="absolute -top-4 left-6 z-20">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
+                  <SecretStarIcon />
+                  <span className="text-[#5C5C78] text-[9px] font-black tracking-[0.25em] uppercase">Secret Tip</span>
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
+                <div className="absolute -bottom-10 -right-10 opacity-[0.05] grayscale scale-[2.5] rotate-[-15deg] pointer-events-none transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-[-20deg]">
+                  {getRecipeIcon(recipe.name, recipe.category, "w-32 h-32 object-contain")}
+                </div>
+                <div className="absolute top-0 right-0 w-24 h-24 bg-[#5C5C78]/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-110" />
+                <p className="text-[#4A4A4A] text-[13px] font-semibold leading-[1.8] tracking-tight whitespace-pre-wrap relative z-10">
+                  {recipe.tips.split(/(\*\*.*?\*\*)/g).map((part, i) => part.startsWith('**') && part.endsWith('**') ? <strong key={i} className="font-black text-gray-900">{part.slice(2, -2)}</strong> : part)}
+                </p>
+                <div className="mt-4 flex justify-end opacity-20 relative z-10">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+});
 
 // --- Sub-Components ---
 const StickerTag = React.memo(({ label, color, className }: { label: string, color: string, className?: string }) => (
@@ -242,8 +325,6 @@ const RecipeDetail: React.FC<{
         <div ref={scrollContainerRef} onScroll={handleHorizontalScroll} className="flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar flex-nowrap pb-20">
           {recipes.map((recipe) => {
             const recipeColor = getRecipeColor(recipe.category);
-            const recipeIngIds = recipe.ingredients.map(i => i.id);
-            const hasCheckedIngredients = recipeIngIds.some(id => checkedIngredients[id]);
             const isFavorite = favorites.includes(recipe.id);
 
             return (
@@ -253,7 +334,6 @@ const RecipeDetail: React.FC<{
                     <div className="relative transform scale-[1.2] flex items-center justify-center">
                       {getRecipeIcon(recipe.name, recipe.category)}
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-20" />
                     <StickerTag label={recipe.category} color={recipeColor} className="bottom-12 right-6" />
                   </div>
                   
@@ -275,9 +355,9 @@ const RecipeDetail: React.FC<{
 
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
                       
-                      <div className="relative flex gap-1 p-1.5 bg-gray-100/60 backdrop-blur-sm rounded-[24px] mb-8 border border-gray-200/50">
+                      <div className="relative flex gap-1 p-1.5 bg-gray-100/60 backdrop-blur-sm rounded-[24px] mb-8 border border-gray-200/50 overflow-hidden">
                         <div 
-                          className="absolute h-[calc(100%-12px)] w-[calc(50%-6px)] bg-white shadow-md rounded-[18px] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0 border-b-2 border-gray-50" 
+                          className="absolute h-[calc(100%-12px)] w-[calc(50%-6px)] bg-white shadow-md rounded-[18px] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0 border-b-2 border-gray-50 transform-gpu" 
                           style={{ transform: `translateX(${activeTab === 'ingredients' ? '0' : '100%'})` }} 
                         />
                         <button 
@@ -296,67 +376,13 @@ const RecipeDetail: React.FC<{
                         </button>
                       </div>
                       
-                      <div className="space-y-4">
-                        {activeTab === 'ingredients' ? (
-                          <>
-                            <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
-                              <button onClick={(e) => { e.stopPropagation(); onResetIngredients(recipeIngIds); }} className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group">
-                                <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
-                                Reset List
-                              </button>
-                            </div>
-                            {recipe.ingredients.map((ing) => {
-                              const isChecked = checkedIngredients[ing.id];
-                              return (
-                                <div key={ing.id} onClick={() => onToggleIngredient(ing.id)} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/60 border border-transparent active:border-gray-200 transition-all cursor-pointer">
-                                  <div className="flex items-center gap-4">
-                                    <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-[#5C5C78] border-[#5C5C78]' : 'border-gray-200'}`}>{isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>}</div>
-                                    <span className={`text-sm font-semibold ${isChecked ? 'text-gray-300 line-through' : 'text-gray-800'}`}>{ing.name}</span>
-                                  </div>
-                                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{ing.amount}</span>
-                                </div>
-                              );
-                            })}
-                          </>
-                        ) : (
-                          <div className="space-y-6 pt-4">
-                            {recipe.youtubeUrl && (
-                              <a href={recipe.youtubeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-2.5 mb-4 bg-[#FF0000]/5 border border-[#FF0000]/10 rounded-xl text-[#FF0000] active:scale-[0.98] transition-all">
-                                <YouTubeIcon />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Watch Video Guide</span>
-                              </a>
-                            )}
-                            {recipe.steps.map((step, i) => (
-                              <div key={i} className="flex gap-4 items-start">
-                                <div className="w-6 h-6 rounded-lg bg-[#5C5C78] text-white flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5">{i + 1}</div>
-                                <p className="text-gray-600 text-[14px] font-medium leading-relaxed">{step}</p>
-                              </div>
-                            ))}
-                            {recipe.tips && (
-                              <div className="mt-36 relative">
-                                <div className="absolute -top-4 left-6 z-20">
-                                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#EFE9E4] rounded-lg shadow-sm">
-                                    <SecretStarIcon />
-                                    <span className="text-[#5C5C78] text-[9px] font-black tracking-[0.25em] uppercase">Secret Tip</span>
-                                  </div>
-                                </div>
-                                <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
-                                  <div className="absolute -bottom-10 -right-10 opacity-[0.05] grayscale scale-[2.5] rotate-[-15deg] pointer-events-none transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-[-20deg]">
-                                    {getRecipeIcon(recipe.name, recipe.category, "w-32 h-32 object-contain")}
-                                  </div>
-                                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#5C5C78]/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-110" />
-                                  <p className="text-[#4A4A4A] text-[13px] font-semibold leading-[1.8] tracking-tight whitespace-pre-wrap relative z-10">
-                                    {recipe.tips.split(/(\*\*.*?\*\*)/g).map((part, i) => part.startsWith('**') && part.endsWith('**') ? <strong key={i} className="font-black text-gray-900">{part.slice(2, -2)}</strong> : part)}
-                                  </p>
-                                  <div className="mt-4 flex justify-end opacity-20 relative z-10">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
+                      <TabContent 
+                        activeTab={activeTab} 
+                        recipe={recipe} 
+                        checkedIngredients={checkedIngredients} 
+                        onToggleIngredient={onToggleIngredient} 
+                        onResetIngredients={onResetIngredients} 
+                      />
                     </div>
                   </div>
                 </div>
@@ -381,7 +407,7 @@ const LoginView: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     <div className="h-[100dvh] bg-[#FDFBF7] flex flex-col items-center justify-between py-24 px-8 font-sans max-w-md mx-auto relative overflow-hidden">
       <div className="flex flex-col items-center text-center">
         <div className="mb-8 drop-shadow-2xl">
-          <img src="./chef_blue.svg" className="w-24 h-24 object-contain" alt="Logo" />
+          <img src="chef_blue.svg" className="w-24 h-24 object-contain" alt="Logo" />
         </div>
         <h1 className="text-3xl font-serif font-bold text-gray-900 mb-3">Kitchen Vault</h1>
         <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em]">The Black Book</p>
@@ -413,7 +439,6 @@ export default function App() {
 
   const navRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const touchStartRef = useRef<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -574,12 +599,12 @@ export default function App() {
             <div className="flex justify-between items-end mb-8">
               <h1 className="text-[36px] font-serif font-bold text-gray-900 leading-none">Kitchen Vault</h1>
               <div className="w-12 h-12 rounded-[14px] bg-white p-1 shadow-mystic border border-gray-50 flex items-center justify-center">
-                <img src="./isa_icon.svg" className="w-full h-full object-contain rounded-[10px]" alt="Vault Icon" />
+                <img src="isa_icon.svg" className="w-full h-full object-contain rounded-[10px]" alt="Vault Icon" />
               </div>
             </div>
             {activeTab === 'recipes' ? (
               <div ref={navRef} className="relative flex items-center h-10 overflow-x-auto hide-scrollbar gap-2.5 scroll-smooth">
-                <div className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0" style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} />
+                <div className="absolute top-1/2 -translate-y-1/2 h-9 bg-[#5C5C78] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0 transform-gpu" style={{ left: categoryIndicatorStyle.left, width: categoryIndicatorStyle.width }} />
                 {CATEGORIES.map((cat, idx) => (
                   <button key={cat} ref={el => { categoryRefs.current[cat] = el; }} onClick={() => { const oldIdx = CATEGORIES.indexOf(selectedCategory); setSlideDirection(idx > oldIdx ? 'right' : 'left'); setSelectedCategory(cat); }} className={`group relative z-10 px-5 h-10 rounded-full flex items-center justify-center gap-2 text-[11px] font-bold tracking-tight transition-all duration-500 whitespace-nowrap ${selectedCategory === cat ? 'text-white' : 'text-gray-400'}`}>
                     {getCategoryMiniIcon(cat)}
@@ -642,16 +667,21 @@ export default function App() {
               </div>
             </main>
           ) : (
-            <div className="px-8 min-h-full flex flex-col items-center text-center">
-              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
-              <img src="./chef_blue.svg" className="w-44 h-44 mb-8" alt="Chef" />
+            <div className="px-8 min-h-full flex flex-col items-center justify-center text-center pb-24">
+              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
+              <img src="chef_blue.svg" className="w-40 h-40 mb-6 opacity-70" alt="Chef" />
+              
+              <p className="text-[13px] font-bold uppercase tracking-[0.05em] text-slate-400 mb-8 leading-relaxed">
+                SPICE THINGS UP!
+              </p>
+
               <button 
                 onClick={() => {
                   setActiveTab('recipes');
                   setSelectedCategory('全部');
                   handleCloseSearch();
                 }} 
-                className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em]"
+                className="bg-gray-900 text-white px-12 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-transform"
               >
                 ADD TO VAULT
               </button>
@@ -662,7 +692,7 @@ export default function App() {
 
       <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-white/60 p-1 rounded-full shadow-mystic z-[700] w-[calc(100%-4rem)] max-w-[320px]">
         <div className="relative flex items-center h-14">
-          <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
+          <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 bg-gray-100/90 rounded-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] z-0 transform-gpu" style={{ left: activeTab === 'recipes' ? '25%' : '75%', transform: 'translate(-50%, -50%)' }} />
           <button onClick={() => { setSelectedIndex(null); if (activeTab === 'recipes') { setSelectedCategory('全部'); handleCloseSearch(); } else setActiveTab('recipes'); }} className="flex-1 h-full flex flex-col items-center justify-center relative z-10 active:scale-90 transition-transform">
             <RecipeIcon active={activeTab === 'recipes'} />
             <span className={`text-[9px] font-black uppercase mt-1 ${activeTab === 'recipes' ? 'text-[#5C5C78]' : 'text-gray-400'}`}>Recipes</span>
