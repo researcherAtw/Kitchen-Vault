@@ -11,8 +11,8 @@ const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, clas
   <div 
     className={`${className} transition-all duration-300 flex-shrink-0`}
     style={{
-      maskImage: `url(./${src})`,
-      WebkitMaskImage: `url(./${src})`,
+      maskImage: `url(${src})`,
+      WebkitMaskImage: `url(${src})`,
       maskRepeat: 'no-repeat',
       maskPosition: 'center',
       maskSize: 'contain',
@@ -77,7 +77,7 @@ const SecretStarIcon = React.memo(() => (
   </svg>
 ));
 
-// --- Updated Tab Icons for Detail Page & Card ---
+// --- Updated Tab Icons for Detail Page & Card (Fixed rendering) ---
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
   <IconMask src="playlist.svg" className={`w-4.5 h-4.5 ${active ? 'opacity-100' : 'opacity-40'}`} />
 ));
@@ -111,11 +111,13 @@ const getRecipeIcon = (name: string, category: string, className?: string) => {
     case '豆腐料理': return <img src="tofu.svg" className={finalClass} alt="Tofu" />;
     case '麵類料理': return <img src="noodle.svg" className={finalClass} alt="Noodles" />;
     case '飯類料理': return <img src="rice.svg" className={finalClass} alt="Rice" />;
+    // --- Updated Recipe Card Icons ---
     case '肉類料理': return <img src="meat.svg" className={finalClass} alt="Meat" />;
     case '海鮮料理': return <img src="seafood.svg" className={finalClass} alt="Seafood" />;
-    case '蛋類料理': return <img src="egg.svg" className={finalClass} alt="Egg" />;
     case '蔬食料理': return <img src="vegetable.svg" className={finalClass} alt="Vegetable" />;
+    // --------------------------------
     case '湯品鍋物': return <img src="soup.svg" className={finalClass} alt="Soup" />;
+    case '蛋類料理': return <img src="egg.svg" className={finalClass} alt="Egg" />;
     default: return <img src="soup.svg" className={finalClass} alt="Default" />;
   }
 };
@@ -643,7 +645,16 @@ export default function App() {
             <div className="px-8 min-h-full flex flex-col items-center text-center">
               <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
               <img src="chef_blue.svg" className="w-44 h-44 mb-8" alt="Chef" />
-              <button onClick={handleCloseSearch} className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em]">Clear Search</button>
+              <button 
+                onClick={() => {
+                  setActiveTab('recipes');
+                  setSelectedCategory('全部');
+                  handleCloseSearch();
+                }} 
+                className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em]"
+              >
+                ADD TO VAULT
+              </button>
             </div>
           )}
         </div>
