@@ -56,7 +56,7 @@ export const RECIPES: Recipe[] = [
     name: '金沙豆腐',
     category: '豆腐料理',
     date: '2025-12-05',
-    description: '外酥內嫩的鹹蛋黃料理。職地厚實的金沙緊緊包裹住每一塊豆腐，鹹香與豆香在口口中完美交織。',
+    description: '外酥內嫩的鹹蛋黃料理。濃郁的金沙緊緊包裹住每一塊豆腐，鹹香與豆香在口口中完美交織。',
     duration: '12 Min',
     calories: '350 Cal',
     nutrition: { carbs: '18g', protein: '22g', calories: '350', fat: '25g' },
@@ -673,7 +673,7 @@ export const RECIPES: Recipe[] = [
     ingredients: [
       { id: 'i32-1', name: '豬肉片', amount: '適量' },
       { id: 'i32-2', name: '辣椒(切丁)', amount: '2-3根' },
-      { id: 'i32-3', name: '五香豆乾(切片)', amount: '5-6塊' },
+      { id: 'i32-3', name: '五香豆乾(切條)', amount: '8片' },
       { id: 'i32-4', name: '蒜末', amount: '5-6瓣' },
       { id: 'i32-5', name: '[醬料]清醬油', amount: '2大匙' },
       { id: 'i32-6', name: '[醬料]米酒', amount: '1大匙' },
