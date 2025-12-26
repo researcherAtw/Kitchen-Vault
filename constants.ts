@@ -86,8 +86,8 @@ export const RECIPES: Recipe[] = [
     image: '',
     ingredients: [
       { id: 'i22-1', name: '蝦子', amount: '適量' },
-      { id: 'i22-2', name: '蒜頭末', amount: '2-3 顆' },
-      { id: 'i22-3', name: '鹹蛋黃醬/鹹蛋黃', amount: '2-3 大匙' },
+      { id: 'i22-2', name: '蒜頭末', amount: '2-3顆' },
+      { id: 'i22-3', name: '鹹蛋黃醬/鹹蛋黃', amount: '2-3大匙' },
       { id: 'i22-4', name: '胡椒鹽', amount: '少量' }
     ],
     steps: [
@@ -419,10 +419,10 @@ export const RECIPES: Recipe[] = [
     image: '',
     ingredients: [
       { id: 'i23-1', name: 'Costco 冷凍花椰菜', amount: '' },
-      { id: 'i23-2', name: '蒜頭罐頭 (含芥花油)', amount: '2 匙' },
+      { id: 'i23-2', name: '蒜頭罐頭 (含芥花油)', amount: '2匙' },
       { id: 'i23-3', name: '無鹽奶油', amount: '適量' },
       { id: 'i23-4', name: '黑胡椒', amount: '少量' },
-      { id: 'i23-5', name: '烹大師', amount: '1 匙' }
+      { id: 'i23-5', name: '烹大師', amount: '1匙' }
     ],
     steps: [
       '預熱處理：將 Costco 冷凍花椰菜放入微波爐，加熱至軟化. ',
@@ -444,15 +444,15 @@ export const RECIPES: Recipe[] = [
     nutrition: { carbs: '65g', protein: '18g', calories: '520', fat: '22g' },
     image: '',
     ingredients: [
-      { id: 'i24-1', name: '湯圓', amount: '1 盒' },
-      { id: 'i24-2', name: '乾香菇', amount: '6 朵' },
-      { id: 'i24-3', name: '牛頭牌紅蔥醬', amount: '2 匙' },
-      { id: 'i24-4', name: '芹菜末', amount: '3 支' },
+      { id: 'i24-1', name: '湯圓', amount: '1盒' },
+      { id: 'i24-2', name: '乾香菇', amount: '6朵' },
+      { id: 'i24-3', name: '牛頭牌紅蔥醬', amount: '2匙' },
+      { id: 'i24-4', name: '芹菜末', amount: '3支' },
       { id: 'i24-5', name: '山茼蒿', amount: '適量' },
-      { id: 'i24-6', name: '蝦米', amount: '1 匙' },
+      { id: 'i24-6', name: '蝦米', amount: '1匙' },
       { id: 'i24-7', name: '白胡椒', amount: '適量' },
-      { id: 'i24-8', name: '烹大師', amount: '2 匙' },
-      { id: 'i24-9', name: '薄鹽醬油', amount: '1 匙' },
+      { id: 'i24-8', name: '烹大師', amount: '2匙' },
+      { id: 'i24-9', name: '薄鹽醬油', amount: '1匙' },
       { id: 'i24-10', name: '水 (含香菇水)', amount: '1500ml' }
     ],
     steps: [
@@ -476,10 +476,10 @@ export const RECIPES: Recipe[] = [
     nutrition: { carbs: '12g', protein: '18g', calories: '310', fat: '21g' },
     image: '',
     ingredients: [
-      { id: 'i25-1', name: '雞蛋', amount: '4 顆' },
+      { id: 'i25-1', name: '雞蛋', amount: '4顆' },
       { id: 'i25-2', name: '菜脯', amount: '適量' },
-      { id: 'i25-3', name: '低筋麵粉', amount: '2 匙' },
-      { id: 'i25-4', name: '烹大師', amount: '2 匙' },
+      { id: 'i25-3', name: '低筋麵粉', amount: '2匙' },
+      { id: 'i25-4', name: '烹大師', amount: '2匙' },
       { id: 'i25-5', name: '白胡椒', amount: '少量' }
     ],
     steps: [
@@ -503,15 +503,15 @@ export const RECIPES: Recipe[] = [
     image: '',
     ingredients: [
       { id: 'i26-1', name: '豬絞肉', amount: '一盒' },
-      { id: 'i26-2', name: '聖女小番茄', amount: '6-8 顆' },
-      { id: 'i26-3', name: '蒜末', amount: '6-7 瓣' },
-      { id: 'i26-4', name: '九層塔 (只取葉子)', amount: '1 把' },
-      { id: 'i26-5', name: '辣椒段', amount: '3-4 根' },
-      { id: 'i26-6', name: '米酒/清酒', amount: '1 大匙' },
-      { id: 'i26-7', name: '[醬料] 清醬油', amount: '2 大匙' },
-      { id: 'i26-8', name: '[醬料] 冰糖', amount: '3-4 顆' },
-      { id: 'i26-9', name: '[醬料] 魚露', amount: '3 大匙' },
-      { id: 'i26-10', name: '[醬料] 檸檬汁', amount: '1-2 大匙' }
+      { id: 'i26-2', name: '聖女小番茄', amount: '6-8顆' },
+      { id: 'i26-3', name: '蒜末', amount: '6-7瓣' },
+      { id: 'i26-4', name: '九層塔 (只取葉子)', amount: '1把' },
+      { id: 'i26-5', name: '辣椒段', amount: '3-4根' },
+      { id: 'i26-6', name: '米酒/清酒', amount: '1大匙' },
+      { id: 'i26-7', name: '[醬料] 清醬油', amount: '2大匙' },
+      { id: 'i26-8', name: '[醬料] 冰糖', amount: '3-4顆' },
+      { id: 'i26-9', name: '[醬料] 魚露', amount: '3大匙' },
+      { id: 'i26-10', name: '[醬料] 檸檬汁', amount: '1-2大匙' }
     ],
     steps: [
       '平底鍋不加油，開中大火，直接把絞肉放進鍋裡. 把絞肉平鋪在鍋子裡，煎個一分鐘左右，再翻炒. ',
@@ -535,22 +535,22 @@ export const RECIPES: Recipe[] = [
     image: '',
     ingredients: [
       { id: 'i27-1', name: '五花肉', amount: '600g' },
-      { id: 'i27-2', name: '乾魷魚', amount: '2-3 片' },
-      { id: 'i27-3', name: '辣椒 (切丁)', amount: '1-2 根' },
-      { id: 'i27-4', name: '五香豆乾 (切條)', amount: '8 片' },
-      { id: 'i27-5', name: '蒜頭', amount: '5-6 瓣' },
-      { id: 'i27-6', name: '蒜苗 (切段)', amount: '3 根' },
-      { id: 'i27-7', name: '[醬料] 清醬油', amount: '2 大匙' },
-      { id: 'i27-8', name: '[醬料] 米酒', amount: '1 大匙' },
-      { id: 'i27-9', name: '[醬料] 醬油膏', amount: '1 大匙' },
-      { id: 'i27-10', name: '[醬料] 冰糖', amount: '2-3 小顆' }
+      { id: 'i27-2', name: '乾魷魚', amount: '2-3片' },
+      { id: 'i27-3', name: '辣椒 (切丁)', amount: '1-2根' },
+      { id: 'i27-4', name: '五香豆乾 (切條)', amount: '8片' },
+      { id: 'i27-5', name: '蒜頭', amount: '5-6瓣' },
+      { id: 'i27-6', name: '蒜苗 (切段)', amount: '3根' },
+      { id: 'i27-7', name: '[醬料] 清醬油', amount: '2大匙' },
+      { id: 'i27-8', name: '[醬料] 米酒', amount: '1大匙' },
+      { id: 'i27-9', name: '[醬料] 醬油膏', amount: '1大匙' },
+      { id: 'i27-10', name: '[醬料] 冰糖', amount: '2-3小顆' }
     ],
     steps: [
       '【預處理】乾魷魚用冷水泡開約 3 小時後切段備用（逆紋切能使魷魚挺直不捲曲）. ',
       '【煸炒肉條】鍋內入少許油熱鍋，以中小火將五花肉條油脂煸出至金黃上色後盛起. ',
       '【煸炒豆乾】利用鍋中餘油將豆乾條炒至金黃上色，同樣盛盤備用. ',
       '【整合食材】將五花肉條及豆乾回鍋拌炒，加入魷魚、蒜瓣爆香，隨即倒入調好之醬料. ',
-      '【收汁盛盤】拌炒至均勻上色，待醬汁慢慢收乾後加入蒜苗，大火快炒後即可起鍋盛盤。'
+      '【收汁盛盤】拌炒至均勻上色，待醬汁慢慢收乾後加入蒜苗，大大火快炒後即可起鍋盛盤。'
     ],
     tips: '油品建議選擇耐高溫、不易起煙的產品，這類產品非常適合用來製作需要長時間煸炒的料理，能確保風味純粹且健康。'
   },
@@ -565,13 +565,13 @@ export const RECIPES: Recipe[] = [
     nutrition: { carbs: '18g', protein: '14g', calories: '280', fat: '16g' },
     image: '',
     ingredients: [
-      { id: 'i28-1', name: '雞蛋', amount: '4 顆' },
-      { id: 'i28-2', name: '牛番茄', amount: '2 顆' },
-      { id: 'i28-3', name: '低筋麵粉', amount: '2 匙' },
+      { id: 'i28-1', name: '雞蛋', amount: '4顆' },
+      { id: 'i28-2', name: '牛番茄', amount: '2顆' },
+      { id: 'i28-3', name: '低筋麵粉', amount: '2匙' },
       { id: 'i28-4', name: '番茄醬', amount: '適量' },
-      { id: 'i28-5', name: '烹大師', amount: '2 匙' },
+      { id: 'i28-5', name: '烹大師', amount: '2匙' },
       { id: 'i28-6', name: '黑胡椒', amount: '適量' },
-      { id: 'i28-7', name: '蔥', amount: '2 根' }
+      { id: 'i28-7', name: '蔥', amount: '2根' }
     ],
     steps: [
       '【蛋液調製】將雞蛋、一匙低筋麵粉、烹大師混合，徹底打勻至麵粉完全溶解無結塊。',
@@ -582,5 +582,82 @@ export const RECIPES: Recipe[] = [
       '【翻炒整合】加入半熟蛋、蔥段在鍋中跟醬汁混合，待蛋全熟後起鍋，可放置一陣子讓醬汁更入味。'
     ],
     tips: '1. 煎蛋的油需要比較多，可讓蛋更漂亮。\n2. 番茄炒蛋可以最開始先做，放置一段時間會更入味。\n3. 番茄醬汁調製，可以看喜好加入番茄醬。'
+  },
+  {
+    id: 'recipe-29',
+    name: '半熟太陽蛋',
+    category: '蛋類料理',
+    date: '2025-12-26',
+    description: '極簡卻最考驗火候的基礎料理。透過精準的時間控制與悶煎技巧，成就蛋白邊緣微焦酥脆、蛋黃如熔岩般流動的完美狀態。',
+    duration: '5 Min',
+    calories: '90 Cal',
+    nutrition: { carbs: '1g', protein: '7g', calories: '90', fat: '6g' },
+    image: '',
+    ingredients: [
+      { id: 'i29-1', name: '生雞蛋', amount: '1顆' }
+    ],
+    steps: [
+      '冷鍋噴些許油，鍋熱時打蛋進鍋。',
+      '蛋下鍋後轉中小火蓋鍋，設定計時器 1 分半。',
+      '計時器響，打開鍋蓋轉中火煎，這樣蛋黃才不會過熟變白。',
+      '目測看蛋白邊緣要煎至微金黃，即可盛盤。'
+    ],
+    tips: '1. 盡量**靠近鍋底打蛋**，可以避免蛋黃破裂跟蛋液飛濺。\n2. 蓋鍋蓋雖然能悶熟蛋白，但副作用是蒸氣會讓鮮黃色的蛋黃表面覆蓋一層白白的薄膜 (俗稱「蓋被子」或 Blindfolded egg)。如果堅持要看到「鮮黃色」的蛋黃，就不能**蓋鍋蓋**，改為**全程小火慢煎**或是「**用湯匙舀熱油淋在蛋白上**」。'
+  },
+  {
+    id: 'recipe-30',
+    name: '鹽之花奶油曲奇',
+    category: '西式甜點',
+    date: '2025-12-24',
+    description: '選用經典金桶奶油搭配頂級鹽之花與法芙娜可可粉。外層酥脆，中心帶有些許鹽之花的鹹香，完美平衡了可可的苦甜，是頂級曲奇的代名詞。',
+    duration: '40 Min',
+    calories: '150 Cal',
+    nutrition: { carbs: '12g', protein: '2g', calories: '150', fat: '10g' },
+    image: '',
+    ingredients: [
+      { id: 'i30-1', name: '金桶奶油', amount: '200g' },
+      { id: 'i30-2', name: '糖粉', amount: '45g' },
+      { id: 'i30-3', name: '鹽之花', amount: '2g' },
+      { id: 'i30-4', name: '玉米粉', amount: '50g' },
+      { id: 'i30-5', name: '法芙娜可可粉', amount: '20g' },
+      { id: 'i30-6', name: '低筋麵粉', amount: '180g' }
+    ],
+    steps: [
+      '糖粉、低筋麵粉、可可粉過篩備用。',
+      '全部材料加入攪拌均勻。',
+      '烤箱 160 度預熱 10 分鐘。',
+      '擠出形狀在鋪好烤紙的烤盤上。',
+      '送入烤箱（上下火 160 度），烘焙 20 分鐘。',
+      '放涼反酥即可食用。'
+    ],
+    tips: '烤紙上可以少量塗抹奶油，比較不會沾黏。'
+  },
+  {
+    id: 'recipe-31',
+    name: '日本抹茶奶油曲奇',
+    category: '西式甜點',
+    date: '2025-12-25',
+    description: '日本抹茶的純粹清香與金桶奶油的濃郁乳感結合。這款曲奇口感細緻酥鬆，微苦的回甘在口中散發開來，是午茶時光最優雅的點綴。',
+    duration: '40 Min',
+    calories: '145 Cal',
+    nutrition: { carbs: '14g', protein: '2g', calories: '145', fat: '9g' },
+    image: '',
+    ingredients: [
+      { id: 'i31-1', name: '金桶奶油', amount: '200g' },
+      { id: 'i31-2', name: '糖粉', amount: '35g' },
+      { id: 'i31-3', name: '細砂糖', amount: '10g' },
+      { id: 'i31-4', name: '玉米粉', amount: '70g' },
+      { id: 'i31-5', name: '抹茶粉', amount: '10g' },
+      { id: 'i31-6', name: '低筋麵粉', amount: '170g' }
+    ],
+    steps: [
+      '糖粉、低筋麵粉、抹茶粉過篩備用。',
+      '全部材料加入攪拌均勻。',
+      '烤箱 160 度預熱 10 分鐘。',
+      '擠出形狀在鋪好烤紙的烤盤上。',
+      '送入烤箱（上下火 160 度），烘焙 20 分鐘。',
+      '放涼反酥即可食用。'
+    ],
+    tips: '烤紙上可以少量塗抹奶油，比較不會沾黏。'
   }
 ];

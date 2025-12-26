@@ -451,7 +451,13 @@ const RecipeDetail: React.FC<{
                                     {getRecipeIcon(recipe.name, recipe.category, "w-32 h-32 object-contain")}
                                   </div>
                                   <div className="absolute top-0 right-0 w-24 h-24 bg-[#5C5C78]/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-110" />
-                                  <p className="text-[#4A4A4A] text-[13px] font-semibold leading-[1.8] tracking-tight whitespace-pre-wrap relative z-10">{recipe.tips}</p>
+                                  <p className="text-[#4A4A4A] text-[13px] font-semibold leading-[1.8] tracking-tight whitespace-pre-wrap relative z-10">
+                                    {recipe.tips.split(/(\*\*.*?\*\*)/g).map((part, i) => 
+                                      part.startsWith('**') && part.endsWith('**') 
+                                        ? <strong key={i} className="font-black text-gray-900">{part.slice(2, -2)}</strong> 
+                                        : part
+                                    )}
+                                  </p>
                                   <div className="mt-4 flex justify-end opacity-20 relative z-10">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                   </div>
