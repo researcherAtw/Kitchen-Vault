@@ -77,7 +77,7 @@ const SecretStarIcon = React.memo(() => (
   </svg>
 ));
 
-// --- Updated Tab Icons with High Contrast for Deep Palette ---
+// --- Updated Tab Icons with High Contrast (Deep Palette) ---
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
   <IconMask src="playlist.svg" className={`w-5 h-5 ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
 ));
@@ -111,11 +111,11 @@ const getRecipeIcon = (name: string, category: string, className?: string) => {
     case '豆腐料理': return <img src="./tofu.svg" className={finalClass} alt="Tofu" />;
     case '麵類料理': return <img src="./noodle.svg" className={finalClass} alt="Noodles" />;
     case '飯類料理': return <img src="./rice.svg" className={finalClass} alt="Rice" />;
-    // --- Assigned Icons as requested ---
-    case '肉類料理': return <img src="./meat.svg" className={finalClass} alt="Meat" />;
+    // --- Assigned Card Icons as requested ---
+    case '肉類料理': return <img src="./meat_2.svg" className={finalClass} alt="Meat" />;
     case '海鮮料理': return <img src="./seafood.svg" className={finalClass} alt="Seafood" />;
     case '蔬食料理': return <img src="./vegetable.svg" className={finalClass} alt="Vegetable" />;
-    // --------------------------------
+    // ----------------------------------------
     case '湯品鍋物': return <img src="./soup.svg" className={finalClass} alt="Soup" />;
     case '蛋類料理': return <img src="./egg.svg" className={finalClass} alt="Egg" />;
     default: return <img src="./soup.svg" className={finalClass} alt="Default" />;
