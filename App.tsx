@@ -9,7 +9,7 @@ const PRIMARY_COLOR = '#5C5C78';
 // --- Optimized Icon Mask with fixed rendering properties ---
 const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, className?: string }) => (
   <div 
-    className={`${className} flex-shrink-0 transform-gpu transition-opacity duration-200`}
+    className={`${className} flex-shrink-0 transform-gpu transition-all duration-200`}
     style={{
       maskImage: `url("${src}")`,
       WebkitMaskImage: `url("${src}")`,
@@ -25,23 +25,11 @@ const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, clas
 const BackIcon = React.memo(() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>);
 
 const RecipeIcon = React.memo(({ active }: { active: boolean }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? PRIMARY_COLOR : "none"} stroke={active ? "none" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" fill={active ? PRIMARY_COLOR : "none"} />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill={active ? PRIMARY_COLOR : "none"} />
-    {active && <rect x="8" y="6" width="8" height="1.5" fill="white" rx="0.75" />}
-    {active && <rect x="8" y="10" width="8" height="1.5" fill="white" rx="0.75" />}
-  </svg>
+  <IconMask src="recipe_book.svg" className={`w-7 h-7 ${active ? 'text-[#5C5C78]' : 'text-gray-400/60'}`} />
 ));
 
 const MenuIcon = React.memo(({ active }: { active: boolean }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? PRIMARY_COLOR : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="8" y1="6" x2="21" y2="6" />
-    <line x1="8" y1="12" x2="21" y2="12" />
-    <line x1="8" y1="18" x2="21" y2="18" />
-    <path d="M3 6h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
-    <path d="M3 12h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
-    <path d="M3 18h.01" strokeWidth="3" fill={active ? PRIMARY_COLOR : "none"} />
-  </svg>
+  <IconMask src="spoon_and_fork.svg" className={`w-7 h-7 ${active ? 'text-[#5C5C78]' : 'text-gray-400/60'}`} />
 ));
 
 const SearchIcon = React.memo(() => (
@@ -78,15 +66,15 @@ const SecretStarIcon = React.memo(() => (
 ));
 
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
-  <IconMask src="playlist.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
+  <IconMask src="items.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-40 text-slate-400'}`} />
 ));
 
 const ChefHatIcon = React.memo(({ active }: { active: boolean }) => (
-  <IconMask src="step.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
+  <IconMask src="setps.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-40 text-slate-400'}`} />
 ));
 
 const StepIcon = React.memo(() => (
-  <IconMask src="step.svg" className="w-3.5 h-3.5 opacity-60" />
+  <IconMask src="setps.svg" className="w-3.5 h-3.5 opacity-60" />
 ));
 
 const CollectionIcon = React.memo(({ active, className = "" }: { active: boolean, className?: string }) => (
@@ -348,7 +336,7 @@ const RecipeDetail: React.FC<{
                       
                       <div className="flex items-center gap-2 mb-6">
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
-                        <span className="text-[11px] font-medium uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-left transform scale-y-[1.1]">{recipe.date}</span>
+                        <span className="text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.12]">{recipe.date}</span>
                       </div>
 
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
@@ -434,7 +422,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
   const scrollMemoryRef = useRef<number>(0);
-  const touchStartX = useRef(0);
+  const touchStartX = useRef<number | null>(null);
 
   const navRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -571,26 +559,33 @@ export default function App() {
     });
   }, []);
 
+  // --- Category Swipe Navigation Implementation ---
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (isSearchOpen || activeTab !== 'recipes') return;
+    if (touchStartX.current === null || isSearchOpen || activeTab !== 'recipes') return;
+    
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
-    const threshold = 70;
+    const threshold = 70; // min distance for swipe
 
     if (Math.abs(diff) > threshold) {
       const currentIndex = CATEGORIES.indexOf(selectedCategory);
-      if (diff > 0 && currentIndex < CATEGORIES.length - 1) {
-        setSlideDirection('right');
-        setSelectedCategory(CATEGORIES[currentIndex + 1]);
-      } else if (diff < 0 && currentIndex > 0) {
-        setSlideDirection('left');
-        setSelectedCategory(CATEGORIES[currentIndex - 1]);
+      if (diff > 0) { // Swiped left -> Next category
+        if (currentIndex < CATEGORIES.length - 1) {
+          setSlideDirection('right');
+          setSelectedCategory(CATEGORIES[currentIndex + 1]);
+        }
+      } else { // Swiped right -> Previous category
+        if (currentIndex > 0) {
+          setSlideDirection('left');
+          setSelectedCategory(CATEGORIES[currentIndex - 1]);
+        }
       }
     }
+    touchStartX.current = null;
   };
 
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
@@ -656,7 +651,13 @@ export default function App() {
           </header>
         </div>
 
-        <div ref={scrollContainerRef} id="recipes-container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44">
+        <div 
+          ref={scrollContainerRef} 
+          id="recipes-container" 
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44"
+        >
           {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full">
               <div className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
@@ -682,7 +683,7 @@ export default function App() {
                             )}
                           </div>
                         )}
-                        <span className="mt-2 text-[11px] font-medium text-slate-400 uppercase tracking-[0.02em] ml-[1px] inline-block origin-left transform scale-y-[1.1]">{recipe.date}</span>
+                        <span className="mt-2 text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.12]">{recipe.date}</span>
                       </div>
                     </div>
                   );
