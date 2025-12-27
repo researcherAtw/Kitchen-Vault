@@ -6,10 +6,10 @@ import { RECIPES } from './constants';
 const CORRECT_PASSWORD = '333';
 const PRIMARY_COLOR = '#5C5C78';
 
-// --- Optimized Icon Mask with fixed rendering properties ---
+// --- Optimized Icon Mask for Complete Display ---
 const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, className?: string }) => (
   <div 
-    className={`${className} flex-shrink-0 transform-gpu transition-all duration-200`}
+    className={`${className} flex-shrink-0 transform-gpu transition-all duration-300 ease-out`}
     style={{
       maskImage: `url("${src}")`,
       WebkitMaskImage: `url("${src}")`,
@@ -25,7 +25,7 @@ const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, clas
 const BackIcon = React.memo(() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>);
 
 const RecipeIcon = React.memo(({ active }: { active: boolean }) => (
-  <IconMask src="recipe_book.svg" className={`w-7 h-7 ${active ? 'text-[#5C5C78]' : 'text-gray-400/60'}`} />
+  <IconMask src="recipe.svg" className={`w-7 h-7 ${active ? 'text-[#5C5C78]' : 'text-gray-400/60'}`} />
 ));
 
 const MenuIcon = React.memo(({ active }: { active: boolean }) => (
@@ -148,7 +148,7 @@ const CATEGORIES = [
   '全部', '肉類料理', '海鮮料理', '蔬食料理', '湯品鍋物', '蛋類料理', '豆腐料理', '麵類料理', '飯類料理', '中式甜點', '西式甜點', '自製醬餡', '飲品'
 ];
 
-// --- Memoized Content Section to Fix Flickering ---
+// --- Memoized Content Section ---
 const TabContent = React.memo(({ 
   activeTab, 
   recipe, 
@@ -336,7 +336,7 @@ const RecipeDetail: React.FC<{
                       
                       <div className="flex items-center gap-2 mb-6">
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
-                        <span className="text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.12]">{recipe.date}</span>
+                        <span className="text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.15]">{recipe.date}</span>
                       </div>
 
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
@@ -559,26 +559,25 @@ export default function App() {
     });
   }, []);
 
-  // --- Category Swipe Navigation Implementation ---
-  const handleTouchStart = (e: React.TouchEvent) => {
+  // --- Category Swipe Implementation ---
+  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || isSearchOpen || activeTab !== 'recipes') return;
-    
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
-    const threshold = 70; // min distance for swipe
+    const threshold = 70; // min swipe distance in px
 
     if (Math.abs(diff) > threshold) {
       const currentIndex = CATEGORIES.indexOf(selectedCategory);
-      if (diff > 0) { // Swiped left -> Next category
+      if (diff > 0) { // Swipe left -> Next category
         if (currentIndex < CATEGORIES.length - 1) {
           setSlideDirection('right');
           setSelectedCategory(CATEGORIES[currentIndex + 1]);
         }
-      } else { // Swiped right -> Previous category
+      } else { // Swipe right -> Previous category
         if (currentIndex > 0) {
           setSlideDirection('left');
           setSelectedCategory(CATEGORIES[currentIndex - 1]);
@@ -654,13 +653,13 @@ export default function App() {
         <div 
           ref={scrollContainerRef} 
           id="recipes-container" 
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
           className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44"
         >
           {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full">
-              <div className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
+              <div className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 transform-gpu ${slideDirection === 'right' ? 'slide-in-from-right-10' : 'slide-in-from-left-10'} fade-in`}>
                 {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
                   const q = deferredSearchQuery.toLowerCase().trim();
@@ -683,7 +682,7 @@ export default function App() {
                             )}
                           </div>
                         )}
-                        <span className="mt-2 text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.12]">{recipe.date}</span>
+                        <span className="mt-2 text-[11px] font-normal text-slate-400 uppercase tracking-[0.02em] ml-[1px] inline-block origin-bottom transform scale-y-[1.15]">{recipe.date}</span>
                       </div>
                     </div>
                   );
