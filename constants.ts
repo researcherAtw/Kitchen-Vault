@@ -506,7 +506,7 @@ export const RECIPES: Recipe[] = [
       { id: 'i26-2', name: '聖女小番茄', amount: '6-8顆' },
       { id: 'i26-3', name: '蒜末', amount: '6-7瓣' },
       { id: 'i26-4', name: '九層塔 (只取葉子)', amount: '1把' },
-      { id: 'i26-5', name: '辣椒段', amount: '3-4根' },
+      { id: 'i26-5', name: '辣椒段/鵝油辣椒', amount: '3-4根/1.5大匙' },
       { id: 'i26-6', name: '米酒/清酒', amount: '1大匙' },
       { id: 'i26-7', name: '[醬料] 清醬油', amount: '2大匙' },
       { id: 'i26-8', name: '[醬料] 冰糖', amount: '3-4顆' },
