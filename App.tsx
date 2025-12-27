@@ -6,19 +6,17 @@ import { RECIPES } from './constants';
 const CORRECT_PASSWORD = '333';
 const PRIMARY_COLOR = '#5C5C78';
 
-// --- Optimized Icon Mask to prevent flickering during tab changes ---
+// --- Optimized Icon Mask with fixed rendering properties ---
 const IconMask = React.memo(({ src, className = "w-4 h-4" }: { src: string, className?: string }) => (
   <div 
-    className={`${className} flex-shrink-0 transform-gpu`}
+    className={`${className} flex-shrink-0 transform-gpu transition-opacity duration-200`}
     style={{
       maskImage: `url("${src}")`,
       WebkitMaskImage: `url("${src}")`,
       maskRepeat: 'no-repeat',
       maskPosition: 'center',
       maskSize: 'contain',
-      backgroundColor: 'currentColor',
-      // Explicitly set transitions only for needed properties to avoid redraw flickering
-      transition: 'opacity 0.2s ease, transform 0.2s ease, color 0.2s ease'
+      backgroundColor: 'currentColor'
     }}
   />
 ));
@@ -362,14 +360,14 @@ const RecipeDetail: React.FC<{
                         />
                         <button 
                           onClick={() => setActiveTab('ingredients')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400'}`}
                         >
                           <BasketIcon active={activeTab === 'ingredients'} />
                           ITEMS ({recipe.ingredients.length})
                         </button>
                         <button 
                           onClick={() => setActiveTab('steps')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-all duration-300 ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400'}`}
                         >
                           <ChefHatIcon active={activeTab === 'steps'} />
                           STEPS ({recipe.steps.length})
