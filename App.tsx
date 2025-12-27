@@ -67,7 +67,7 @@ const ResetIcon = React.memo(() => (
 
 const YouTubeIcon = React.memo(() => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 12 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
   </svg>
 ));
 
@@ -78,11 +78,11 @@ const SecretStarIcon = React.memo(() => (
 ));
 
 const BasketIcon = React.memo(({ active }: { active: boolean }) => (
-  <IconMask src="playlist.svg" className={`w-5 h-5 ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
+  <IconMask src="playlist.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
 ));
 
 const ChefHatIcon = React.memo(({ active }: { active: boolean }) => (
-  <IconMask src="step.svg" className={`w-5 h-5 ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
+  <IconMask src="step.svg" className={`w-5 h-5 transition-opacity ${active ? 'opacity-100 text-slate-900' : 'opacity-30 text-slate-400'}`} />
 ));
 
 const StepIcon = React.memo(() => (
@@ -127,7 +127,7 @@ const getCategoryMiniIcon = (category: string) => {
     '蔬食料理': 'broccoli.svg',
     '湯品鍋物': 'pot.svg',
     '蛋類料理': 'eggegg.svg',
-    '豆腐料理': 'tofu.svg',
+    '豆腐料理': 'tofutofu.svg',
     '麵類料理': 'noodles.svg',
     '飯類料理': 'ricerice.svg',
     '中式甜點': 'mooncake.svg',
@@ -178,9 +178,9 @@ const TabContent = React.memo(({
   const hasCheckedIngredients = useMemo(() => recipeIngIds.some(id => checkedIngredients[id]), [recipeIngIds, checkedIngredients]);
 
   return (
-    <div className="space-y-4 min-h-[360px] transform-gpu">
+    <div className="space-y-4 min-h-[360px] transform-gpu overflow-hidden">
       {activeTab === 'ingredients' ? (
-        <div className="animate-in fade-in duration-300">
+        <div key="ing-content" className="animate-in fade-in duration-300">
           <div className={`flex justify-end transition-all duration-500 ease-out overflow-hidden ${hasCheckedIngredients ? 'max-h-12 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
             <button onClick={(e) => { e.stopPropagation(); onResetIngredients(recipeIngIds); }} className="flex items-center gap-2 px-4 py-2 bg-[#5C5C78]/5 hover:bg-[#5C5C78]/10 rounded-xl text-[9px] font-black uppercase tracking-[0.25em] text-[#5C5C78] active:scale-95 transition-all group">
               <span className="group-hover:rotate-[-45deg] transition-transform duration-300"><ResetIcon /></span>
@@ -203,7 +203,7 @@ const TabContent = React.memo(({
           </div>
         </div>
       ) : (
-        <div className="space-y-6 pt-4 animate-in fade-in duration-300">
+        <div key="step-content" className="space-y-6 pt-4 animate-in fade-in duration-300">
           {recipe.youtubeUrl && (
             <a href={recipe.youtubeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-2.5 mb-4 bg-[#FF0000]/5 border border-[#FF0000]/10 rounded-xl text-[#FF0000] active:scale-[0.98] transition-all">
               <YouTubeIcon />
@@ -224,7 +224,7 @@ const TabContent = React.memo(({
                   <span className="text-[#5C5C78] text-[9px] font-black tracking-[0.25em] uppercase">Secret Tip</span>
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
+              <div className="bg-gradient-to-br from-[#F9F7F2] to-[#FDFBF7] rounded-3xl p-8 pt-12 relative overflow-hidden group shadow-[0_10px_40_rgba(0,0,0,0.03)]">
                 <div className="absolute -bottom-10 -right-10 opacity-[0.05] grayscale scale-[2.5] rotate-[-15deg] pointer-events-none transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-[-20deg]">
                   {getRecipeIcon(recipe.name, recipe.category, "w-32 h-32 object-contain")}
                 </div>
@@ -348,7 +348,7 @@ const RecipeDetail: React.FC<{
                       
                       <div className="flex items-center gap-2 mb-6">
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
-                        <span className="text-[12px] font-bold text-gray-400">{recipe.date}</span>
+                        <span className="text-[11px] font-medium uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-left transform scale-y-[1.1]">{recipe.date}</span>
                       </div>
 
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
@@ -360,14 +360,14 @@ const RecipeDetail: React.FC<{
                         />
                         <button 
                           onClick={() => setActiveTab('ingredients')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors duration-200 ${activeTab === 'ingredients' ? 'text-gray-900' : 'text-gray-400'}`}
                         >
                           <BasketIcon active={activeTab === 'ingredients'} />
                           ITEMS ({recipe.ingredients.length})
                         </button>
                         <button 
                           onClick={() => setActiveTab('steps')} 
-                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400'}`}
+                          className={`relative z-10 flex-1 py-3.5 flex items-center justify-center gap-2.5 font-black text-[10px] tracking-[0.15em] transition-colors duration-200 ${activeTab === 'steps' ? 'text-gray-900' : 'text-gray-400'}`}
                         >
                           <ChefHatIcon active={activeTab === 'steps'} />
                           STEPS ({recipe.steps.length})
@@ -434,6 +434,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
   const scrollMemoryRef = useRef<number>(0);
+  const touchStartX = useRef(0);
 
   const navRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -570,6 +571,28 @@ export default function App() {
     });
   }, []);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isSearchOpen || activeTab !== 'recipes') return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    const threshold = 70;
+
+    if (Math.abs(diff) > threshold) {
+      const currentIndex = CATEGORIES.indexOf(selectedCategory);
+      if (diff > 0 && currentIndex < CATEGORIES.length - 1) {
+        setSlideDirection('right');
+        setSelectedCategory(CATEGORIES[currentIndex + 1]);
+      } else if (diff < 0 && currentIndex > 0) {
+        setSlideDirection('left');
+        setSelectedCategory(CATEGORIES[currentIndex - 1]);
+      }
+    }
+  };
+
   if (!isAuth) return <LoginView onLogin={() => { setIsAuth(true); sessionStorage.setItem('kitchen_auth', 'true'); }} />;
 
   return (
@@ -596,8 +619,8 @@ export default function App() {
           <header className="px-8 pt-10 pb-4">
             <div className="flex justify-between items-end mb-8">
               <h1 className="text-[36px] font-serif font-bold text-gray-900 leading-none">Kitchen Vault</h1>
-              <div className="w-12 h-12 rounded-[14px] bg-white p-1 shadow-mystic border border-gray-50 flex items-center justify-center">
-                <img src="isa_icon.svg" className="w-full h-full object-contain rounded-[10px]" alt="Vault Icon" />
+              <div className="w-12 h-12 rounded-[28%] bg-white p-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-gray-50 flex items-center justify-center">
+                <img src="isa_icon.svg" className="w-full h-full object-contain" alt="Vault Icon" />
               </div>
             </div>
             {activeTab === 'recipes' ? (
@@ -633,7 +656,7 @@ export default function App() {
           </header>
         </div>
 
-        <div ref={scrollContainerRef} id="recipes-container" className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44">
+        <div ref={scrollContainerRef} id="recipes-container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} className="flex-1 overflow-y-auto hide-scrollbar pt-6 pb-44">
           {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full">
               <div className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 ${slideDirection === 'right' ? 'slide-in-from-right-20 fade-in' : 'slide-in-from-left-20 fade-in'}`}>
@@ -647,18 +670,20 @@ export default function App() {
                         <div className="transition-transform duration-700 group-hover:scale-110 flex items-center justify-center">{getRecipeIcon(recipe.name, recipe.category)}</div>
                         <StickerTag label={recipe.category} color={getRecipeColor(recipe.category)} className="top-2 -right-4" />
                       </div>
-                      <h4 className="text-[15px] font-serif font-bold text-gray-900 px-1 leading-tight line-clamp-2 mb-1">{recipe.name}</h4>
-                      {isSearchOpen && q && (
-                        <div className="mt-2 space-y-1 border-t border-gray-50 pt-2 px-1">
-                          {recipe.ingredients.some(i => i.name.toLowerCase().includes(q)) && (
-                            <p className="text-[9px] text-[#5C5C78] font-bold uppercase tracking-wider">食材匹配: {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}</p>
-                          )}
-                          {(recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q))) && (
-                            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><StepIcon /> 匹配步驟內容</p>
-                          )}
-                        </div>
-                      )}
-                      <span className="mt-1 text-[12px] font-bold text-gray-400 px-1">{recipe.date}</span>
+                      <div className="px-1 flex flex-col items-start">
+                        <h4 className="text-[14px] font-serif font-bold text-slate-900 leading-tight line-clamp-2 mb-0.5">{recipe.name}</h4>
+                        {isSearchOpen && q && (
+                          <div className="mt-2 space-y-1 border-t border-gray-50 pt-2">
+                            {recipe.ingredients.some(i => i.name.toLowerCase().includes(q)) && (
+                              <p className="text-[9px] text-[#5C5C78] font-bold uppercase tracking-wider">食材匹配: {recipe.ingredients.filter(i => i.name.toLowerCase().includes(q)).map(i => i.name).join(', ')}</p>
+                            )}
+                            {(recipe.steps.some(s => s.toLowerCase().includes(q)) || (recipe.tips && recipe.tips.toLowerCase().includes(q))) && (
+                              <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><StepIcon /> 匹配步驟內容</p>
+                            )}
+                          </div>
+                        )}
+                        <span className="mt-2 text-[11px] font-medium text-slate-400 uppercase tracking-[0.02em] ml-[1px] inline-block origin-left transform scale-y-[1.1]">{recipe.date}</span>
+                      </div>
                     </div>
                   );
                 })}
@@ -666,10 +691,10 @@ export default function App() {
             </main>
           ) : (
             <div className="px-8 min-h-full flex flex-col items-center justify-center text-center pb-24">
-              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
-              <img src="chef_blue.svg" className="w-40 h-40 mb-6 opacity-70" alt="Chef" />
+              <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">{isSearchOpen ? 'No Global Matches' : 'The Black Book is Empty'}</h3>
+              <img src="chef_blue.svg" className="w-32 h-32 mb-4 opacity-60" alt="Chef" />
               
-              <p className="text-[13px] font-bold uppercase tracking-[0.05em] text-slate-400 mb-8 leading-relaxed">
+              <p className="text-[13px] font-bold uppercase tracking-[0.02em] text-slate-400 mb-6 leading-relaxed">
                 SPICE THINGS UP!
               </p>
 
@@ -679,7 +704,7 @@ export default function App() {
                   setSelectedCategory('全部');
                   handleCloseSearch();
                 }} 
-                className="bg-gray-900 text-white px-12 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-transform"
+                className="bg-gray-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-transform"
               >
                 ADD TO VAULT
               </button>
