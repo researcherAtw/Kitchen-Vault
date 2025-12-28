@@ -33,7 +33,7 @@ const MenuIcon = React.memo(({ active }: { active: boolean }) => (
 ));
 
 const SearchIcon = React.memo(() => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
   </svg>
@@ -336,7 +336,7 @@ const RecipeDetail: React.FC<{
                       
                       <div className="flex items-center gap-2 mb-6">
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5C78]">Recipe Date</span>
-                        <span className="text-[11px] font-normal uppercase tracking-[0.02em] text-gray-400 ml-[1px] inline-block origin-bottom transform scale-y-[1.15]">{recipe.date}</span>
+                        <span className="text-[11px] font-normal text-slate-400 uppercase tracking-[0.02em] ml-[1px] inline-block origin-bottom transform scale-y-[1.15]">{recipe.date}</span>
                       </div>
 
                       <p className="text-gray-500 text-[13px] leading-relaxed mb-8 border-l-2 border-gray-100 pl-4 whitespace-pre-wrap">{recipe.description}</p>
@@ -659,7 +659,10 @@ export default function App() {
         >
           {currentDisplayList.length > 0 ? (
             <main className="px-8 min-h-full">
-              <div className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-700 transform-gpu ${slideDirection === 'right' ? 'slide-in-from-right-10' : 'slide-in-from-left-10'} fade-in`}>
+              <div 
+                key={selectedCategory + activeTab} 
+                className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-500 transform-gpu ease-[cubic-bezier(0.25,1,0.5,1)] ${slideDirection === 'right' ? 'slide-in-from-right-[20%]' : 'slide-in-from-left-[20%]'} fade-in`}
+              >
                 {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
                   const q = deferredSearchQuery.toLowerCase().trim();
