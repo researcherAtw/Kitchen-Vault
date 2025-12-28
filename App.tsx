@@ -33,14 +33,14 @@ const MenuIcon = React.memo(({ active }: { active: boolean }) => (
 ));
 
 const SearchIcon = React.memo(() => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="10.5" cy="10.5" r="7.5"></circle>
+    <line x1="21" y1="21" x2="15.8" y2="15.8"></line>
   </svg>
 ));
 
 const CloseIcon = React.memo(() => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="18" y1="6" x2="6" y2="18"></line>
     <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
@@ -661,7 +661,7 @@ export default function App() {
             <main className="px-8 min-h-full">
               <div 
                 key={selectedCategory + activeTab} 
-                className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in duration-500 transform-gpu ease-[cubic-bezier(0.25,1,0.5,1)] ${slideDirection === 'right' ? 'slide-in-from-right-[20%]' : 'slide-in-from-left-[20%]'} fade-in`}
+                className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in transform-gpu duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${slideDirection === 'right' ? 'slide-in-from-right-[40%]' : 'slide-in-from-left-[40%]'} zoom-in-95 fade-in`}
               >
                 {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
