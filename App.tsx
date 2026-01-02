@@ -33,9 +33,9 @@ const MenuIcon = React.memo(({ active }: { active: boolean }) => (
 ));
 
 const SearchIcon = React.memo(() => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="10.5" cy="10.5" r="7.5"></circle>
-    <line x1="21" y1="21" x2="15.8" y2="15.8"></line>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="10.5" cy="10.5" r="7" />
+    <line x1="22" y1="22" x2="15.5" y2="15.5" />
   </svg>
 ));
 
@@ -596,7 +596,7 @@ export default function App() {
           <div className="relative group">
             <div className="absolute inset-0 bg-white/15 backdrop-blur-[1px] rounded-full border border-white/30 shadow-glass pointer-events-none" />
             <div className="relative flex items-center px-6 py-4 gap-3">
-              <span className="text-gray-900"><SearchIcon /></span>
+              <span className="text-gray-900 flex items-center justify-center"><SearchIcon /></span>
               <input ref={searchInputRef} type="text" placeholder="Search globally..." className="flex-1 bg-transparent border-none outline-none text-[14px] font-bold text-gray-900 placeholder-gray-400" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               <button type="button" onClick={handleCloseSearch} className="text-gray-400 hover:text-gray-900"><CloseIcon /></button>
             </div>
@@ -661,7 +661,7 @@ export default function App() {
             <main className="px-8 min-h-full">
               <div 
                 key={selectedCategory + activeTab} 
-                className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in transform-gpu duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${slideDirection === 'right' ? 'slide-in-from-right-[40%]' : 'slide-in-from-left-[40%]'} zoom-in-95 fade-in`}
+                className={`grid grid-cols-2 gap-x-4 gap-y-12 animate-in transform-gpu duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] ${slideDirection === 'right' ? 'slide-in-from-right-[50%]' : 'slide-in-from-left-[50%]'} zoom-in-95 fade-in blur-in-sm`}
               >
                 {currentDisplayList.map((recipe, idx) => {
                   const isFavorite = favorites.includes(recipe.id);
